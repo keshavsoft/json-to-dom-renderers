@@ -1081,7 +1081,7 @@ const Dt = ({
     }
   };
 };
-createDataProvider;
+// createDataProvider;
 window.ks ?? (window.ks = {});
 window.ks["json-to-dom-renderers"] = {
   Table: ot,
