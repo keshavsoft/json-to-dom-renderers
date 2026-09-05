@@ -245,7 +245,7 @@
                     <li class="nav-item"><a class="nav-link" href="#quickstart">Quick Start</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">v9.0.0</span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">v10.0.0</span>
                     <a href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank"
                         class="btn btn-sm btn-outline-light d-flex align-items-center gap-2">
                         <i class="bi bi-github"></i> GitHub
@@ -332,11 +332,23 @@
                     <h2 class="fw-bold mb-1">Hybrid Search, Table &amp; Autocomplete</h2>
                     <p class="text-muted small mb-0">All 3 renderers orchestrated together from the CDN bundle</p>
                 </div>
-                <div class="d-flex align-items-center gap-2 mt-3 mt-md-0">
-                    <span class="small text-muted">Presets:</span>
-                    <button class="btn btn-outline-primary preset-btn" id="preset-rope">ROPE</button>
-                    <button class="btn btn-outline-primary preset-btn" id="preset-shading">Shading Net</button>
-                    <button class="btn btn-outline-secondary preset-btn" id="preset-reset">Reset</button>
+                <div class="d-flex align-items-center gap-2 mt-3 mt-md-0 flex-wrap">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="small text-muted fw-semibold"><i class="bi bi-palette me-1"></i>Theme:</span>
+                        <select id="theme-selector" class="form-select form-select-sm" style="width: 125px;">
+                            <option value="default" selected>Default</option>
+                            <option value="light">Light</option>
+                            <option value="extraLight">Extra Light</option>
+                            <option value="dark">Dark</option>
+                            <option value="extraDark">Extra Dark</option>
+                        </select>
+                    </div>
+                    <div class="d-flex align-items-center gap-1 ms-md-2">
+                        <span class="small text-muted">Filter:</span>
+                        <button class="btn btn-outline-primary preset-btn" id="preset-rope">ROPE</button>
+                        <button class="btn btn-outline-primary preset-btn" id="preset-shading">Shading Net</button>
+                        <button class="btn btn-outline-secondary preset-btn" id="preset-reset">Reset</button>
+                    </div>
                 </div>
             </div>
 
@@ -703,20 +715,27 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
     <script type="module">
         import { sampleColumns, sampleTableConfig, sampleSearchConfig, sampleDatalistConfig, sampleData } from "./sampleData.js";
 
-        // Dynamic module import: use local dist/v9/min.js, falling back to CDN if run standalone
+        // Dynamic module import: prefer local dist/v10/min.js with clean fallbacks
         let Table, Form, DataList;
 
         try {
-            const module = await import("./dist/v9/min.js");
+            const module = await import("./dist/v10/min.js");
             Table = module.Table;
             Form = module.Form;
             DataList = module.DataList;
         } catch (err) {
-            console.warn("Local dist load fallback to CDN:", err);
-            const cdnModule = await import("https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js");
-            Table = cdnModule.Table;
-            Form = cdnModule.Form;
-            DataList = cdnModule.DataList;
+            try {
+                const module = await import("./dist/v9/min.js");
+                Table = module.Table;
+                Form = module.Form;
+                DataList = module.DataList;
+            } catch (fallbackErr) {
+                console.warn("Local dist load fallback to CDN:", fallbackErr);
+                const cdnModule = await import("https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v10/min.js");
+                Table = cdnModule.Table;
+                Form = cdnModule.Form;
+                DataList = cdnModule.DataList;
+            }
         }
 
         // Initialize Live Demo
@@ -736,7 +755,7 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
                 inConfig: sampleSearchConfig,
                 inTargetContainerId: "demo-filter-container"
             });
-            const formRenderResult = form.render();
+            let formRenderResult = form.render();
 
             // 3. DataList
             const dataList = new DataList({
@@ -755,9 +774,10 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
             };
             updateCountBadge();
 
-            // Wire form filter buttons
-            if (formRenderResult?.element) {
-                const buttons = formRenderResult.element.querySelectorAll("button");
+            // Wire form filter buttons helper
+            const wireFormButtons = (containerElement) => {
+                if (!containerElement) return;
+                const buttons = containerElement.querySelectorAll("button");
                 buttons.forEach(button => {
                     button.addEventListener("click", event => {
                         const row = event.currentTarget.closest("div");
@@ -774,7 +794,18 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
                         updateCountBadge();
                     });
                 });
-            }
+            };
+
+            wireFormButtons(formRenderResult?.element);
+
+            // Dynamic Theme Switching (v10 Feature)
+            document.getElementById("theme-selector")?.addEventListener("change", (e) => {
+                const newTheme = e.target.value;
+                table.setTheme({ inTheme: newTheme });
+                formRenderResult = form.setTheme({ inTheme: newTheme });
+                dataList.setTheme({ inTheme: newTheme });
+                wireFormButtons(formRenderResult?.element);
+            });
 
             // Presets
             const applyFilterToFirstInput = (val) => {
