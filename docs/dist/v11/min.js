@@ -1,27 +1,27 @@
 class N {
   constructor({ inData: n = [], inColumns: t = [], inConfig: e = {}, inTopN: o } = {}) {
-    const a = n, r = t, s = e, i = o;
+    const a = n, s = t, r = e, i = o;
     this.source = this._buildSource({
       inData: a,
-      inColumns: r,
-      inConfig: s,
+      inColumns: s,
+      inConfig: r,
       inTopN: i
     });
   }
   _buildSource({ inData: n = [], inColumns: t = [], inConfig: e = {}, inTopN: o } = {}) {
-    const a = n, r = t, s = e, i = o;
+    const a = n, s = t, r = e, i = o;
     return {
       originalData: Array.isArray(a) ? typeof structuredClone == "function" ? structuredClone(a) : JSON.parse(JSON.stringify(a)) : [],
-      columns: Array.isArray(r) ? r : [],
-      config: s || {},
+      columns: Array.isArray(s) ? s : [],
+      config: r || {},
       topN: i
     };
   }
   _resolveActiveColumns({ inColumnsCatalog: n = [], inColumnKeys: t = [] } = {}) {
     const e = n, o = t;
     if (Array.isArray(o) && o.length > 0) {
-      const a = new Map((Array.isArray(e) ? e : []).map((r) => [r.key, r]));
-      return o.map((r) => a.get(r)).filter(Boolean);
+      const a = new Map((Array.isArray(e) ? e : []).map((s) => [s.key, s]));
+      return o.map((s) => a.get(s)).filter(Boolean);
     }
     return Array.isArray(e) ? e : [];
   }
@@ -32,13 +32,13 @@ class N {
     return this.source.config;
   }
 }
-const F = ({ inData: d = [] } = {}) => {
-  const n = d;
+const F = ({ inData: u = [] } = {}) => {
+  const n = u;
   return Array.isArray(n) ? typeof structuredClone == "function" ? structuredClone(n) : JSON.parse(JSON.stringify(n)) : [];
-}, B = ({ inColumns: d = [], inData: n = [], inConfig: t = {}, inLabel: e } = {}) => {
+}, B = ({ inColumns: u = [], inData: n = [], inConfig: t = {}, inLabel: e } = {}) => {
   var p, f;
-  const o = d, a = n, r = t, s = e;
-  if (!!!(r != null && r.serial || (p = r == null ? void 0 : r.table) != null && p.serial || (f = r == null ? void 0 : r.head) != null && f.serial))
+  const o = u, a = n, s = t, r = e;
+  if (!!!(s != null && s.serial || (p = s == null ? void 0 : s.table) != null && p.serial || (f = s == null ? void 0 : s.head) != null && f.serial))
     return {
       columns: o,
       data: a,
@@ -46,7 +46,7 @@ const F = ({ inData: d = [] } = {}) => {
     };
   const l = {
     key: "serial",
-    label: s || typeof (r == null ? void 0 : r.serial) == "object" && r.serial.label || "#",
+    label: r || typeof (s == null ? void 0 : s.serial) == "object" && s.serial.label || "#",
     align: "center",
     isSerial: !0
   }, m = (Array.isArray(o) ? o : []).some((C) => C.key === "serial") ? o : [l, ...Array.isArray(o) ? o : []], b = (Array.isArray(a) ? a : []).map((C, h) => ({
@@ -58,76 +58,76 @@ const F = ({ inData: d = [] } = {}) => {
     data: b,
     isSerialEnabled: !0
   };
-}, U = ({ inData: d = [], inKey: n } = {}) => {
-  const t = d, e = n;
+}, U = ({ inData: u = [], inKey: n } = {}) => {
+  const t = u, e = n;
   return !Array.isArray(t) || !e ? 0 : t.reduce((o, a) => {
-    const r = Number(a == null ? void 0 : a[e]);
-    return o + (isNaN(r) ? 0 : r);
+    const s = Number(a == null ? void 0 : a[e]);
+    return o + (isNaN(s) ? 0 : s);
   }, 0);
-}, q = ({ inData: d = [] } = {}) => {
-  const n = d;
+}, q = ({ inData: u = [] } = {}) => {
+  const n = u;
   return Array.isArray(n) ? n.length : 0;
 }, K = {
   sum: U,
   count: q
-}, _ = ({ inExpression: d = "", inScope: n = {} } = {}) => {
-  const t = d, e = n;
+}, _ = ({ inExpression: u = "", inScope: n = {} } = {}) => {
+  const t = u, e = n;
   try {
     const o = Object.keys(e), a = Object.values(e);
     return new Function(...o, `return ${t};`)(...a);
   } catch (o) {
     return console.error(`Error evaluating expression "${t}":`, o), 0;
   }
-}, M = ({ inRowConfig: d = {}, inData: n = [], inScope: t = {} } = {}) => {
-  const e = d, o = n, a = t, r = e.id || "", s = e.title || "", i = e.type || "aggregate", c = e.values || {}, l = {};
-  return i === "aggregate" ? Object.entries(c).forEach(([u, m]) => {
+}, M = ({ inRowConfig: u = {}, inData: n = [], inScope: t = {} } = {}) => {
+  const e = u, o = n, a = t, s = e.id || "", r = e.title || "", i = e.type || "aggregate", c = e.values || {}, l = {};
+  return i === "aggregate" ? Object.entries(c).forEach(([d, m]) => {
     const b = K[m];
-    typeof b == "function" && (l[u] = b({ inData: o, inKey: u }));
-  }) : i === "eval" && Object.entries(c).forEach(([u, m]) => {
-    typeof m == "string" && (l[u] = _({
+    typeof b == "function" && (l[d] = b({ inData: o, inKey: d }));
+  }) : i === "eval" && Object.entries(c).forEach(([d, m]) => {
+    typeof m == "string" && (l[d] = _({
       inExpression: m,
       inScope: a
     }));
   }), {
-    id: r,
-    title: s,
+    id: s,
+    title: r,
     values: l
   };
-}, R = ({ inData: d = [], inFooterConfig: n = [] } = {}) => {
-  const t = d, e = n;
+}, R = ({ inData: u = [], inFooterConfig: n = [] } = {}) => {
+  const t = u, e = n;
   if (!Array.isArray(e)) return [];
   const o = {}, a = [];
-  return e.forEach((r) => {
-    const s = M({
-      inRowConfig: r,
+  return e.forEach((s) => {
+    const r = M({
+      inRowConfig: s,
       inData: t,
       inScope: o
     });
-    r.id && (o[r.id] = s.values), a.push(s);
+    s.id && (o[s.id] = r.values), a.push(r);
   }), a;
-}, j = ({ inSource: d = {}, inResolveColumns: n } = {}) => {
+}, j = ({ inSource: u = {}, inResolveColumns: n } = {}) => {
   var i, c, l;
-  const t = d, e = n, o = typeof e == "function" ? e({
+  const t = u, e = n, o = typeof e == "function" ? e({
     inColumnsCatalog: t == null ? void 0 : t.columns,
     inColumnKeys: (c = (i = t == null ? void 0 : t.config) == null ? void 0 : i.head) == null ? void 0 : c.columns
   }) : (t == null ? void 0 : t.columns) || [], a = F({
     inData: t == null ? void 0 : t.originalData
-  }), r = B({
+  }), s = B({
     inColumns: o,
     inData: a,
     inConfig: t == null ? void 0 : t.config
-  }), s = R({
-    inData: r.data,
+  }), r = R({
+    inData: s.data,
     inFooterConfig: (l = t == null ? void 0 : t.config) == null ? void 0 : l.foot
   });
   return {
-    activeColumns: r.columns,
-    stateData: r.data,
-    computedFooter: s,
-    isSerialEnabled: r.isSerialEnabled
+    activeColumns: s.columns,
+    stateData: s.data,
+    computedFooter: r,
+    isSerialEnabled: s.isSerialEnabled
   };
-}, V = ({ inQuery: d = "", inActiveColumns: n = [] } = {}) => {
-  const t = d, e = n, o = new Set(
+}, V = ({ inQuery: u = "", inActiveColumns: n = [] } = {}) => {
+  const t = u, e = n, o = new Set(
     (Array.isArray(e) ? e : []).map((a) => typeof a == "object" && a !== null ? a.key : a).filter(Boolean)
   );
   if (typeof t == "object" && t !== null) {
@@ -136,57 +136,57 @@ const F = ({ inData: d = [] } = {}) => {
         type: "string",
         value: String(t.value ?? "").trim().toLowerCase()
       };
-    const a = t.type === "object" && typeof t.value == "object" && t.value !== null ? t.value : t, r = {};
-    for (const [s, i] of Object.entries(a))
-      if (o.has(s) && i !== void 0 && i !== null) {
+    const a = t.type === "object" && typeof t.value == "object" && t.value !== null ? t.value : t, s = {};
+    for (const [r, i] of Object.entries(a))
+      if (o.has(r) && i !== void 0 && i !== null) {
         const c = String(i).trim().toLowerCase();
-        c !== "" && (r[s] = c);
+        c !== "" && (s[r] = c);
       }
     return {
       type: "object",
-      value: r
+      value: s
     };
   }
   return {
     type: "string",
     value: String(t ?? "").trim().toLowerCase()
   };
-}, J = ({ inData: d = [], inQueryObject: n = {}, inActiveColumns: t = [] } = {}) => {
-  const e = d, o = n, a = t;
+}, J = ({ inData: u = [], inQueryObject: n = {}, inActiveColumns: t = [] } = {}) => {
+  const e = u, o = n, a = t;
   if (!Array.isArray(e)) return [];
-  const r = o == null ? void 0 : o.type, s = o == null ? void 0 : o.value, i = Array.isArray(a) && a.length > 0 ? a.map((l) => typeof l == "object" && l !== null ? l.key : l).filter(Boolean) : null;
-  if (r === "object") {
-    const u = Object.entries(typeof s == "object" && s !== null ? s : {});
-    return u.length === 0 ? [...e] : e.filter((m) => !m || typeof m != "object" ? !1 : u.every(([b, p]) => {
+  const s = o == null ? void 0 : o.type, r = o == null ? void 0 : o.value, i = Array.isArray(a) && a.length > 0 ? a.map((l) => typeof l == "object" && l !== null ? l.key : l).filter(Boolean) : null;
+  if (s === "object") {
+    const d = Object.entries(typeof r == "object" && r !== null ? r : {});
+    return d.length === 0 ? [...e] : e.filter((m) => !m || typeof m != "object" ? !1 : d.every(([b, p]) => {
       const f = m[b];
       return f == null ? !1 : String(f).toLowerCase().includes(p);
     }));
   }
-  const c = typeof s == "string" ? s : String(o ?? "").trim().toLowerCase();
+  const c = typeof r == "string" ? r : String(o ?? "").trim().toLowerCase();
   return c ? e.filter((l) => !l || typeof l != "object" ? !1 : (i ? i.map((m) => l[m]) : Object.values(l)).some((m) => m == null ? !1 : String(m).toLowerCase().includes(c))) : [...e];
-}, W = ({ inData: d = [], inIsEnabled: n = !1 } = {}) => {
-  const t = d;
+}, W = ({ inData: u = [], inIsEnabled: n = !1 } = {}) => {
+  const t = u;
   return !n || !Array.isArray(t) ? t : t.map((o, a) => ({
     ...o,
     serial: a + 1
   }));
-}, $ = ({ inStore: d, inData: n = [], inQuery: t = "" } = {}) => {
+}, $ = ({ inStore: u, inData: n = [], inQuery: t = "" } = {}) => {
   var b;
-  const e = d, o = n, a = t, r = e.library.activeColumns, s = e.library.isSerialEnabled, i = (b = e.source.config) == null ? void 0 : b.foot, c = V({
+  const e = u, o = n, a = t, s = e.library.activeColumns, r = e.library.isSerialEnabled, i = (b = e.source.config) == null ? void 0 : b.foot, c = V({
     inQuery: a,
-    inActiveColumns: r
+    inActiveColumns: s
   }), l = J({
     inData: o,
     inQueryObject: c,
-    inActiveColumns: r
-  }), u = W({
+    inActiveColumns: s
+  }), d = W({
     inData: l,
-    inIsEnabled: s
+    inIsEnabled: r
   }), m = R({
-    inData: u,
+    inData: d,
     inFooterConfig: i
   });
-  return e.library.stateData = u, e.library.computedFooter = m, {
+  return e.library.stateData = d, e.library.computedFooter = m, {
     activeColumns: e.library.activeColumns,
     stateData: e.library.stateData,
     computedFooter: e.library.computedFooter
@@ -194,11 +194,11 @@ const F = ({ inData: d = [] } = {}) => {
 };
 class H extends N {
   constructor({ inData: n = [], inColumns: t = [], inConfig: e = {} } = {}) {
-    const o = n, a = t, r = e;
+    const o = n, a = t, s = e;
     super({
       inData: o,
       inColumns: a,
-      inConfig: r
+      inConfig: s
     }), this.library = j({
       inSource: this.source,
       inResolveColumns: this._resolveActiveColumns.bind(this)
@@ -242,17 +242,17 @@ class H extends N {
   }
 }
 const S = ({
-  inCellTagName: d = "td",
+  inCellTagName: u = "td",
   inCells: n = [],
   inRowClass: t = "",
   inCellClass: e = ""
 } = {}) => {
-  const o = d, a = n, r = t, s = e;
+  const o = u, a = n, s = t, r = e;
   return {
     tagName: "tr",
-    attributes: r ? { class: r } : {},
+    attributes: s ? { class: s } : {},
     children: a.map((i) => {
-      const c = String(typeof i == "object" ? i.textContent ?? "" : i ?? ""), l = typeof i == "object" && i.class !== void 0 ? i.class : s, u = typeof i == "object" ? i.align : "", b = [l, u === "right" ? "text-end" : u === "center" ? "text-center" : ""].filter(Boolean).join(" ").trim(), p = b ? { class: b } : {};
+      const c = String(typeof i == "object" ? i.textContent ?? "" : i ?? ""), l = typeof i == "object" && i.class !== void 0 ? i.class : r, d = typeof i == "object" ? i.align : "", b = [l, d === "right" ? "text-end" : d === "center" ? "text-center" : ""].filter(Boolean).join(" ").trim(), p = b ? { class: b } : {};
       return typeof i == "object" && i.id && (p.id = i.id), {
         tagName: o,
         textContent: c,
@@ -260,11 +260,11 @@ const S = ({
       };
     })
   };
-}, z = ({ inColumns: d = [], inClasses: n = {} } = {}) => {
-  const t = d, e = n, o = t.map((s) => ({
-    textContent: s.label,
-    align: s.align,
-    id: s.id
+}, z = ({ inColumns: u = [], inClasses: n = {} } = {}) => {
+  const t = u, e = n, o = t.map((r) => ({
+    textContent: r.label,
+    align: r.align,
+    id: r.id
   })), a = S({
     inCellTagName: "th",
     inCells: o,
@@ -276,8 +276,8 @@ const S = ({
     attributes: e != null && e.thead ? { class: e.thead } : {},
     children: [a]
   };
-}, P = ({ inColumns: d = [], inData: n = [], inRowConfig: t = {}, inClasses: e = {} } = {}) => {
-  const o = d, a = n, r = e;
+}, P = ({ inColumns: u = [], inData: n = [], inRowConfig: t = {}, inClasses: e = {} } = {}) => {
+  const o = u, a = n, s = e;
   if (!Array.isArray(a) || a.length === 0) {
     const c = {
       tagName: "tr",
@@ -292,35 +292,35 @@ const S = ({
     };
     return {
       tagName: "tbody",
-      attributes: r != null && r.tbody ? { class: r.tbody } : {},
+      attributes: s != null && s.tbody ? { class: s.tbody } : {},
       children: [c]
     };
   }
-  const s = a.map((c) => {
-    const l = o.map((u) => ({
-      textContent: u.key === "amount" ? Number(c[u.key]).toFixed(2) : String(c[u.key] ?? ""),
-      align: u.align
+  const r = a.map((c) => {
+    const l = o.map((d) => ({
+      textContent: d.key === "amount" ? Number(c[d.key]).toFixed(2) : String(c[d.key] ?? ""),
+      align: d.align
     }));
     return S({
       inCellTagName: "td",
       inCells: l,
-      inRowClass: (r == null ? void 0 : r.tr) || "",
-      inCellClass: (r == null ? void 0 : r.td) || ""
+      inRowClass: (s == null ? void 0 : s.tr) || "",
+      inCellClass: (s == null ? void 0 : s.td) || ""
     });
   });
   return {
     tagName: "tbody",
-    attributes: r != null && r.tbody ? { class: r.tbody } : {},
-    children: s
+    attributes: s != null && s.tbody ? { class: s.tbody } : {},
+    children: r
   };
-}, L = ({ inColumns: d = [], inComputedFooter: n = [], inClasses: t = {} } = {}) => {
-  const e = d, o = n, a = t;
+}, L = ({ inColumns: u = [], inComputedFooter: n = [], inClasses: t = {} } = {}) => {
+  const e = u, o = n, a = t;
   if (!Array.isArray(o) || o.length === 0)
     return null;
-  const r = o.map((i, c) => {
-    const l = i.title || "", u = i.values || {}, m = c === o.length - 1, b = e.findIndex((f) => !f.isSerial), p = e.map((f, C) => {
-      if (u[f.key] !== void 0) {
-        const h = u[f.key];
+  const s = o.map((i, c) => {
+    const l = i.title || "", d = i.values || {}, m = c === o.length - 1, b = e.findIndex((f) => !f.isSerial), p = e.map((f, C) => {
+      if (d[f.key] !== void 0) {
+        const h = d[f.key];
         return {
           textContent: typeof h == "number" ? h.toFixed(2) : String(h),
           align: f.align || "right",
@@ -345,79 +345,83 @@ const S = ({
   return {
     tagName: "tfoot",
     attributes: a != null && a.tfoot ? { class: a.tfoot } : {},
-    children: r
+    children: s
   };
-}, G = ({ inColumns: d = [], inData: n = [], inComputedFooter: t = [], inRowConfig: e = {}, inClasses: o = {} } = {}) => {
-  const a = d, r = n, s = t, i = e, c = o, l = z({ inColumns: a, inClasses: c }), u = P({ inColumns: a, inData: r, inRowConfig: i, inClasses: c }), m = L({ inColumns: a, inComputedFooter: s, inClasses: c });
+}, G = ({ inColumns: u = [], inData: n = [], inComputedFooter: t = [], inRowConfig: e = {}, inClasses: o = {} } = {}) => {
+  const a = u, s = n, r = t, i = e, c = o, l = z({ inColumns: a, inClasses: c }), d = P({ inColumns: a, inData: s, inRowConfig: i, inClasses: c }), m = L({ inColumns: a, inComputedFooter: r, inClasses: c });
   return {
     tagName: "table",
     attributes: c != null && c.table ? { class: c.table } : {},
-    children: [l, u, m].filter(Boolean)
+    children: [l, d, m].filter(Boolean)
   };
-}, E = ({ inSpec: d } = {}) => {
+}, E = ({ inSpec: u } = {}) => {
   var i, c, l;
-  const n = d;
+  const n = u;
   if (!n || typeof n != "object") return null;
   if (Array.isArray(n)) {
-    const u = n.map((m) => E({ inSpec: m })).filter(Boolean);
-    return u.length > 0 ? u : null;
+    const d = n.map((m) => E({ inSpec: m })).filter(Boolean);
+    return d.length > 0 ? d : null;
   }
-  const e = (Array.isArray(n.children) ? n.children : []).map((u) => E({ inSpec: u })).filter(Boolean), o = ((i = n.attributes) == null ? void 0 : i.id) || n.id, a = !!o, r = e.length > 0;
-  if (!a && !r)
+  const e = (Array.isArray(n.children) ? n.children : []).map((d) => E({ inSpec: d })).filter(Boolean), o = ((i = n.attributes) == null ? void 0 : i.id) || n.id, a = !!o, s = e.length > 0;
+  if (!a && !s)
     return null;
-  const s = {
+  const r = {
     tagName: n.tagName
   };
-  return o && (s.id = o), (c = n.attributes) != null && c.name && (s.name = n.attributes.name), (l = n.attributes) != null && l.type && (s.type = n.attributes.type), n.attributes && (s.attributes = n.attributes), e.length > 0 && (s.children = e), s;
-}, Q = ({ inTableElement: d, inColumns: n = [], inData: t = [], inRowConfig: e = {}, inClasses: o = {} } = {}) => {
+  return o && (r.id = o), (c = n.attributes) != null && c.name && (r.name = n.attributes.name), (l = n.attributes) != null && l.type && (r.type = n.attributes.type), n.attributes && (r.attributes = n.attributes), e.length > 0 && (r.children = e), r;
+}, Q = ({ inTableElement: u, inColumns: n = [], inData: t = [], inRowConfig: e = {}, inClasses: o = {} } = {}) => {
   var p, f;
-  const a = d, r = n, s = t, i = e, c = o;
+  const a = u, s = n, r = t, i = e, c = o;
   if (!a) return;
   const l = P({
-    inColumns: r,
-    inData: s,
+    inColumns: s,
+    inData: r,
     inRowConfig: i,
     inClasses: c
-  }), u = (f = (p = window.ks) == null ? void 0 : p["json-to-dom"]) == null ? void 0 : f.buildSpecElement;
-  if (typeof u != "function") return;
-  const m = u({ inSpec: l }), b = a.querySelector("tbody");
+  }), d = (f = (p = window.ks) == null ? void 0 : p["json-to-dom"]) == null ? void 0 : f.buildSpecElement;
+  if (typeof d != "function") return;
+  const m = d({ inSpec: l }), b = a.querySelector("tbody");
   b && m && b.replaceWith(m);
-}, O = ({ inTableElement: d, inColumns: n = [], inComputedFooter: t = [], inClasses: e = {} } = {}) => {
+}, O = ({ inTableElement: u, inColumns: n = [], inComputedFooter: t = [], inClasses: e = {} } = {}) => {
   var m, b;
-  const o = d, a = n, r = t, s = e;
+  const o = u, a = n, s = t, r = e;
   if (!o) return;
   const i = L({
     inColumns: a,
-    inComputedFooter: r,
-    inClasses: s
+    inComputedFooter: s,
+    inClasses: r
   }), c = (b = (m = window.ks) == null ? void 0 : m["json-to-dom"]) == null ? void 0 : b.buildSpecElement;
   if (typeof c != "function") return;
-  const l = i ? c({ inSpec: i }) : null, u = o.querySelector("tfoot");
-  u && l ? u.replaceWith(l) : u && !l ? u.remove() : !u && l && o.appendChild(l);
-}, I = ({ inTableElement: d, inStore: n } = {}) => {
-  var o;
-  const t = d, e = n;
-  !t || !e || (Q({
-    inTableElement: t,
-    inColumns: e.activeColumns,
-    inData: e.stateData,
-    inRowConfig: (o = e.config) == null ? void 0 : o.row
+  const l = i ? c({ inSpec: i }) : null, d = o.querySelector("tfoot");
+  d && l ? d.replaceWith(l) : d && !l ? d.remove() : !d && l && o.appendChild(l);
+}, I = ({ inTableElement: u, inStore: n, inClasses: t = {} } = {}) => {
+  var s;
+  const e = u, o = n, a = t;
+  !e || !o || (Q({
+    inTableElement: e,
+    inColumns: o.activeColumns,
+    inData: o.stateData,
+    inRowConfig: (s = o.config) == null ? void 0 : s.row,
+    inClasses: a
   }), O({
-    inTableElement: t,
-    inColumns: e.activeColumns,
-    inComputedFooter: e.computedFooter
+    inTableElement: e,
+    inColumns: o.activeColumns,
+    inComputedFooter: o.computedFooter,
+    inClasses: a
   }));
-}, X = ({ inTable: d, inQuery: n = "" } = {}) => {
-  const t = d, e = n;
+}, X = ({ inTable: u, inQuery: n = "" } = {}) => {
+  const t = u, e = n;
   !(t != null && t.tableElement) || !(t != null && t.store) || (t.store.filterOriginalData({ inQuery: e }), I({
     inTableElement: t.tableElement,
-    inStore: t.store
+    inStore: t.store,
+    inClasses: t.classes
   }));
-}, Y = ({ inTable: d, inQuery: n = "" } = {}) => {
-  const t = d, e = n;
+}, Y = ({ inTable: u, inQuery: n = "" } = {}) => {
+  const t = u, e = n;
   !(t != null && t.tableElement) || !(t != null && t.store) || (t.store.filterStateData({ inQuery: e }), I({
     inTableElement: t.tableElement,
-    inStore: t.store
+    inStore: t.store,
+    inClasses: t.classes
   }));
 }, Z = {
   table: "table table-hover table-striped table-sm align-middle",
@@ -467,8 +471,8 @@ const S = ({
   extraDark: nt
 };
 class ot {
-  constructor({ data: n = [], columns: t = [], config: e = {}, theme: o = "default", classes: a = null, dataProvider: r = null, targetContainerId: s = "table-container", inData: i, inColumns: c, inConfig: l, inTheme: u, inClasses: m, inDataProvider: b, inTargetContainerId: p } = {}) {
-    const f = n || i || [], C = t || c || [], h = e || l || {}, y = u || o || (h == null ? void 0 : h.theme) || "default", w = T[y] || T.default || T, g = a || m || {}, v = b || r || null, D = s || p || "table-container";
+  constructor({ data: n = [], columns: t = [], config: e = {}, theme: o = "default", classes: a = null, dataProvider: s = null, targetContainerId: r = "table-container", inData: i, inColumns: c, inConfig: l, inTheme: d, inClasses: m, inDataProvider: b, inTargetContainerId: p } = {}) {
+    const f = n || i || [], C = t || c || [], h = e || l || {}, y = d || o || (h == null ? void 0 : h.theme) || "default", w = T[y] || T.default || T, g = a || m || {}, v = b || s || null, D = r || p || "table-container";
     this.containerId = D, this.theme = y, this.classes = { ...w, ...(h == null ? void 0 : h.classes) || {}, ...g }, this.dataProvider = v, this.tableElement = null, this.controlsTree = null, this.store = new H({
       inData: f,
       inColumns: C,
@@ -502,11 +506,11 @@ class ot {
     return await this.load(), o;
   }
   async updateRecord({ inId: n, id: t = null, inItem: e = {}, item: o = null } = {}) {
-    const a = t ?? n, r = o || e;
+    const a = t ?? n, s = o || e;
     if (!this.dataProvider || typeof this.dataProvider.update != "function")
       throw new Error("Table.updateRecord requires a valid dataProvider.update implementation");
-    const s = await this.dataProvider.update({ inId: a, inItem: r });
-    return await this.load(), s;
+    const r = await this.dataProvider.update({ inId: a, inItem: s });
+    return await this.load(), r;
   }
   async deleteRecord({ inId: n, id: t = null } = {}) {
     const e = t ?? n;
@@ -516,7 +520,7 @@ class ot {
     return await this.load(), o;
   }
   render() {
-    var a, r, s;
+    var a, s, r;
     const n = document.getElementById(this.containerId);
     if (!n) return null;
     const t = G({
@@ -527,7 +531,7 @@ class ot {
       inClasses: this.classes
     });
     this.controlsTree = E({ inSpec: t });
-    const e = (s = (r = window.ks) == null ? void 0 : r["json-to-dom"]) == null ? void 0 : s.buildSpecElement;
+    const e = (r = (s = window.ks) == null ? void 0 : s["json-to-dom"]) == null ? void 0 : r.buildSpecElement;
     if (typeof e != "function")
       return console.error("json-to-dom buildSpecElement not found on window.ks"), this.controlsTree;
     const o = e({ inSpec: t });
@@ -561,7 +565,8 @@ class ot {
   refreshTable() {
     this.tableElement && I({
       inTableElement: this.tableElement,
-      inStore: this.store
+      inStore: this.store,
+      inClasses: this.classes
     });
   }
   filterOriginalData({ query: n = "", inQuery: t = "" } = {}) {
@@ -581,8 +586,8 @@ class ot {
     this.filterOriginalData({ query: e });
   }
 }
-const at = ({ inHeadConfig: d = {} } = {}) => {
-  const n = d, t = (n == null ? void 0 : n.title) || "", e = (n == null ? void 0 : n.subtitle) || "";
+const at = ({ inHeadConfig: u = {} } = {}) => {
+  const n = u, t = (n == null ? void 0 : n.title) || "", e = (n == null ? void 0 : n.subtitle) || "";
   if (!t && !e) return null;
   const o = [];
   return t && o.push({
@@ -604,22 +609,22 @@ const at = ({ inHeadConfig: d = {} } = {}) => {
     },
     children: o
   };
-}, rt = ({ inColumn: d = {}, inClasses: n = {} } = {}) => {
-  const t = d, e = n, o = t.key || "", a = t.label || o, r = t.type === "number" ? "number" : "text", s = {
+}, st = ({ inColumn: u = {}, inClasses: n = {} } = {}) => {
+  const t = u, e = n, o = t.key || "", a = t.label || o, s = t.type === "number" ? "number" : "text", r = {
     tagName: "label",
     textContent: a,
     attributes: e != null && e.label ? { class: e.label } : {}
-  }, i = t.datalist === !0 || t.datalist !== !1 && r !== "number", c = t.datalistId || `${o}-datalist`, l = {
-    type: r,
+  }, i = t.datalist === !0 || t.datalist !== !1 && s !== "number", c = t.datalistId || `${o}-datalist`, l = {
+    type: s,
     name: o,
     placeholder: `Enter ${a}...`
   };
   e != null && e.input && (l.class = e.input), i && (l.list = c);
-  const u = {
+  const d = {
     tagName: "input",
     attributes: l
   };
-  t.id && (u.attributes.id = t.id, s.attributes.for = t.id);
+  t.id && (d.attributes.id = t.id, r.attributes.for = t.id);
   const m = {
     tagName: "button",
     textContent: "Search",
@@ -633,35 +638,35 @@ const at = ({ inHeadConfig: d = {} } = {}) => {
   }, b = {
     tagName: "div",
     attributes: e != null && e.group ? { class: e.group } : {},
-    children: [u, m]
+    children: [d, m]
   };
   return {
     tagName: "div",
     attributes: e != null && e.field ? { class: e.field } : {},
-    children: [s, b]
+    children: [r, b]
   };
-}, st = ({ inColumns: d = [], inClasses: n = {} } = {}) => {
-  const t = d, e = n;
+}, rt = ({ inColumns: u = [], inClasses: n = {} } = {}) => {
+  const t = u, e = n;
   if (!Array.isArray(t)) return { tagName: "div", children: [] };
-  const o = t.map((r) => rt({ inColumn: r, inClasses: e }));
+  const o = t.map((s) => st({ inColumn: s, inClasses: e }));
   return {
     tagName: "div",
     attributes: e != null && e.body ? { class: e.body } : {},
     children: o
   };
-}, it = ({ inFootConfig: d = {} } = {}) => {
-  const n = d, t = n == null ? void 0 : n.buttons;
+}, it = ({ inFootConfig: u = {} } = {}) => {
+  const n = u, t = n == null ? void 0 : n.buttons;
   if (!Array.isArray(t) || t.length === 0) return null;
   const e = t.map((o) => {
-    const r = o.variant === "primary" ? "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out cursor-pointer" : "px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition duration-150 ease-in-out cursor-pointer", s = {
+    const s = o.variant === "primary" ? "px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out cursor-pointer" : "px-4 py-2 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 transition duration-150 ease-in-out cursor-pointer", r = {
       type: o.type || "button",
       name: o.name || "",
-      class: r
+      class: s
     };
-    return o.id && (s.id = o.id), {
+    return o.id && (r.id = o.id), {
       tagName: "button",
       textContent: o.label || o.name,
-      attributes: s
+      attributes: r
     };
   });
   return {
@@ -671,12 +676,12 @@ const at = ({ inHeadConfig: d = {} } = {}) => {
     },
     children: e
   };
-}, lt = ({ inColumns: d = [], inConfig: n = {}, inClasses: t = {} } = {}) => {
-  const e = d, o = n, a = t, r = at({ inHeadConfig: o == null ? void 0 : o.head }), s = st({ inColumns: e, inClasses: a }), i = it({ inFootConfig: o == null ? void 0 : o.foot });
+}, lt = ({ inColumns: u = [], inConfig: n = {}, inClasses: t = {} } = {}) => {
+  const e = u, o = n, a = t, s = at({ inHeadConfig: o == null ? void 0 : o.head }), r = rt({ inColumns: e, inClasses: a }), i = it({ inFootConfig: o == null ? void 0 : o.foot });
   return {
     tagName: "div",
     attributes: a != null && a.form ? { class: a.form } : {},
-    children: [r, s, i].filter(Boolean)
+    children: [s, r, i].filter(Boolean)
   };
 };
 class ct extends N {
@@ -703,15 +708,15 @@ class ct extends N {
     return this.library.activeColumns;
   }
 }
-const dt = {
-  form: "card p-3 shadow-sm mb-3 bg-light border-light-subtle",
-  body: "row g-3 align-items-end",
-  field: "col-md-4",
-  label: "form-label form-label-sm fw-semibold text-secondary mb-1",
-  group: "input-group input-group-sm",
+const ut = {
+  form: "mb-3",
+  body: "row g-3 align-items-center",
+  field: "col-auto d-flex align-items-center gap-2 mb-2",
+  label: "col-form-label col-form-label-sm fw-semibold text-secondary text-nowrap mb-0",
+  group: "input-group input-group-sm w-auto",
   input: "form-control bg-white",
   button: "btn btn-outline-primary"
-}, ut = {
+}, dt = {
   form: "p-2 mb-3 bg-transparent border-0 shadow-none",
   body: "row g-2 align-items-end",
   field: "col-md-4",
@@ -735,26 +740,26 @@ const dt = {
   group: "input-group input-group-sm",
   input: "form-control bg-dark text-white border-secondary",
   button: "btn btn-primary"
-}, A = {
+}, x = {
   default: {
-    form: "card p-3 shadow-sm mb-3",
-    body: "row g-3 align-items-end",
-    field: "col-md-4",
-    label: "form-label form-label-sm fw-semibold mb-1",
-    group: "input-group input-group-sm",
+    form: "mb-3",
+    body: "row g-3 align-items-center",
+    field: "col-auto d-flex align-items-center gap-2 mb-2",
+    label: "col-form-label col-form-label-sm fw-semibold text-nowrap mb-0",
+    group: "input-group input-group-sm w-auto",
     input: "form-control",
     button: "btn btn-outline-secondary"
   },
-  light: dt,
-  extraLight: ut,
+  light: ut,
+  extraLight: dt,
   dark: mt,
   extraDark: bt
 };
 class ft {
-  constructor({ columns: n = [], config: t = {}, theme: e = "default", classes: o = null, targetContainerId: a = "form-container", inColumns: r, inConfig: s, inTheme: i, inClasses: c, inTargetContainerId: l } = {}) {
-    const u = n || r || [], m = t || s || {}, b = i || e || (m == null ? void 0 : m.theme) || "default", p = A[b] || A.default || A, f = o || c || {}, C = a || l || "form-container";
+  constructor({ columns: n = [], config: t = {}, theme: e = "default", classes: o = null, targetContainerId: a = "form-container", inColumns: s, inConfig: r, inTheme: i, inClasses: c, inTargetContainerId: l } = {}) {
+    const d = n || s || [], m = t || r || {}, b = i || e || (m == null ? void 0 : m.theme) || "default", p = x[b] || x.default || x, f = o || c || {}, C = a || l || "form-container";
     this.containerId = C, this.theme = b, this.classes = { ...p, ...(m == null ? void 0 : m.classes) || {}, ...f }, this.formElement = null, this.controlsTree = null, this.store = new ct({
-      inColumns: u,
+      inColumns: d,
       inConfig: m
     });
   }
@@ -762,7 +767,7 @@ class ft {
     var a;
     const e = t || n || "default";
     this.theme = e;
-    const o = A[e] || A.default || A;
+    const o = x[e] || x.default || x;
     if (this.classes = { ...o, ...((a = this.store.config) == null ? void 0 : a.classes) || {} }, this.formElement)
       return this.render();
   }
@@ -773,7 +778,7 @@ class ft {
     return this.store.config;
   }
   render() {
-    var a, r;
+    var a, s;
     const n = document.getElementById(this.containerId);
     if (!n) return null;
     const t = lt({
@@ -782,7 +787,7 @@ class ft {
       inClasses: this.classes
     });
     this.controlsTree = E({ inSpec: t });
-    const e = (r = (a = window.ks) == null ? void 0 : a["json-to-dom"]) == null ? void 0 : r.buildSpecElement;
+    const e = (s = (a = window.ks) == null ? void 0 : a["json-to-dom"]) == null ? void 0 : s.buildSpecElement;
     if (typeof e != "function")
       return console.error("json-to-dom buildSpecElement not found on window.ks"), this.controlsTree;
     const o = e({ inSpec: t });
@@ -796,20 +801,20 @@ class ft {
     return this.controlsTree;
   }
 }
-const k = ({ inData: d = [], inKey: n = "", inTopN: t = 100 } = {}) => {
-  const e = d, o = n, a = t;
+const k = ({ inData: u = [], inKey: n = "", inTopN: t = 100 } = {}) => {
+  const e = u, o = n, a = t;
   if (!Array.isArray(e) || !o) return [];
-  const r = /* @__PURE__ */ new Map();
+  const s = /* @__PURE__ */ new Map();
   for (const c of e) {
     if (!c || typeof c != "object") continue;
     const l = c[o];
     if (l != null) {
-      const u = String(l).trim();
-      u !== "" && r.set(u, (r.get(u) || 0) + 1);
+      const d = String(l).trim();
+      d !== "" && s.set(d, (s.get(d) || 0) + 1);
     }
   }
-  const s = Array.from(r.entries()).map(([c, l]) => ({ value: c, count: l })).sort((c, l) => l.count - c.count);
-  return (a > 0 && Number.isFinite(a) ? s.slice(0, a) : s).map(({ value: c, count: l }) => ({
+  const r = Array.from(s.entries()).map(([c, l]) => ({ value: c, count: l })).sort((c, l) => l.count - c.count);
+  return (a > 0 && Number.isFinite(a) ? r.slice(0, a) : r).map(({ value: c, count: l }) => ({
     tagName: "option",
     attributes: {
       value: c,
@@ -817,16 +822,16 @@ const k = ({ inData: d = [], inKey: n = "", inTopN: t = 100 } = {}) => {
     },
     textContent: `${c} (${l})`
   }));
-}, pt = ({ inData: d = [], inColumns: n = [], inTopN: t = 100 } = {}) => {
-  const e = d, o = n, a = t;
+}, pt = ({ inData: u = [], inColumns: n = [], inTopN: t = 100 } = {}) => {
+  const e = u, o = n, a = t;
   if (!Array.isArray(o) || o.length === 0)
     return {
       tagName: "div",
       attributes: { id: "ks-datalists-wrapper" },
       children: []
     };
-  const r = o.map((s) => {
-    const i = s.key || "", c = s.datalistId || `${i}-datalist`, l = k({
+  const s = o.map((r) => {
+    const i = r.key || "", c = r.datalistId || `${i}-datalist`, l = k({
       inData: e,
       inKey: i,
       inTopN: a
@@ -844,26 +849,26 @@ const k = ({ inData: d = [], inKey: n = "", inTopN: t = 100 } = {}) => {
     attributes: {
       id: "ks-datalists-wrapper"
     },
-    children: r
+    children: s
   };
 };
 class ht extends N {
   constructor({ inData: n = [], inColumns: t = [], inConfig: e = {}, inTopN: o = 100 } = {}) {
-    const a = n, r = t, s = e, i = o;
+    const a = n, s = t, r = e, i = o;
     super({
       inData: a,
-      inColumns: r,
-      inConfig: s,
+      inColumns: s,
+      inConfig: r,
       inTopN: i
     }), this.library = this._buildLibrary({
       inSource: this.source
     });
   }
   _buildLibrary({ inSource: n } = {}) {
-    var r, s, i, c, l;
+    var s, r, i, c, l;
     const t = n, e = this._resolveActiveColumns({
       inColumnsCatalog: t == null ? void 0 : t.columns,
-      inColumnKeys: ((s = (r = t == null ? void 0 : t.config) == null ? void 0 : r.datalist) == null ? void 0 : s.columns) || ((i = t == null ? void 0 : t.config) == null ? void 0 : i.columns)
+      inColumnKeys: ((r = (s = t == null ? void 0 : t.config) == null ? void 0 : s.datalist) == null ? void 0 : r.columns) || ((i = t == null ? void 0 : t.config) == null ? void 0 : i.columns)
     }), o = F({
       inData: t == null ? void 0 : t.originalData
     }), a = ((l = (c = t == null ? void 0 : t.config) == null ? void 0 : c.datalist) == null ? void 0 : l.topN) ?? (t == null ? void 0 : t.topN) ?? 100;
@@ -903,7 +908,7 @@ const yt = {
   wrapper: "ks-datalists-wrapper ks-datalist-extradark",
   datalist: "",
   option: ""
-}, x = {
+}, A = {
   default: {
     wrapper: "ks-datalists-wrapper",
     datalist: "",
@@ -915,8 +920,8 @@ const yt = {
   extraDark: wt
 };
 class vt {
-  constructor({ data: n = [], columns: t = [], config: e = {}, theme: o = "default", classes: a = null, dataProvider: r = null, targetContainerId: s = "datalist-container", inData: i, inColumns: c, inConfig: l, inTheme: u, inClasses: m, inDataProvider: b, inTargetContainerId: p } = {}) {
-    const f = n || i || [], C = t || c || [], h = e || l || {}, y = u || o || (h == null ? void 0 : h.theme) || "default", w = x[y] || x.default || x, g = a || m || {}, v = b || r || null, D = s || p || "datalist-container";
+  constructor({ data: n = [], columns: t = [], config: e = {}, theme: o = "default", classes: a = null, dataProvider: s = null, targetContainerId: r = "datalist-container", inData: i, inColumns: c, inConfig: l, inTheme: d, inClasses: m, inDataProvider: b, inTargetContainerId: p } = {}) {
+    const f = n || i || [], C = t || c || [], h = e || l || {}, y = d || o || (h == null ? void 0 : h.theme) || "default", w = A[y] || A.default || A, g = a || m || {}, v = b || s || null, D = r || p || "datalist-container";
     this.containerId = D, this.theme = y, this.classes = { ...w, ...(h == null ? void 0 : h.classes) || {}, ...g }, this.dataProvider = v, this.element = null, this.spec = null, this.store = new ht({
       inData: f,
       inColumns: C,
@@ -927,7 +932,7 @@ class vt {
     var a;
     const e = t || n || "default";
     this.theme = e;
-    const o = x[e] || x.default || x;
+    const o = A[e] || A.default || A;
     if (this.classes = { ...o, ...((a = this.store.config) == null ? void 0 : a.classes) || {} }, this.element)
       return this.render();
   }
@@ -948,7 +953,7 @@ class vt {
     return this.store.config;
   }
   render() {
-    var a, r;
+    var a, s;
     if (typeof document > "u") return null;
     let n = document.getElementById(this.containerId);
     n || (n = document.createElement("div"), n.id = this.containerId, document.body.appendChild(n));
@@ -958,14 +963,14 @@ class vt {
       inTopN: this.store.topN
     });
     this.spec = t;
-    const e = (r = (a = window.ks) == null ? void 0 : a["json-to-dom"]) == null ? void 0 : r.buildSpecElement;
+    const e = (s = (a = window.ks) == null ? void 0 : a["json-to-dom"]) == null ? void 0 : s.buildSpecElement;
     let o = null;
     if (typeof e != "function") {
-      const s = document.createElement("div");
-      s.id = "ks-datalists-wrapper";
+      const r = document.createElement("div");
+      r.id = "ks-datalists-wrapper";
       for (const i of this.store.activeColumns) {
-        const c = i.key || "", l = i.datalistId || `${c}-datalist`, u = document.createElement("datalist");
-        u.id = l;
+        const c = i.key || "", l = i.datalistId || `${c}-datalist`, d = document.createElement("datalist");
+        d.id = l;
         const m = k({
           inData: this.store.stateData,
           inKey: c,
@@ -973,19 +978,19 @@ class vt {
         });
         for (const b of m) {
           const p = document.createElement("option");
-          p.value = b.attributes.value, p.label = b.attributes.label, p.textContent = b.textContent, u.appendChild(p);
+          p.value = b.attributes.value, p.label = b.attributes.label, p.textContent = b.textContent, d.appendChild(p);
         }
-        s.appendChild(u);
+        r.appendChild(d);
       }
-      o = s;
+      o = r;
     } else {
-      const s = e({ inSpec: t });
-      if (o = Array.isArray(s) ? s[0] : s, !o || o.children.length === 0) {
+      const r = e({ inSpec: t });
+      if (o = Array.isArray(r) ? r[0] : r, !o || o.children.length === 0) {
         const i = document.createElement("div");
         i.id = "ks-datalists-wrapper";
         for (const c of this.store.activeColumns) {
-          const l = c.key || "", u = c.datalistId || `${l}-datalist`, m = document.createElement("datalist");
-          m.id = u;
+          const l = c.key || "", d = c.datalistId || `${l}-datalist`, m = document.createElement("datalist");
+          m.id = d;
           const b = k({
             inData: this.store.stateData,
             inKey: l,
@@ -1011,19 +1016,19 @@ class vt {
   }
 }
 const Dt = ({
-  inBaseUrl: d = "",
+  inBaseUrl: u = "",
   inReadUrl: n = "",
   inCreateUrl: t = "",
   inUpdateUrl: e = "",
   inDeleteUrl: o = "",
   inHeaders: a = {},
-  inFetchOptions: r = {},
-  inCustom: s = {}
+  inFetchOptions: s = {},
+  inCustom: r = {}
 } = {}) => {
-  const i = d, c = n || i, l = t || i, u = e || i, m = o || i, b = {
+  const i = u, c = n || i, l = t || i, d = e || i, m = o || i, b = {
     "Content-Type": "application/json",
     ...a
-  }, p = r, f = s;
+  }, p = s, f = r;
   return {
     read: async ({ inQuery: C = {}, inUrl: h } = {}) => {
       const y = C;
@@ -1063,7 +1068,7 @@ const Dt = ({
       const w = C, g = h;
       if (typeof f.update == "function")
         return await f.update({ inId: w, inItem: g });
-      let v = y || u;
+      let v = y || d;
       w != null && (v.includes(":id") ? v = v.replace(":id", encodeURIComponent(w)) : v = `${v.replace(/\/$/, "")}/${encodeURIComponent(w)}`);
       const D = await fetch(v, {
         method: "PUT",

@@ -158,7 +158,8 @@ export class Table {
 
         refreshTable({
             inTableElement: this.tableElement,
-            inStore: this.store
+            inStore: this.store,
+            inClasses: this.classes
         });
     }
 

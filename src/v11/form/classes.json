@@ -1,19 +1,19 @@
 {
     "default": {
-        "form": "card p-3 shadow-sm mb-3",
-        "body": "row g-3 align-items-end",
-        "field": "col-md-4",
-        "label": "form-label form-label-sm fw-semibold mb-1",
-        "group": "input-group input-group-sm",
+        "form": "mb-3",
+        "body": "row g-3 align-items-center",
+        "field": "col-auto d-flex align-items-center gap-2 mb-2",
+        "label": "col-form-label col-form-label-sm fw-semibold text-nowrap mb-0",
+        "group": "input-group input-group-sm w-auto",
         "input": "form-control",
         "button": "btn btn-outline-secondary"
     },
     "light": {
-        "form": "card p-3 shadow-sm mb-3 bg-light border-light-subtle",
-        "body": "row g-3 align-items-end",
-        "field": "col-md-4",
-        "label": "form-label form-label-sm fw-semibold text-secondary mb-1",
-        "group": "input-group input-group-sm",
+        "form": "mb-3",
+        "body": "row g-3 align-items-center",
+        "field": "col-auto d-flex align-items-center gap-2 mb-2",
+        "label": "col-form-label col-form-label-sm fw-semibold text-secondary text-nowrap mb-0",
+        "group": "input-group input-group-sm w-auto",
         "input": "form-control bg-white",
         "button": "btn btn-outline-primary"
     },

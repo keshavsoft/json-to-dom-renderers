@@ -10,7 +10,8 @@ export const filterOriginalTable = ({ inTable, inQuery = "" } = {}) => {
 
     refreshTable({
         inTableElement: localTable.tableElement,
-        inStore: localTable.store
+        inStore: localTable.store,
+        inClasses: localTable.classes
     });
 };
 
@@ -24,7 +25,8 @@ export const filterStateTable = ({ inTable, inQuery = "" } = {}) => {
 
     refreshTable({
         inTableElement: localTable.tableElement,
-        inStore: localTable.store
+        inStore: localTable.store,
+        inClasses: localTable.classes
     });
 };
 
