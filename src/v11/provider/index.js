@@ -1,2 +1,2 @@
 export { createDataProvider } from "./createDataProvider.js";
-export default createDataProvider;
+export { default } from "./createDataProvider.js";

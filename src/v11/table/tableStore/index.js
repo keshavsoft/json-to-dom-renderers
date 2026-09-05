@@ -32,6 +32,18 @@ export class TableStore extends SourceStore {
         return this.library.computedFooter;
     }
 
+    updateData({ inData = [] } = {}) {
+        const localData = inData;
+
+        this.source.originalData = Array.isArray(localData) ? localData : [];
+        this.library = buildLibrary({
+            inSource: this.source,
+            inResolveColumns: this._resolveActiveColumns.bind(this)
+        });
+
+        return this.library.stateData;
+    }
+
     filterOriginalData({ inQuery = "" } = {}) {
         const localQuery = inQuery;
 

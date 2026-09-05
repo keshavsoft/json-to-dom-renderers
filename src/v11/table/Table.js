@@ -54,6 +54,12 @@ export class Table {
         return records;
     }
 
+    update({ data = [], inData } = {}) {
+        const localData = data?.length > 0 ? data : (inData || []);
+        this.store.updateData({ inData: localData });
+        return this.render();
+    }
+
     async createRecord({ inItem = {}, item = null } = {}) {
         const localItem = item || inItem;
         if (!this.dataProvider || typeof this.dataProvider.create !== "function") {
