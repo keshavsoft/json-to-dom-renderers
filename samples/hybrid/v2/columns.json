@@ -1,0 +1,34 @@
+[
+    {
+        "key": "vchtype",
+        "label": "Vch Type",
+        "type": "string",
+        "id": "vchtype-id"
+    },
+    {
+        "key": "vouchernumber",
+        "label": "Vch No",
+        "type": "string"
+    },
+    {
+        "key": "allinventoryentries.stockitemname",
+        "label": "Stock Item Name",
+        "type": "string"
+    },
+    {
+        "key": "allinventoryentries.batchallocations.batchname",
+        "label": "Batch Name",
+        "type": "string"
+    },
+    {
+        "key": "allinventoryentries.batchallocations.amount",
+        "label": "Amount",
+        "type": "number",
+        "align": "right"
+    },
+    {
+        "key": "allinventoryentries.batchallocations.actualqty",
+        "label": "Actual Qty",
+        "type": "string"
+    }
+]

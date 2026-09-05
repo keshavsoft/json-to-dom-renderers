@@ -1,0 +1,43 @@
+{
+    "serial": true,
+    "head": {
+        "columns": [
+            "vchtype",
+            "vouchernumber",
+            "allinventoryentries.stockitemname",
+            "allinventoryentries.batchallocations.batchname",
+            "allinventoryentries.batchallocations.amount",
+            "allinventoryentries.batchallocations.actualqty"
+        ]
+    },
+    "row": {
+        "striped": true,
+        "hover": true
+    },
+    "foot": [
+        {
+            "id": "summaryRow",
+            "title": "Total",
+            "type": "aggregate",
+            "values": {
+                "amount": "sum"
+            }
+        },
+        {
+            "id": "taxRow",
+            "title": "GST (18%)",
+            "type": "eval",
+            "values": {
+                "amount": "summaryRow.amount * 0.18"
+            }
+        },
+        {
+            "id": "balanceRow",
+            "title": "Grand Total",
+            "type": "eval",
+            "values": {
+                "amount": "summaryRow.amount + taxRow.amount"
+            }
+        }
+    ]
+}

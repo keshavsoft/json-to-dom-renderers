@@ -1,0 +1,9 @@
+{
+    "form": "card p-3 shadow-sm mb-3",
+    "body": "row g-3 align-items-end",
+    "field": "col-md-4",
+    "label": "form-label form-label-sm fw-semibold mb-1",
+    "group": "input-group input-group-sm",
+    "input": "form-control",
+    "button": "btn btn-outline-secondary"
+}

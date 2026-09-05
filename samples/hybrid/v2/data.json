@@ -1,0 +1,155 @@
+[
+    {
+        "type": "Voucher",
+        "vchtype": "Sales/CA",
+        "date": "2026-04-01",
+        "vouchernumber": "1",
+        "numberingstyle": "Auto Renumber",
+        "isdeleted": false,
+        "vouchernumberseries": "Default",
+        "allinventoryentries.stockitemname": "Shading Net Kgs",
+        "allinventoryentries.rate": "280.90/kgs",
+        "allinventoryentries.amount": "1000.00",
+        "allinventoryentries.actualqty": " 3.560 kgs",
+        "allinventoryentries.billedqty": " 3.560 kgs",
+        "allinventoryentries.basicuserdescription": [
+            {
+                "metadata": true,
+                "type": "String"
+            },
+            "K"
+        ],
+        "allinventoryentries.batchallocations.mfdon": "20210723",
+        "allinventoryentries.batchallocations.godownname": "Main Location",
+        "allinventoryentries.batchallocations.batchname": "Rishi-Rs.205/-",
+        "allinventoryentries.batchallocations.destinationgodownname": "Main Location",
+        "allinventoryentries.batchallocations.indentno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.orderno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.trackingnumber": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.dynamiccstiscleared": false,
+        "allinventoryentries.batchallocations.batchid": {
+            "type": "Number",
+            "value": " 4193"
+        },
+        "allinventoryentries.batchallocations.batchdiscount": {
+            "type": "Number",
+            "value": "0"
+        },
+        "allinventoryentries.batchallocations.amount": "1000.00",
+        "allinventoryentries.batchallocations.actualqty": " 3.560 kgs",
+        "allinventoryentries.batchallocations.billedqty": " 3.560 kgs",
+        "allinventoryentries.batchallocations.batchrate": {
+            "type": "Rate",
+            "value": "280.90/kgs"
+        }
+    },
+    {
+        "type": "Voucher",
+        "vchtype": "Sales/CA",
+        "date": "2026-04-01",
+        "vouchernumber": "1",
+        "numberingstyle": "Auto Renumber",
+        "isdeleted": false,
+        "vouchernumberseries": "Default",
+        "allinventoryentries.stockitemname": "ROPE",
+        "allinventoryentries.rate": "312.50/kgs",
+        "allinventoryentries.amount": "100.00",
+        "allinventoryentries.actualqty": " 0.320 kgs",
+        "allinventoryentries.billedqty": " 0.320 kgs",
+        "allinventoryentries.batchallocations.godownname": "Main Location",
+        "allinventoryentries.batchallocations.batchname": "Tuf-Rs.170",
+        "allinventoryentries.batchallocations.destinationgodownname": "Main Location",
+        "allinventoryentries.batchallocations.indentno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.orderno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.trackingnumber": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.dynamiccstiscleared": false,
+        "allinventoryentries.batchallocations.batchid": {
+            "type": "Number",
+            "value": " 3550"
+        },
+        "allinventoryentries.batchallocations.batchdiscount": {
+            "type": "Number",
+            "value": "0"
+        },
+        "allinventoryentries.batchallocations.amount": "100.00",
+        "allinventoryentries.batchallocations.actualqty": " 0.320 kgs",
+        "allinventoryentries.batchallocations.billedqty": " 0.320 kgs",
+        "allinventoryentries.batchallocations.batchrate": {
+            "type": "Rate",
+            "value": "312.50/kgs"
+        }
+    },
+    {
+        "type": "Voucher",
+        "vchtype": "Sales/CA",
+        "date": "2026-04-01",
+        "vouchernumber": "1",
+        "numberingstyle": "Auto Renumber",
+        "isdeleted": false,
+        "vouchernumberseries": "Default",
+        "allinventoryentries.stockitemname": "ROPE",
+        "allinventoryentries.rate": "259.26/kgs",
+        "allinventoryentries.amount": "420.00",
+        "allinventoryentries.actualqty": " 1.620 kgs",
+        "allinventoryentries.billedqty": " 1.620 kgs",
+        "allinventoryentries.batchallocations.godownname": "Main Location",
+        "allinventoryentries.batchallocations.batchname": "Tuf-Rs.170",
+        "allinventoryentries.batchallocations.destinationgodownname": "Main Location",
+        "allinventoryentries.batchallocations.indentno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.orderno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.trackingnumber": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.dynamiccstiscleared": false,
+        "allinventoryentries.batchallocations.batchid": {
+            "type": "Number",
+            "value": " 3550"
+        },
+        "allinventoryentries.batchallocations.batchdiscount": {
+            "type": "Number",
+            "value": "0"
+        },
+        "allinventoryentries.batchallocations.amount": "420.00",
+        "allinventoryentries.batchallocations.actualqty": " 1.620 kgs",
+        "allinventoryentries.batchallocations.billedqty": " 1.620 kgs",
+        "allinventoryentries.batchallocations.batchrate": {
+            "type": "Rate",
+            "value": "259.26/kgs"
+        }
+    },
+    {
+        "type": "Voucher",
+        "vchtype": "Sales/CA",
+        "date": "2026-04-01",
+        "vouchernumber": "1",
+        "numberingstyle": "Auto Renumber",
+        "isdeleted": false,
+        "vouchernumberseries": "Default",
+        "allinventoryentries.stockitemname": "ROPE",
+        "allinventoryentries.rate": "250.00/kgs",
+        "allinventoryentries.amount": "200.00",
+        "allinventoryentries.actualqty": " 0.800 kgs",
+        "allinventoryentries.billedqty": " 0.800 kgs",
+        "allinventoryentries.batchallocations.godownname": "Main Location",
+        "allinventoryentries.batchallocations.batchname": "Tuf-Rs.170",
+        "allinventoryentries.batchallocations.destinationgodownname": "Main Location",
+        "allinventoryentries.batchallocations.indentno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.orderno": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.trackingnumber": "\u0004 Not Applicable",
+        "allinventoryentries.batchallocations.dynamiccstiscleared": false,
+        "allinventoryentries.batchallocations.batchid": {
+            "type": "Number",
+            "value": " 3550"
+        },
+        "allinventoryentries.batchallocations.batchdiscount": {
+            "type": "Number",
+            "value": "0"
+        },
+        "allinventoryentries.batchallocations.amount": "200.00",
+        "allinventoryentries.batchallocations.actualqty": " 0.800 kgs",
+        "allinventoryentries.batchallocations.billedqty": " 0.800 kgs",
+        "allinventoryentries.batchallocations.inclvatrate": "250.00/kgs",
+        "allinventoryentries.batchallocations.batchrate": {
+            "type": "Rate",
+            "value": "250.00/kgs"
+        }
+    }
+]
