@@ -251,6 +251,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
+                    <li class="nav-item"><a class="nav-link" href="#the-story">The Story</a></li>
                     <li class="nav-item"><a class="nav-link" href="#demo">Live Demo</a></li>
                     <li class="nav-item"><a class="nav-link" href="#architecture">Architecture</a></li>
                     <li class="nav-item"><a class="nav-link" href="#how-to">How To</a></li>
@@ -259,7 +260,7 @@
                     <li class="nav-item"><a class="nav-link" href="#quickstart">Quick Start</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">v11.0.0</span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">v12.0.0</span>
                     <a href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank"
                         class="btn btn-sm btn-outline-light d-flex align-items-center gap-2">
                         <i class="bi bi-github"></i> GitHub
@@ -346,6 +347,97 @@
                             Instant theme switching (<code>default</code>, <code>light</code>, <code>extraLight</code>, <code>dark</code>, <code>extraDark</code>)
                             across Table, Form, and DataList via declarative <code>classes.json</code> catalogs.
                         </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Story: Two Libraries, Two Worlds Section -->
+    <section id="the-story" class="py-5 bg-light border-bottom border-light-subtle">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="text-primary fw-semibold text-uppercase small tracking-wide">The Grand Architecture</span>
+                <h2 class="fw-bold">Two Worlds &bull; Two Libraries</h2>
+                <p class="text-muted mx-auto" style="max-width: 720px;">
+                    What is the missing link? Why are there two separate libraries? Here is the exact boundary between the 
+                    <strong>JSON Specification World</strong> and the <strong>Native DOM World</strong>.
+                </p>
+            </div>
+
+            <div class="row g-4 align-items-stretch">
+                <!-- Library 1: json-to-dom-renderers -->
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 border-primary border-opacity-50">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle fw-semibold px-3 py-1">Tier 1: High-Level</span>
+                            <span class="small text-muted font-monospace">JSON-to-JSON Transformer</span>
+                        </div>
+                        <h4 class="fw-bold mb-2">json-to-dom-renderers</h4>
+                        <p class="text-muted small mb-3">
+                            The <strong>Business State &amp; Spec Engine</strong>. Operates 100% in the <em>JSON Specification World</em>.
+                        </p>
+                        <ul class="small text-secondary ps-3 mb-4 lh-lg">
+                            <li><strong>Input:</strong> Business Data (<code>data.json</code>), Column Schemas (<code>columns.json</code>), Display Configs (<code>config.json</code>), Theme Maps (<code>classes.json</code>).</li>
+                            <li><strong>State Management:</strong> Isolated stores (<code>TableStore</code>, <code>FormStore</code>, <code>DataListStore</code>).</li>
+                            <li><strong>Calculations:</strong> Multi-tier summary footers (aggregates like <code>sum</code>, evaluated formulas like <code>amount * 0.18</code>).</li>
+                            <li><strong>Autocomplete Profiling:</strong> Frequency counting with <code>topN</code> caps.</li>
+                            <li><strong>REST CRUD Adapter:</strong> <code>createDataProvider</code> for dynamic async fetching without auth coupling.</li>
+                            <li><strong>Output:</strong> Pure declarative JSON Element Specification Tree (<code>inSpec</code>). <em>(Zero native DOM nodes created!)</em></li>
+                        </ul>
+                        <div class="p-3 bg-dark text-light rounded-3 font-monospace small">
+                            <span class="text-secondary">// json-to-dom-renderers output:</span><br>
+                            { tagName: "table", classList: [...], children: [...] }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Library 2: json-to-dom -->
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 border-info border-opacity-50">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="badge bg-info-subtle text-info border border-info-subtle fw-semibold px-3 py-1">Tier 2: Low-Level</span>
+                            <a href="https://github.com/keshavsoft/json-to-dom" target="_blank" class="small text-decoration-none text-info font-monospace">
+                                <i class="bi bi-box-arrow-up-right"></i> json-to-dom Repository
+                            </a>
+                        </div>
+                        <h4 class="fw-bold mb-2">json-to-dom</h4>
+                        <p class="text-muted small mb-3">
+                            The <strong>Native DOM Compiler</strong>. Crosses the boundary from the <em>JSON World</em> into the <em>Physical DOM World</em>.
+                        </p>
+                        <ul class="small text-secondary ps-3 mb-4 lh-lg">
+                            <li><strong>Input:</strong> Pure JSON Element Specification Tree (<code>inSpec</code>).</li>
+                            <li><strong>Domain Knowledge:</strong> <strong>Zero!</strong> Knows nothing about tables, invoices, serial numbers, or search filters.</li>
+                            <li><strong>Compilation:</strong> Recursively executes native <code>document.createElement</code>, assigns classes, sets attributes, binds event listeners.</li>
+                            <li><strong>Efficiency:</strong> Direct native DOM instantiation with zero Virtual DOM overhead or diffing lag.</li>
+                            <li><strong>Output:</strong> Physical browser DOM element instances (<code>HTMLTableElement</code>, <code>HTMLFormElement</code>) or <code>DocumentFragment</code>.</li>
+                            <li><strong>Targeted Repainting:</strong> Works with surgical repainters to swap <code>&lt;tbody&gt;</code> and <code>&lt;tfoot&gt;</code> without rebuilding headers.</li>
+                        </ul>
+                        <div class="p-3 bg-dark text-light rounded-3 font-monospace small">
+                            <span class="text-secondary">// json-to-dom output:</span><br>
+                            &lt;table class="table table-striped"&gt;&lt;thead&gt;...&lt;/tbody&gt;&lt;/table&gt;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Architectural Boundary Banner -->
+            <div class="card-custom p-4 mt-4 bg-white border-2 border-primary border-opacity-25 shadow-sm">
+                <div class="row align-items-center g-3">
+                    <div class="col-md-8">
+                        <h5 class="fw-bold mb-1 text-primary">
+                            <i class="bi bi-arrow-left-right me-2"></i> Crossing the Architectural Boundary
+                        </h5>
+                        <p class="text-muted small mb-0">
+                            The two libraries dock together at a single clean invocation point:
+                            <code>window.ks["json-to-dom"].buildSpecElement({ inSpec })</code>.
+                            All business calculations, state changes, and theme mappings happen before this line; all DOM attachments happen after.
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/architecture.md" target="_blank" class="btn btn-primary btn-sm">
+                            <i class="bi bi-book me-1"></i> Read Architecture Deep Dive
+                        </a>
                     </div>
                 </div>
             </div>
@@ -921,7 +1013,7 @@ await table.deleteRecord({ inId: 42 });</code></pre>
                     <div class="card-custom p-4 h-100">
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <h5 class="fw-bold mb-0"><code>createDataProvider</code></h5>
-                            <span class="badge bg-success">v11 Factory</span>
+                            <span class="badge bg-success">v12 Factory</span>
                         </div>
                         <p class="text-muted small">
                             Decoupled CRUD repository adapter handling URLs, auth headers, and path params.
@@ -967,13 +1059,13 @@ await table.deleteRecord({ inId: 42 });</code></pre>
                         </div>
 
                         <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-code-square text-primary"></i> 2. Import Renderers via ESM (v11)
+                            <i class="bi bi-code-square text-primary"></i> 2. Import Renderers via ESM (v12)
                         </h5>
                         <div class="code-container">
                             <button class="copy-btn" onclick="copySnippet('code-esm-import')">Copy</button>
                             <pre id="code-esm-import" class="mb-0"><code class="text-light">// Import Table, Form, DataList, and createDataProvider
 import { Table, Form, DataList, createDataProvider } 
-    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";</code></pre>
+    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v12/min.js";</code></pre>
                         </div>
                     </div>
                 </div>
@@ -991,7 +1083,7 @@ import { Table, Form, DataList, createDataProvider }
 
 &lt;script type="module"&gt;
   import { Table, Form, DataList } 
-      from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+      from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v12/min.js";
 
   const columns = [
       { key: "name", label: "Item" }, 
@@ -1048,25 +1140,25 @@ import { Table, Form, DataList, createDataProvider }
     <script type="module">
         import { sampleColumns, sampleTableConfig, sampleSearchConfig, sampleDatalistConfig, sampleData } from "./sampleData.js";
 
-        // Dynamic module import: prefer local dist/v11/min.js with clean fallbacks
+        // Dynamic module import: prefer local dist/v12/min.js with clean fallbacks
         let Table, Form, DataList, createDataProvider;
 
         try {
-            const module = await import("./dist/v11/min.js");
+            const module = await import("./dist/v12/min.js");
             Table = module.Table;
             Form = module.Form;
             DataList = module.DataList;
             createDataProvider = module.createDataProvider;
         } catch (err) {
             try {
-                const module = await import("./dist/v10/min.js");
+                const module = await import("./dist/v11/min.js");
                 Table = module.Table;
                 Form = module.Form;
                 DataList = module.DataList;
                 createDataProvider = module.createDataProvider;
             } catch (fallbackErr) {
                 console.warn("Local dist load fallback to CDN:", fallbackErr);
-                const cdnModule = await import("https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js");
+                const cdnModule = await import("https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v12/min.js");
                 Table = cdnModule.Table;
                 Form = cdnModule.Form;
                 DataList = cdnModule.DataList;

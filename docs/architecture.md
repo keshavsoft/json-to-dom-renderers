@@ -1,167 +1,201 @@
-# 🏛 Architecture & Design System
+# 🏛 Architecture & Design System: The Story of Two Worlds
 
-`json-to-dom-renderers` is designed around a **Screaming Architecture** and a strictly unidirectional, declarative data flow. It bridges high-level JSON data and configurations to the low-level native DOM with zero Virtual DOM overhead, achieving near-instant repaints and predictable state management.
+> **"What exactly is `json-to-dom-renderers` doing?"**  
+> If `json-to-dom` converts JSON to DOM, is `json-to-dom-renderers` just JSON-to-JSON?  
+> **Yes, exactly!** `json-to-dom-renderers` is the **High-Level Business State & JSON-to-JSON Transformation Engine**, while `json-to-dom` is the **Low-Level Native DOM Compiler**. Together, they form a complete declarative UI ecosystem.
 
 ---
 
-## 📐 High-Level Architecture Diagram
+## 📖 The Story: Two Worlds, Two Libraries
+
+Modern web applications constantly struggle with the boundary between application state (data, columns, business rules, API queries) and the physical browser DOM (nodes, layout, event listeners).
+
+Most frameworks (like React or Vue) solve this by creating an in-memory Virtual DOM tree, running expensive diffing algorithms on every tick, and managing huge runtime runtimes.
+
+KeshavSoft splits this problem cleanly into **Two Specialized Worlds** handled by **Two Dedicated Libraries**:
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      1. Configuration & Data Layer                      │
-│      columns.json  │  data.json  │  config.json  │  classes.json        │
-└────────────────────────────────────┬────────────────────────────────────┘
-                                     │
-                                     ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                       2. State Stores Layer                             │
-│       TableStore        │       FormStore       │     DataListStore     │
-│   - originalData / state │   - activeColumns     │   - frequency map     │
-│   - activeColumns        │   - field controls    │   - topN limiting     │
-│   - footer aggregates    │                       │                       │
-│   - formula evaluations  │                       │                       │
-└────────────────────────────────────┬────────────────────────────────────┘
-                                     │
-                                     ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                         3. Builders Layer                               │
-│       buildTable        │       buildForm       │     buildDataList     │
-│            Pure declarative JSON element specification tree             │
-└────────────────────────────────────┬────────────────────────────────────┘
-                                     │
-                                     ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      4. json-to-dom Engine                              │
-│              window.ks["json-to-dom"].buildSpecElement                  │
-│                     (Compiles JSON Spec -> Real DOM)                     │
-└────────────────────────────────────┬────────────────────────────────────┘
-                                     │
-                                     ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                      5. Native DOM & Repainters                         │
-│   Fast-path updates: repaintBody() │ repaintFoot() │ refreshTable()     │
-│             Interactive Controls Tree: pruneTreeWithIds()               │
-└─────────────────────────────────────────────────────────────────────────┘
-                                     ▲
-                                     │
-┌────────────────────────────────────┴────────────────────────────────────┐
-│                  6. DataProvider Adapter Layer (v11)                    │
-│   Decoupled async REST CRUD: read() │ create() │ update() │ delete()   │
-│              (Zero authentication/fetch coupling in UI)                 │
-└─────────────────────────────────────────────────────────────────────────┘
+ ┌──────────────────────────────────────────────────────────────────────────────────┐
+ │                                THE JSON WORLD                                    │
+ │                     (Managed by json-to-dom-renderers)                           │
+ │                                                                                  │
+ │   Application Data ───►  State Stores  ───►  Calculations  ───►  JSON Element    │
+ │   (columns, rows,         (TableStore,        (aggregates,        Specification  │
+ │    configs, themes)        FormStore)          eval formulas)     Tree (inSpec)  │
+ └────────────────────────────────────────┬─────────────────────────────────────────┘
+                                          │
+                        THE ARCHITECTURAL BOUNDARY
+                                          │
+                        window.ks["json-to-dom"].buildSpecElement({ inSpec })
+                                          │
+ ┌────────────────────────────────────────▼─────────────────────────────────────────┐
+ │                                 THE DOM WORLD                                    │
+ │                           (Managed by json-to-dom)                               │
+ │                                                                                  │
+ │   Recursive DOM Builder ───► Native DOM Elements ───► Surgical Repainters        │
+ │   (pure DOM APIs:            (<table>, <form>,        (repaintBody, repaintFoot) │
+ │    createElement, attrs)      <datalist>)                                        │
+ └──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🧱 The Core Layers Explained
+## 🔗 The Two Libraries Explained
 
-### 1. Configuration & Data Layer
-Everything in `json-to-dom-renderers` is driven by declarative schemas:
-- **`columns.json`**: The single source of truth for fields. Defines data keys, human labels, data types (`number`, `string`, `date`), alignments (`left`, `center`, `right`), formatters, and metadata.
-- **`config.json`**: Controls presentation and behavior. Specifies which columns appear in the table head, which fields appear in filter forms, whether serial row numbering is enabled, and complex footer calculations.
-- **`classes.json`**: Standardized Bootstrap 5 utility classes cataloged by theme (`default`, `light`, `extraLight`, `dark`, `extraDark`).
-- **`data.json`**: Array of plain JavaScript record objects.
+| Library | Role | Input | Output | What it Cares About |
+| :--- | :--- | :--- | :--- | :--- |
+| **`json-to-dom-renderers`**<br>*(High-Level Component Engine)* | **JSON-to-JSON Transformer & State Coordinator** | Business Data (`data.json`), Column Schemas (`columns.json`), Display Configs (`config.json`), Theme Catalogs (`classes.json`), REST Endpoints | Declarative Element Specification JSON (`inSpec`) | Tables, serial numbering, multi-tier footer aggregates (`sum`), formula evaluations (`amount * 0.18`), autocomplete frequency profiling, REST CRUD lifecycle. |
+| **`json-to-dom`**<br>*(Low-Level Compiler)* | **JSON-to-DOM Compiler** | Declarative Element Specification JSON (`inSpec`) | Native Browser DOM Elements (`HTMLElement` / `DocumentFragment`) | HTML tag creation, class list assignments, DOM attributes, native event listeners. Zero knowledge of tables, columns, or business rules. |
 
----
-
-### 2. State Stores Layer
-Components do not store raw state in DOM attributes. Instead, each renderer is backed by an isolated Store:
-- **`TableStore`**:
-  - Maintains `originalData` (immutable baseline) and `stateData` (actively filtered/sorted working set).
-  - Resolves `activeColumns` based on `config.head.columns`.
-  - Computes multi-tiered footer summaries:
-    - **Aggregate Rows**: Calculates `"sum"`, `"count"`, or `"avg"` across active rows.
-    - **Evaluated Formula Rows**: Dynamically evaluates mathematical expressions referencing other footer rows (e.g. `summaryRow.amount * 0.18`).
-- **`FormStore`**:
-  - Validates and stores the active field inputs defined in `config.body.columns`.
-  - Resolves placeholder labels and control attributes from the column definitions.
-- **`DataListStore`**:
-  - Computes frequency distributions across dataset values.
-  - Automatically appends count badges (e.g. `ROPE (3)`).
-  - Enforces `topN` caps to prevent DOM bloating with massive datasets.
+> [!TIP]
+> **Why this separation matters**:  
+> Because `json-to-dom-renderers` works almost entirely in the **JSON World**, your tables, forms, and calculations can be tested in Node.js without JSDOM, serialized, cached, sent over WebSockets, or transformed by pipeline tasks before a single browser DOM node is ever created!
 
 ---
 
-### 3. Builders Layer
-Builders are pure functional transformers. They take store state and return a structured JSON specification tree (`inSpec`).
-- Builders **never** touch `document.createElement`, `innerHTML`, or DOM APIs.
-- They generate declarative node specifications:
-  ```javascript
-  {
-      tagName: "table",
-      classList: ["table", "table-hover", "table-striped"],
-      children: [
-          { tagName: "thead", children: [...] },
-          { tagName: "tbody", children: [...] },
-          { tagName: "tfoot", children: [...] }
-      ]
-  }
-  ```
-- This ensures 100% testability, easy serialization, and full environment independence.
+## 🔄 The Complete End-to-End Pipeline
+
+Here is the exact step-by-step journey from raw data to pixels on screen:
+
+```text
+1. REST API / Local Array
+       │
+       ▼
+2. DataProvider (v11/v12)
+       │ Fetches JSON records via read() with auth headers & query params
+       ▼
+3. Component Store Layer
+   ┌──────────────────────────────────────────────────────────────┐
+   │ TableStore / FormStore / DataListStore                       │
+   │  - Ingests inData, inColumns, inConfig                       │
+   │  - Resolves active visible columns                           │
+   │  - Computes multi-tier footers (aggregates + eval formulas)  │
+   │  - Profiles datalist item frequencies & applies top-N caps   │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │
+                                  ▼
+4. JSON-to-JSON Builders Layer (Pure Spec Generation)
+   ┌──────────────────────────────────────────────────────────────┐
+   │ buildTable / buildForm / buildDataList                       │
+   │  - Generates the "God Spec" / Element Spec tree              │
+   │  - Maps theme classes from classes.json                      │
+   │  - Attaches unique element IDs for interactive controls      │
+   │  - NO document.createElement. NO innerHTML. 100% Pure JSON!  │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │
+                                  ▼
+                     [CROSSING THE BOUNDARY]
+          window.ks["json-to-dom"].buildSpecElement({ inSpec })
+                                  │
+                                  ▼
+5. json-to-dom Engine (The Compiler)
+   ┌──────────────────────────────────────────────────────────────┐
+   │ Recursively compiles JSON spec into physical DOM tree        │
+   │ Produces native <table>, <thead>, <tbody>, <tfoot> elements  │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │
+                                  ▼
+6. Controls Tree & Event Wiring
+   ┌──────────────────────────────────────────────────────────────┐
+   │ pruneTreeWithIds({ inSpec })                                 │
+   │ Extracts indexed lookup table of input IDs and button IDs    │
+   │ Allows friction-free event listener binding                  │
+   └──────────────────────────────┬───────────────────────────────┘
+                                  │
+                                  ▼
+7. Surgical Repainting Loop
+   ┌──────────────────────────────────────────────────────────────┐
+   │ User types in Form Filter or DataProvider updates:           │
+   │  - TableStore updates stateData in-memory                    │
+   │  - repaintBody() transforms ONLY row JSON -> compiles tbody  │
+   │  - repaintFoot() recalculates totals JSON -> compiles tfoot  │
+   │  - Existing table, headers, and inputs remain UNTOUCHED!     │
+   └──────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-### 4. `json-to-dom` Engine Layer
-The engine receives the specification tree from the Builder and instantiates native browser DOM elements in a single high-efficiency pass.
-- Eliminates the memory and diffing overhead of virtual DOM libraries (like React or Vue).
-- Returns either a single root `HTMLElement` or a `DocumentFragment`.
+## 🔍 Peek Behind the Curtain: What the JSON Spec Looks Like
 
----
-
-### 5. Surgical Repainters & Controls Tree
-Instead of re-parsing and re-rendering the entire component when data changes:
-- **`repaintBody`**: Selectively updates only the `<tbody>` DOM elements using cached column configurations and active records.
-- **`repaintFoot`**: Recalculates aggregates/formulas and replaces only `<tfoot>` rows in place.
-- **`refreshTable`**: Synchronizes both body and footer without recreating header structures.
-- **`pruneTreeWithIds`**: Traverses the specification tree to extract an indexed lookup table of all interactive elements with IDs, making event-listener wiring frictionless.
-
----
-
-### 6. DataProvider Adapter Layer (v11)
-The `createDataProvider` factory abstracts REST networking away from the rendering logic:
-- Encapsulates endpoint URLs (`readUrl`, `createUrl`, `updateUrl`, `deleteUrl`), HTTP headers (e.g. `Authorization: Bearer ...`), query serialization, and `:id` path param substitution.
-- Allows renderers to perform asynchronous data operations via simple semantic methods:
-  ```javascript
-  await table.load();
-  await table.createRecord({ inItem: newRecord });
-  await table.updateRecord({ inId: 42, inItem: updatedRecord });
-  await table.deleteRecord({ inId: 42 });
-  ```
-- Keeps UI renderers pure, portable, and completely agnostic of backend endpoints and authentication mechanics.
-
----
-
-## 🎨 Cascading Theming Architecture
-
-Themes are configured via nested JSON class maps (`classes.json`):
+To see that `json-to-dom-renderers` is truly a **JSON-to-JSON** transformer, look at what `buildTable()` produces before `json-to-dom` compiles it:
 
 ```json
 {
-  "default": {
-    "table": "table table-striped table-hover align-middle",
-    "thead": "table-light border-bottom",
-    "tfoot": "table-light border-top fw-bold"
-  },
-  "dark": {
-    "table": "table table-dark table-striped table-hover align-middle",
-    "thead": "table-dark border-secondary",
-    "tfoot": "table-dark border-secondary fw-bold"
-  }
+  "tagName": "table",
+  "classList": ["table", "table-striped", "table-hover"],
+  "children": [
+    {
+      "tagName": "thead",
+      "children": [
+        {
+          "tagName": "tr",
+          "children": [
+            { "tagName": "th", "textContent": "#" },
+            { "tagName": "th", "textContent": "Stock Item Name" },
+            { "tagName": "th", "textContent": "Amount", "classList": ["text-end"] }
+          ]
+        }
+      ]
+    },
+    {
+      "tagName": "tbody",
+      "children": [
+        {
+          "tagName": "tr",
+          "children": [
+            { "tagName": "td", "textContent": "1" },
+            { "tagName": "td", "textContent": "ROPE 10MM" },
+            { "tagName": "td", "textContent": "1,500.00", "classList": ["text-end"] }
+          ]
+        }
+      ]
+    },
+    {
+      "tagName": "tfoot",
+      "children": [
+        {
+          "tagName": "tr",
+          "classList": ["table-light", "fw-bold"],
+          "children": [
+            { "tagName": "td", "textContent": "Total", "attributes": { "colspan": "2" } },
+            { "tagName": "td", "textContent": "1,500.00", "classList": ["text-end"] }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
-Components expose a dynamic `.setTheme({ inTheme })` method:
-1. Looks up the requested theme key in the component's `classes.json`.
-2. Merges with instance-level overrides passed in `inClasses`.
-3. Performs a seamless repaint, applying new theme classes instantly without losing component state.
+`json-to-dom` takes this exact JSON specification and turns it into native browser DOM elements in microseconds!
+
+---
+
+## 🎨 Cascading Theming: Spec Transformation, Not CSS Injection
+
+Theming in `json-to-dom-renderers` is also a pure JSON transformation:
+1. `classes.json` holds theme dictionaries (`default`, `light`, `extraLight`, `dark`, `extraDark`).
+2. When `.setTheme({ inTheme })` is called:
+   - The renderer merges the theme class dictionary into the specification tree.
+   - It re-invokes `json-to-dom` for the target container.
+   - The DOM receives updated Bootstrap classes without inline CSS or runtime stylesheet injection.
 
 ---
 
 ## 🛡 Parameter Naming Convention: `in` and `local`
 
-All functions, constructors, and methods across `json-to-dom-renderers` follow a strict parameter naming rule:
-1. **Object Destructuring for Inputs:** Functions accept a single object with `in`-prefixed keys (e.g., `{ inData, inColumns, inConfig }`).
-2. **Immediate Assignment to `local` Variables:** At the very top of the function body, each `in*` property is mapped to a `local*` variable (e.g., `const localData = inData;`).
-3. **Execution Exclusively with `local`:** Only `local*` variables are referenced throughout the remaining logic.
+All functions across both libraries follow KeshavSoft's parameter naming convention:
+1. **Inputs:** Single configuration object with `in`-prefixed keys (`{ inData, inColumns, inConfig }`).
+2. **Local Mapping:** Immediate assignment to `local`-prefixed variables at the top of the function (`const localData = inData;`).
+3. **Execution:** Strictly using `local*` variables for all business logic.
 
-This guarantees clear boundaries, protects against accidental mutation of inputs, and makes variable origin instantly recognizable.
+This guarantees immutability boundaries, ensures input arguments are never accidentally mutated, and clarifies variable origins at a glance.
+
+---
+
+## 📚 External References
+
+- [json-to-dom Repository](https://github.com/keshavsoft/json-to-dom)
+- [json-to-dom Architecture & Pipeline Guide](https://keshavsoft.github.io/json-to-dom/architecture-and-pipeline.html)
+- [json-to-dom Spec Schema Guide](https://keshavsoft.github.io/json-to-dom/spec-schema-and-guide.html)
+- [json-to-dom Engine Standalone CDN](https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom/docs/dist/v3/min.js)

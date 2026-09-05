@@ -210,3 +210,34 @@ table.filterStateData({ inQuery: { status: "Active" } });
 // Resetting is seamless:
 table.filterStateData({ inQuery: "" }); // Restores all original records!
 ```
+
+---
+
+## 8. Misunderstanding the Boundary: Trying to Create DOM Inside Builders
+
+### ❌ DON'T: Create Physical DOM Nodes in `json-to-dom-renderers` Builders
+```javascript
+// BAD: Violates the architecture! Renderers do NOT create DOM elements.
+export function buildCustomRow({ inRow }) {
+    const tr = document.createElement("tr"); // WRONG! Breaches JSON World boundary
+    tr.className = "my-row";
+    return tr;
+}
+```
+
+### ✅ DO: Generate Pure JSON Specifications and Let `json-to-dom` Compile Them
+```javascript
+// GOOD: Pure JSON-to-JSON specification transformation
+export function buildCustomRow({ inRow }) {
+    const localRow = inRow;
+    return {
+        tagName: "tr",
+        classList: ["my-row"],
+        children: [
+            { tagName: "td", textContent: localRow.name }
+        ]
+    };
+}
+// json-to-dom compiles this JSON into the native DOM element at the boundary!
+```
+

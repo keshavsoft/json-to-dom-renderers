@@ -3,9 +3,47 @@
 Modular, high-performance, config-driven UI Renderers (**Table**, **Form**, and **DataList**) built on top of [json-to-dom](https://github.com/keshavsoft/json-to-dom).
 
 [![Live Docs & Demo](https://img.shields.io/badge/Live-Showcase%20%26%20Docs-blue?style=flat-square&logo=github)](https://keshavsoft.github.io/json-to-dom-renderers/)
-[![jsDelivr CDN](https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat-square)](https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js)
+[![jsDelivr CDN](https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat-square)](https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v12/min.js)
 [![License: ISC](https://img.shields.io/badge/License-ISC-green?style=flat-square)](LICENSE)
-[![Version: v11.0.0](https://img.shields.io/badge/Version-v11.0.0-indigo?style=flat-square)](src/v11)
+[![Version: v12.0.0](https://img.shields.io/badge/Version-v12.0.0-indigo?style=flat-square)](src/v12)
+
+---
+
+## 📖 The Story: Why Two Libraries?
+
+> **"What exactly is `json-to-dom-renderers` doing?"**  
+> If [`json-to-dom`](https://github.com/keshavsoft/json-to-dom) compiles JSON to DOM, is `json-to-dom-renderers` just JSON-to-JSON?  
+> **Yes, exactly!** It is the **High-Level Business State & JSON-to-JSON Transformation Engine**, while `json-to-dom` is the **Low-Level Native DOM Compiler**.
+
+```
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │                      THE JSON SPECIFICATION WORLD                      │
+ │                    (Managed by json-to-dom-renderers)                  │
+ │                                                                        │
+ │   Business Data  ──►   State Stores   ──►   Pure JSON Element Spec     │
+ │   (rows, columns,     (TableStore,          Tree (inSpec)              │
+ │    configs, themes)    FormStore)           (NO DOM elements created!) │
+ └───────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                 [ CROSSING THE ARCHITECTURAL BOUNDARY ]
+             window.ks["json-to-dom"].buildSpecElement({ inSpec })
+                                     │
+ ┌───────────────────────────────────▼────────────────────────────────────┐
+ │                           THE NATIVE DOM WORLD                         │
+ │                         (Managed by json-to-dom)                       │
+ │                                                                        │
+ │   Recursive DOM Compiler ──► Native DOM Nodes ──► Surgical Repaints    │
+ │   (document.createElement)   (<table>, <form>)    (tbody, tfoot)       │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+### The Division of Responsibilities
+1. **`json-to-dom-renderers` (High-Level Engine)**:
+   - Understands business domains: data rows, column types, serial numbers (`#`), summary footer aggregates (`sum`, `count`), formula rows (`summaryRow.amount * 0.18`), autocomplete frequency profiling, and REST CRUD adapters (`createDataProvider`).
+   - Manages state in memory and transforms business state into a pure declarative JSON element specification (`inSpec`).
+   - **Does NOT create DOM nodes directly.** It stays 100% in the JSON World until the final render step!
+2. **`json-to-dom` (Low-Level Compiler)**:
+   - Knows **zero business logic**. It receives a pure JSON spec tree and compiles it into real browser DOM elements (`document.createElement`, `classList`, attributes) with high speed and zero Virtual DOM overhead.
 
 ---
 
@@ -13,11 +51,13 @@ Modular, high-performance, config-driven UI Renderers (**Table**, **Form**, and 
 
 | Document | Description |
 | :--- | :--- |
-| 🏛 [**Architecture & Design System**](docs/architecture.md) | Screaming architecture, data flow, stores, builders, engine, repainters & DataProvider. |
+| 🏛 [**Architecture & Design System**](docs/architecture.md) | The Story of Two Worlds, Screaming architecture, data flow, stores, builders, engine, repainters & DataProvider. |
 | 📖 [**How-To Guide & Recipes**](docs/how-to.md) | Copy-pasteable recipes for Tables, Forms, DataLists, REST CRUD, Theming & Hybrid sync. |
 | 🚫 [**How-Not-To: Anti-Patterns**](docs/how-not-to.md) | Common mistakes, DO vs DON'T comparisons, and parameter convention traps. |
 | 📚 [**Complete API Reference**](docs/api-reference.md) | Exhaustive parameter specifications, method returns, and configuration schemas. |
 | 🌐 [**Interactive Docs & Live Demo**](https://keshavsoft.github.io/json-to-dom-renderers/) | Live showcase with real-time theming, interactive filtering, and code inspectors. |
+| 📦 [**json-to-dom Repository**](https://github.com/keshavsoft/json-to-dom) | Low-level declarative DOM compiler engine powering all renderers. |
+
 
 ---
 
@@ -72,11 +112,11 @@ No bundler, build step, or Node.js environment required. Load directly in any br
 <script type="module" src="https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom/docs/dist/v3/min.js"></script>
 ```
 
-### 2. Import Renderers via ESM (v11)
+### 2. Import Renderers via ESM (v12)
 
 ```javascript
 import { Table, Form, DataList, createDataProvider } 
-    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v12/min.js";
 ```
 
 ### 3. Complete Minimal Example
@@ -100,7 +140,7 @@ import { Table, Form, DataList, createDataProvider }
 
     <script type="module">
         import { Table, Form, DataList } 
-            from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+            from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v12/min.js";
 
         const columns = [
             { key: "item", label: "Product Name" },
