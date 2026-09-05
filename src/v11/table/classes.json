@@ -1,0 +1,47 @@
+{
+    "default": {
+        "table": "table table-hover table-striped table-sm align-middle",
+        "thead": "table-light",
+        "th": "text-uppercase fw-semibold",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "table-group-divider fw-bold"
+    },
+    "light": {
+        "table": "table table-hover table-striped table-sm align-middle",
+        "thead": "table-light",
+        "th": "text-uppercase fw-semibold text-secondary",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "table-group-divider fw-bold"
+    },
+    "extraLight": {
+        "table": "table table-borderless table-hover table-sm align-middle",
+        "thead": "border-bottom",
+        "th": "text-muted small text-uppercase",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "border-top text-secondary fw-bold"
+    },
+    "dark": {
+        "table": "table table-dark table-hover table-striped table-sm align-middle",
+        "thead": "table-dark",
+        "th": "text-uppercase fw-semibold",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "table-group-divider fw-bold border-secondary"
+    },
+    "extraDark": {
+        "table": "table table-dark table-striped-columns table-sm align-middle border-secondary",
+        "thead": "table-active",
+        "th": "text-uppercase fw-bold text-light",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "table-group-divider fw-bold border-top border-secondary"
+    }
+}

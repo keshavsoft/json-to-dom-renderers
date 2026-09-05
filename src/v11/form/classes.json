@@ -1,0 +1,47 @@
+{
+    "default": {
+        "form": "card p-3 shadow-sm mb-3",
+        "body": "row g-3 align-items-end",
+        "field": "col-md-4",
+        "label": "form-label form-label-sm fw-semibold mb-1",
+        "group": "input-group input-group-sm",
+        "input": "form-control",
+        "button": "btn btn-outline-secondary"
+    },
+    "light": {
+        "form": "card p-3 shadow-sm mb-3 bg-light border-light-subtle",
+        "body": "row g-3 align-items-end",
+        "field": "col-md-4",
+        "label": "form-label form-label-sm fw-semibold text-secondary mb-1",
+        "group": "input-group input-group-sm",
+        "input": "form-control bg-white",
+        "button": "btn btn-outline-primary"
+    },
+    "extraLight": {
+        "form": "p-2 mb-3 bg-transparent border-0 shadow-none",
+        "body": "row g-2 align-items-end",
+        "field": "col-md-4",
+        "label": "form-label form-label-sm text-muted mb-1",
+        "group": "input-group input-group-sm",
+        "input": "form-control border-secondary border-opacity-25",
+        "button": "btn btn-light border"
+    },
+    "dark": {
+        "form": "card p-3 shadow-sm mb-3 bg-dark text-light border-secondary",
+        "body": "row g-3 align-items-end",
+        "field": "col-md-4",
+        "label": "form-label form-label-sm fw-semibold text-light mb-1",
+        "group": "input-group input-group-sm",
+        "input": "form-control bg-dark text-light border-secondary",
+        "button": "btn btn-outline-light"
+    },
+    "extraDark": {
+        "form": "card p-3 shadow-sm mb-3 bg-black text-light border-secondary border-opacity-50",
+        "body": "row g-3 align-items-end",
+        "field": "col-md-4",
+        "label": "form-label form-label-sm fw-bold text-white mb-1",
+        "group": "input-group input-group-sm",
+        "input": "form-control bg-dark text-white border-secondary",
+        "button": "btn btn-primary"
+    }
+}

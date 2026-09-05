@@ -3,16 +3,17 @@
 Modular, high-performance, config-driven UI Renderers (**Table**, **Form**, and **DataList**) built on top of [json-to-dom](https://github.com/keshavsoft/json-to-dom).
 
 [![Live Docs & Demo](https://img.shields.io/badge/Live-Showcase%20%26%20Docs-blue?style=flat-square&logo=github)](https://keshavsoft.github.io/json-to-dom-renderers/)
-[![jsDelivr CDN](https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat-square)](https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v10/min.js)
+[![jsDelivr CDN](https://img.shields.io/badge/CDN-jsDelivr-orange?style=flat-square)](https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js)
 [![License: ISC](https://img.shields.io/badge/License-ISC-green?style=flat-square)](LICENSE)
-[![Version: v10.0.0](https://img.shields.io/badge/Version-v10.0.0-indigo?style=flat-square)](src/v10)
+[![Version: v11.0.0](https://img.shields.io/badge/Version-v11.0.0-indigo?style=flat-square)](src/v11)
 
 ---
 
 ## 🌟 Highlights
 
 - **Pure DOM Generation**: Zero Virtual DOM overhead. Transforms declarative JSON specifications directly into native DOM elements via `json-to-dom`.
-- **🎨 Multi-Theme System (New in v10)**: Dynamic theme switching (`default`, `light`, `extraLight`, `dark`, `extraDark`) across **Table**, **Form**, and **DataList** via nested `classes.json` catalogs and `.setTheme({ inTheme })`.
+- **🌐 DataProvider & Dynamic Fetch (New in v11)**: Decoupled CRUD repository adapter pattern via `createDataProvider`. Fetch from any REST URL dynamically (`await table.load()`), perform asynchronous CRUD (`createRecord`, `updateRecord`, `deleteRecord`), with zero auth/header coupling in UI components.
+- **🎨 Multi-Theme System**: Dynamic theme switching (`default`, `light`, `extraLight`, `dark`, `extraDark`) across **Table**, **Form**, and **DataList** via nested `classes.json` catalogs and `.setTheme({ inTheme })`.
 - **100% Config-Driven Styling**: Fully styled via Bootstrap 5 and JSON configuration objects (`columns.json`, `config.json`, `classes.json`) without hardcoded CSS.
 - **Screaming Architecture**: Strict separation of concerns between State Stores, Builder Specifications, and DOM Repainters.
 - **Hybrid Orchestration**: Reactive Form filtering, stateful Table updates, and frequency-profiled HTML5 DataList autocomplete working synchronously.
@@ -35,10 +36,10 @@ No bundler, build step, or Node.js environment required. Load directly in any br
 <script type="module" src="https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom/docs/dist/v3/min.js"></script>
 ```
 
-### 2. Import Renderers via ESM
+### 2. Import Renderers & DataProvider via ESM
 
 ```javascript
-import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v10/min.js";
+import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
 ```
 
 ### 3. Complete Minimal Example
@@ -264,6 +265,42 @@ dataList.render();
 
 // Reactively update datalists when table filters change:
 dataList.update({ data: table.store.stateData });
+```
+
+---
+
+### 4. `createDataProvider` (New in v11)
+Creates a decoupled CRUD repository adapter that handles dynamic fetching, REST queries, and asynchronous lifecycle operations with zero auth coupling in the UI layer.
+
+```javascript
+import { createDataProvider, Table } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+
+// 1. Configure provider from outside
+const dataProvider = createDataProvider({
+    inReadUrl: "https://api.example.com/vouchers",
+    inCreateUrl: "https://api.example.com/vouchers",
+    inUpdateUrl: "https://api.example.com/vouchers/:id",
+    inDeleteUrl: "https://api.example.com/vouchers/:id",
+    inHeaders: {
+        "Authorization": "Bearer YOUR_TOKEN"
+    }
+});
+
+// 2. Supply to Table
+const table = new Table({
+    inColumns: columns,
+    inConfig: tableConfig,
+    inDataProvider: dataProvider,
+    inTargetContainerId: "table-container"
+});
+
+// 3. Dynamic async lifecycle
+await table.load();
+
+// 4. Asynchronous CRUD operations
+await table.createRecord({ inItem: { stockitemname: "Widget", amount: 500 } });
+await table.updateRecord({ inId: 1, inItem: { amount: 650 } });
+await table.deleteRecord({ inId: 1 });
 ```
 
 ---

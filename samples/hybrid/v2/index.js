@@ -1,25 +1,32 @@
 import columns from "./columns.json" with { type: "json" };
-import data from "./data.json" with { type: "json" };
 import tableConfig from "./table/config.json" with { type: "json" };
 import searchConfig from "./search/config.json" with { type: "json" };
 import datalistConfig from "./datalist/config.json" with { type: "json" };
 
-// Import everything cleanly from CDN
-import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
+// Import everything cleanly from CDN (v11 with DataProvider)
+import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
 
-const startFunc = () => {
-    // 1. Instantiate Table with clean public API
+// 1. Data Provider configured from the outside with fetch endpoint
+const dataProvider = createDataProvider({
+    inReadUrl: "./data.json"
+});
+
+const startFunc = async () => {
+    // 2. Instantiate Table with dataProvider (no hardcoded data!)
     const table = new Table({
-        data,
+        theme: "dark",
         columns,
         config: tableConfig,
+        dataProvider,
         targetContainerId: "table-container"
     });
 
-    table.render();
+    // Fetch data dynamically and render table
+    const fetchedData = await table.load();
 
-    // 2. Instantiate and render Form with config-driven activeColumns
+    // 3. Instantiate and render Form
     const form = new Form({
+        theme: "dark",
         columns,
         config: searchConfig,
         targetContainerId: "filter-container"
@@ -27,9 +34,10 @@ const startFunc = () => {
 
     const fromForm = form.render();
 
-    // 3. Instantiate and render DataList with its own independent config
+    // 4. Instantiate and render DataList populated with fetched records
     const dataList = new DataList({
-        data,
+        theme: "dark",
+        data: fetchedData,
         columns,
         config: datalistConfig,
         targetContainerId: "datalist-container"

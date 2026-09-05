@@ -245,7 +245,7 @@
                     <li class="nav-item"><a class="nav-link" href="#quickstart">Quick Start</a></li>
                 </ul>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">v10.0.0</span>
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1">v11.0.0</span>
                     <a href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank"
                         class="btn btn-sm btn-outline-light d-flex align-items-center gap-2">
                         <i class="bi bi-github"></i> GitHub
@@ -715,26 +715,29 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
     <script type="module">
         import { sampleColumns, sampleTableConfig, sampleSearchConfig, sampleDatalistConfig, sampleData } from "./sampleData.js";
 
-        // Dynamic module import: prefer local dist/v10/min.js with clean fallbacks
-        let Table, Form, DataList;
+        // Dynamic module import: prefer local dist/v11/min.js with clean fallbacks
+        let Table, Form, DataList, createDataProvider;
 
         try {
-            const module = await import("./dist/v10/min.js");
+            const module = await import("./dist/v11/min.js");
             Table = module.Table;
             Form = module.Form;
             DataList = module.DataList;
+            createDataProvider = module.createDataProvider;
         } catch (err) {
             try {
-                const module = await import("./dist/v9/min.js");
+                const module = await import("./dist/v10/min.js");
                 Table = module.Table;
                 Form = module.Form;
                 DataList = module.DataList;
+                createDataProvider = module.createDataProvider;
             } catch (fallbackErr) {
                 console.warn("Local dist load fallback to CDN:", fallbackErr);
-                const cdnModule = await import("https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v10/min.js");
+                const cdnModule = await import("https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js");
                 Table = cdnModule.Table;
                 Form = cdnModule.Form;
                 DataList = cdnModule.DataList;
+                createDataProvider = cdnModule.createDataProvider;
             }
         }
 

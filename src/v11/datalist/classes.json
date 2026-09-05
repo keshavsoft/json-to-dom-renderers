@@ -1,0 +1,27 @@
+{
+    "default": {
+        "wrapper": "ks-datalists-wrapper",
+        "datalist": "",
+        "option": ""
+    },
+    "light": {
+        "wrapper": "ks-datalists-wrapper ks-datalist-light",
+        "datalist": "",
+        "option": ""
+    },
+    "extraLight": {
+        "wrapper": "ks-datalists-wrapper ks-datalist-extralight",
+        "datalist": "",
+        "option": ""
+    },
+    "dark": {
+        "wrapper": "ks-datalists-wrapper ks-datalist-dark",
+        "datalist": "",
+        "option": ""
+    },
+    "extraDark": {
+        "wrapper": "ks-datalists-wrapper ks-datalist-extradark",
+        "datalist": "",
+        "option": ""
+    }
+}
