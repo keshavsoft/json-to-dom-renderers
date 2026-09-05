@@ -1,0 +1,57 @@
+{
+    "default": {
+        "form": "",
+        "body": "",
+        "field": "",
+        "label": "fw-semibold text-secondary small",
+        "controlWrapper": "",
+        "group": "",
+        "input": "",
+        "button": "btn-outline-secondary",
+        "foot": ""
+    },
+    "light": {
+        "form": "bg-light p-3 rounded shadow-sm border",
+        "body": "",
+        "field": "",
+        "label": "fw-semibold text-secondary small",
+        "controlWrapper": "",
+        "group": "",
+        "input": "bg-white border-secondary border-opacity-25",
+        "button": "btn-outline-primary",
+        "foot": "border-secondary border-opacity-25"
+    },
+    "extraLight": {
+        "form": "bg-transparent border-0 shadow-none",
+        "body": "",
+        "field": "",
+        "label": "text-muted small",
+        "controlWrapper": "",
+        "group": "",
+        "input": "bg-light border-light-subtle",
+        "button": "btn-light border",
+        "foot": "border-light-subtle"
+    },
+    "dark": {
+        "form": "card p-3 shadow-sm bg-dark text-light border-secondary",
+        "body": "",
+        "field": "",
+        "label": "fw-semibold text-light small",
+        "controlWrapper": "",
+        "group": "",
+        "input": "bg-dark text-light border-secondary",
+        "button": "btn-outline-light",
+        "foot": "border-secondary"
+    },
+    "extraDark": {
+        "form": "card p-3 shadow-sm bg-black text-light border-secondary border-opacity-50",
+        "body": "",
+        "field": "",
+        "label": "fw-bold text-white small",
+        "controlWrapper": "",
+        "group": "",
+        "input": "bg-dark text-white border-secondary",
+        "button": "btn-primary",
+        "foot": "border-secondary border-opacity-50"
+    }
+}

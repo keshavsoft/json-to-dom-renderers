@@ -9,16 +9,52 @@ Modular, high-performance, config-driven UI Renderers (**Table**, **Form**, and 
 
 ---
 
+## 📚 Complete Documentation
+
+| Document | Description |
+| :--- | :--- |
+| 🏛 [**Architecture & Design System**](docs/architecture.md) | Screaming architecture, data flow, stores, builders, engine, repainters & DataProvider. |
+| 📖 [**How-To Guide & Recipes**](docs/how-to.md) | Copy-pasteable recipes for Tables, Forms, DataLists, REST CRUD, Theming & Hybrid sync. |
+| 🚫 [**How-Not-To: Anti-Patterns**](docs/how-not-to.md) | Common mistakes, DO vs DON'T comparisons, and parameter convention traps. |
+| 📚 [**Complete API Reference**](docs/api-reference.md) | Exhaustive parameter specifications, method returns, and configuration schemas. |
+| 🌐 [**Interactive Docs & Live Demo**](https://keshavsoft.github.io/json-to-dom-renderers/) | Live showcase with real-time theming, interactive filtering, and code inspectors. |
+
+---
+
 ## 🌟 Highlights
 
 - **Pure DOM Generation**: Zero Virtual DOM overhead. Transforms declarative JSON specifications directly into native DOM elements via `json-to-dom`.
-- **🌐 DataProvider & Dynamic Fetch (New in v11)**: Decoupled CRUD repository adapter pattern via `createDataProvider`. Fetch from any REST URL dynamically (`await table.load()`), perform asynchronous CRUD (`createRecord`, `updateRecord`, `deleteRecord`), with zero auth/header coupling in UI components.
+- **🌐 DataProvider & Dynamic Fetch (v11)**: Decoupled CRUD repository adapter pattern via `createDataProvider`. Fetch from any REST URL dynamically (`await table.load()`), perform asynchronous CRUD (`createRecord`, `updateRecord`, `deleteRecord`), with zero auth/header coupling in UI components.
 - **🎨 Multi-Theme System**: Dynamic theme switching (`default`, `light`, `extraLight`, `dark`, `extraDark`) across **Table**, **Form**, and **DataList** via nested `classes.json` catalogs and `.setTheme({ inTheme })`.
 - **100% Config-Driven Styling**: Fully styled via Bootstrap 5 and JSON configuration objects (`columns.json`, `config.json`, `classes.json`) without hardcoded CSS.
 - **Screaming Architecture**: Strict separation of concerns between State Stores, Builder Specifications, and DOM Repainters.
 - **Hybrid Orchestration**: Reactive Form filtering, stateful Table updates, and frequency-profiled HTML5 DataList autocomplete working synchronously.
 - **Declarative Footers & Serials**: Automatic row serial numbering (`#`), multi-tier footer aggregates (`sum`, `count`, `avg`), and evaluated formula rows (e.g. `summaryRow.amount * 0.18`).
 - **Strict Parameter Convention**: Universal adoption of `in`-prefixed arguments and `local`-prefixed variables for clean, immutable data pipelines.
+
+---
+
+## 🛡 Parameter Naming Convention: `in` and `local`
+
+All constructors, methods, and functions strictly enforce the following parameter pattern:
+1. **Object Destructuring for Inputs:** Functions accept a single configuration object with `in`-prefixed keys (e.g., `{ inData, inColumns, inConfig }`).
+2. **Immediate Assignment to `local` Variables:** At the top of the function body, each `in*` argument is assigned to a `local*` variable (e.g., `const localData = inData;`).
+3. **Internal Execution Using `local`:** Only `local*` variables are referenced throughout the function body.
+
+```javascript
+// Example following the convention
+export function calculateTotals({ inRecords = [], inTaxRate = 0.18 } = {}) {
+    // 1. Assign to local variables
+    const localRecords = inRecords;
+    const localTaxRate = inTaxRate;
+
+    // 2. Use local variables for all logic
+    const subTotal = localRecords.reduce((acc, row) => acc + (row.amount || 0), 0);
+    const tax = subTotal * localTaxRate;
+
+    return { subTotal, tax, total: subTotal + tax };
+}
+```
 
 ---
 
@@ -36,10 +72,11 @@ No bundler, build step, or Node.js environment required. Load directly in any br
 <script type="module" src="https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom/docs/dist/v3/min.js"></script>
 ```
 
-### 2. Import Renderers & DataProvider via ESM
+### 2. Import Renderers via ESM (v11)
 
 ```javascript
-import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+import { Table, Form, DataList, createDataProvider } 
+    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
 ```
 
 ### 3. Complete Minimal Example
@@ -49,6 +86,7 @@ import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quickstart | json-to-dom-renderers</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script type="module" src="https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom/docs/dist/v3/min.js"></script>
@@ -61,7 +99,8 @@ import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.
     </div>
 
     <script type="module">
-        import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
+        import { Table, Form, DataList } 
+            from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
 
         const columns = [
             { key: "item", label: "Product Name" },
@@ -75,7 +114,7 @@ import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.
             { item: "Headphones", category: "Electronics", amount: 150 }
         ];
 
-        // 1. Table
+        // 1. Table with auto serials and aggregate footer
         const table = new Table({
             inData: data,
             inColumns: columns,
@@ -112,7 +151,7 @@ import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.
 
 ---
 
-## 🏛 Architecture & Design Patterns
+## 🏛 Screaming Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -149,193 +188,66 @@ import { Table, Form, DataList, createDataProvider } from "https://cdn.jsdelivr.
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Parameter Naming Convention: `in` and `local`
-All constructors and methods adhere strictly to the `in` and `local` parameter pattern:
-1. Arguments are destructured from a single configuration object with `in`-prefixed keys.
-2. The function immediately maps each `in*` argument to a `local*` variable at the top of the scope.
-3. Only `local*` variables are referenced throughout internal execution.
+See [docs/architecture.md](docs/architecture.md) for full details.
 
 ---
 
-## 📦 Component API Reference
+## 💡 Quick How-To & How-Not-To
 
-### 1. `Table`
-Orchestrates rendering, state storage, dynamic footer calculations, and targeted repainting for data tables.
-
+### ✅ HOW-TO: Surgical Repainting
 ```javascript
-import { Table } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
-
-const table = new Table({
-    inData: [],               // Array of row objects
-    inColumns: [],            // Master column schema definitions
-    inConfig: {},             // Table display and calculation configurations
-    inClasses: {},            // Optional Bootstrap class overrides
-    inTargetContainerId: "table-container" // Target DOM element ID
-});
+// DO use surgical repainters when filtering or mutating data
+table.filterStateData({ inQuery: { category: "Electronics" } });
+// Under the hood, this executes repaintBody() and repaintFoot() without full DOM re-parsing!
 ```
 
-#### Table Configuration Schema (`config.json`)
-```json
-{
-    "serial": true,
-    "head": {
-        "columns": ["vchtype", "vouchernumber", "stockitemname", "amount"]
-    },
-    "row": {
-        "striped": true,
-        "hover": true
-    },
-    "foot": [
-        {
-            "id": "summaryRow",
-            "title": "Total",
-            "type": "aggregate",
-            "values": { "amount": "sum" }
-        },
-        {
-            "id": "taxRow",
-            "title": "GST (18%)",
-            "type": "eval",
-            "values": { "amount": "summaryRow.amount * 0.18" }
-        },
-        {
-            "id": "balanceRow",
-            "title": "Grand Total",
-            "type": "eval",
-            "values": { "amount": "summaryRow.amount + taxRow.amount" }
-        }
-    ]
-}
+### ❌ HOW-NOT-TO: Avoid Full Component Re-renders
+```javascript
+// DON'T rebuild the whole table DOM on every filter keypress
+table.store.stateData = filteredData;
+table.render(); // BAD: destroys existing table, resets input focus, causes screen flicker
 ```
 
-#### Table Methods
-- `table.render()`: Builds and mounts the table to the target container.
-- `table.filterStateData({ query })`: Filters active rows by key/value query and repaints body and footers.
-- `table.filterOriginalData({ query })`: Filters the original baseline dataset.
-- `table.repaintBody()`: Fast-path re-render of `<tbody>` only.
-- `table.repaintFoot()`: Fast-path recalculation and re-render of `<tfoot>` only.
-- `table.refreshTable()`: Full refresh of table body and footer.
-
----
-
-### 2. `Form`
-Generates config-driven filter and entry forms matching column schemas with automatic datalist bindings and control-tree tracking.
-
+### ✅ HOW-TO: Decoupled REST CRUD with `createDataProvider`
 ```javascript
-import { Form } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
-
-const form = new Form({
-    inColumns: [],            // Column definitions
-    inConfig: {
-        body: {
-            columns: ["stockitemname", "batchname", "amount"]
-        }
-    },
-    inTargetContainerId: "filter-container"
-});
-
-const { treeWithIds, spec, element } = form.render();
-```
-
-#### Form Methods
-- `form.render()`: Builds and inserts form DOM nodes, returning `{ treeWithIds, spec, element }`.
-- `form.getControlsTree()`: Retrieves pruned interactive element tree containing assigned control IDs.
-
----
-
-### 3. `DataList`
-Analyzes dataset columns, profiles item frequencies (e.g. `ROPE (3)`), and generates native HTML5 `<datalist>` elements for autocomplete inputs.
-
-```javascript
-import { DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
-
-const dataList = new DataList({
-    inData: [],               // Row records to profile
-    inColumns: [],            // Column schema
-    inConfig: {
-        datalist: {
-            columns: ["stockitemname", "batchname"]
-        },
-        topN: 10              // Optional top-N frequency limit
-    },
-    inTargetContainerId: "datalist-container"
-});
-
-dataList.render();
-
-// Reactively update datalists when table filters change:
-dataList.update({ data: table.store.stateData });
-```
-
----
-
-### 4. `createDataProvider` (New in v11)
-Creates a decoupled CRUD repository adapter that handles dynamic fetching, REST queries, and asynchronous lifecycle operations with zero auth coupling in the UI layer.
-
-```javascript
-import { createDataProvider, Table } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
-
-// 1. Configure provider from outside
 const dataProvider = createDataProvider({
-    inReadUrl: "https://api.example.com/vouchers",
-    inCreateUrl: "https://api.example.com/vouchers",
-    inUpdateUrl: "https://api.example.com/vouchers/:id",
-    inDeleteUrl: "https://api.example.com/vouchers/:id",
-    inHeaders: {
-        "Authorization": "Bearer YOUR_TOKEN"
-    }
+    inReadUrl: "https://api.example.com/items",
+    inCreateUrl: "https://api.example.com/items",
+    inUpdateUrl: "https://api.example.com/items/:id",
+    inDeleteUrl: "https://api.example.com/items/:id",
+    inHeaders: { "Authorization": "Bearer TOKEN" }
 });
 
-// 2. Supply to Table
 const table = new Table({
     inColumns: columns,
-    inConfig: tableConfig,
     inDataProvider: dataProvider,
     inTargetContainerId: "table-container"
 });
 
-// 3. Dynamic async lifecycle
 await table.load();
-
-// 4. Asynchronous CRUD operations
-await table.createRecord({ inItem: { stockitemname: "Widget", amount: 500 } });
-await table.updateRecord({ inId: 1, inItem: { amount: 650 } });
-await table.deleteRecord({ inId: 1 });
+await table.createRecord({ inItem: { item: "New Item", amount: 100 } });
 ```
+
+### ❌ HOW-NOT-TO: Avoid Hardcoded Fetch in UI Events
+```javascript
+// DON'T hardcode endpoint URLs and auth headers directly inside DOM click handlers!
+// Use createDataProvider to cleanly separate network operations from presentation.
+```
+
+See [docs/how-to.md](docs/how-to.md) and [docs/how-not-to.md](docs/how-not-to.md) for comprehensive deep-dives.
 
 ---
 
-## 🔗 Hybrid Workflow (Form + DataList + Table)
+## 📦 Component Summary
 
-In full applications (like `samples/hybrid/v2`), all three renderers operate in unison:
+| Component | Purpose | Key Methods |
+| :--- | :--- | :--- |
+| **`Table`** | High-performance data tables with auto serials, aggregate summaries, formula rows, and surgical repainting. | `.render()`, `.repaintBody()`, `.repaintFoot()`, `.refreshTable()`, `.setTheme()`, `.load()`, `.createRecord()` |
+| **`Form`** | Schema-driven filter and entry form generation with control-tree tracking. | `.render()`, `.getControlsTree()`, `.setTheme()` |
+| **`DataList`** | Profiles column values, computes frequency counts, and renders HTML5 `<datalist>` elements. | `.render()`, `.update({ inData })`, `.setTheme()`, `.load()` |
+| **`createDataProvider`** | REST CRUD repository adapter pattern decoupling endpoints, auth headers, and path params from UI. | `.read()`, `.create()`, `.update()`, `.delete()` |
 
-```javascript
-// 1. Mount all 3 renderers
-const table = new Table({ data, columns, config: tableConfig, targetContainerId: "table-box" });
-table.render();
-
-const form = new Form({ columns, config: searchConfig, targetContainerId: "filter-box" });
-const fromForm = form.render();
-
-const dataList = new DataList({ data, columns, config: datalistConfig, targetContainerId: "datalist-box" });
-dataList.render();
-
-// 2. Connect Form filter events to Table & DataList
-fromForm.element.querySelectorAll("button").forEach(button => {
-    button.addEventListener("click", event => {
-        const row = event.currentTarget.closest("div");
-        const input = row.querySelector("input");
-        const name = input.getAttribute("name");
-        const value = input.value;
-
-        // Filter Table state
-        table.filterStateData({ query: { [name]: value } });
-
-        // Synchronize DataList counts with filtered dataset
-        dataList.update({ data: table.store.stateData });
-    });
-});
-```
+Full method signatures and configurations are available in [docs/api-reference.md](docs/api-reference.md).
 
 ---
 
@@ -343,25 +255,29 @@ fromForm.element.querySelectorAll("button").forEach(button => {
 
 ```
 json-to-dom-renderers/
-├── docs/                     # GitHub Pages publication directory
-│   ├── dist/v9/min.js        # Minified production ESM bundle
-│   ├── index.html            # Interactive Documentation & Live Demo
-│   └── sampleData.js         # Showcase sample dataset and configs
+├── docs/                             # GitHub Pages publication & Documentation
+│   ├── dist/                         # Minified production ESM bundles
+│   │   ├── v9/min.js
+│   │   ├── v10/min.js
+│   │   └── v11/min.js
+│   ├── architecture.md               # Screaming architecture deep-dive
+│   ├── how-to.md                     # Step-by-step recipes and guides
+│   ├── how-not-to.md                 # Anti-patterns and common pitfalls
+│   ├── api-reference.md              # Exhaustive API reference
+│   ├── index.html                    # Interactive Documentation & Live Demo
+│   └── sampleData.js                 # Sample datasets and schemas
 ├── samples/
-│   └── hybrid/v2/            # Standalone hybrid sample loading from CDN
-│       ├── index.html
-│       ├── index.js
-│       ├── columns.json
-│       ├── data.json
-│       └── ...
-├── src/v9/                   # Source architecture
-│   ├── common/               # Utility functions (pruneTreeWithIds, etc.)
-│   ├── datalist/             # DataList component (Store, Builder, Options)
-│   ├── form/                 # Form component (Store, Builder, Classes)
-│   ├── table/                # Table component (Store, Builder, Repaints, Filters)
-│   └── index.js              # Main library entry point
+│   └── hybrid/v2/                    # Standalone hybrid sample
+├── src/v11/                          # Current active source architecture
+│   ├── common/                       # Utilities (pruneTreeWithIds, etc.)
+│   ├── datalist/                     # DataList component
+│   ├── form/                         # Form component
+│   ├── provider/                     # DataProvider factory (v11)
+│   ├── table/                        # Table component
+│   └── index.js                      # Main ESM entry point
 ├── package.json
-└── vite.config.js
+├── vite.config.js
+└── README.md
 ```
 
 ---
@@ -375,7 +291,7 @@ npm install
 # Start local development server
 npm run dev
 
-# Build production bundle to docs/dist/v9/min.js
+# Build production bundle to docs/dist/v11/min.js
 npm run build
 ```
 

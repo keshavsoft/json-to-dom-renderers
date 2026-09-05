@@ -1,0 +1,38 @@
+{
+    "default": {
+        "table": "table align-middle",
+        "thead": "",
+        "th": "text-uppercase fw-semibold",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "table-group-divider fw-bold"
+    },
+    "compact": {
+        "table": "table table-sm align-middle",
+        "thead": "",
+        "th": "text-uppercase fw-semibold small",
+        "tbody": "",
+        "tr": "",
+        "td": "py-1",
+        "tfoot": "table-group-divider fw-bold small"
+    },
+    "bordered": {
+        "table": "table table-bordered table-sm align-middle",
+        "thead": "",
+        "th": "text-uppercase fw-semibold",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "table-group-divider fw-bold"
+    },
+    "borderless": {
+        "table": "table table-borderless table-sm align-middle",
+        "thead": "border-bottom",
+        "th": "text-uppercase fw-semibold",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "border-top fw-bold"
+    }
+}

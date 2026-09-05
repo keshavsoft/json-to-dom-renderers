@@ -54,7 +54,7 @@
                 radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
                 linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
             border-bottom: 1px solid var(--ks-border-color);
-            padding: 4.5rem 0 3.5rem;
+            padding: 4.5rem 0 3rem;
         }
 
         .hero-badge {
@@ -134,17 +134,9 @@
             border-radius: 50%;
         }
 
-        .dot-red {
-            background-color: #ef4444;
-        }
-
-        .dot-yellow {
-            background-color: #f59e0b;
-        }
-
-        .dot-green {
-            background-color: #10b981;
-        }
+        .dot-red { background-color: #ef4444; }
+        .dot-yellow { background-color: #f59e0b; }
+        .dot-green { background-color: #10b981; }
 
         /* Code snippets */
         .code-container {
@@ -175,26 +167,6 @@
             background: rgba(255, 255, 255, 0.25);
         }
 
-        /* Table styling refinements */
-        #demo-table-container table {
-            margin-bottom: 0;
-        }
-
-        #demo-table-container th {
-            font-weight: 600;
-            font-size: 0.875rem;
-            background-color: #f8fafc;
-            color: #475569;
-            border-bottom: 2px solid #cbd5e1;
-        }
-
-        #demo-table-container tfoot th,
-        #demo-table-container tfoot td {
-            font-weight: 700;
-            background-color: #f8fafc;
-            border-top: 2px solid #94a3b8;
-        }
-
         /* Nav Pills */
         .nav-pills-custom .nav-link {
             color: #64748b;
@@ -217,9 +189,49 @@
             cursor: pointer;
         }
 
-        .navbar-brand span {
-            font-weight: 800;
-            letter-spacing: -0.03em;
+        /* DO vs DONT card styles */
+        .card-dont {
+            border-left: 4px solid #ef4444 !important;
+            background: #fff8f8;
+        }
+
+        .card-do {
+            border-left: 4px solid #10b981 !important;
+            background: #f6fbf9;
+        }
+
+        .badge-dont {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fca5a5;
+        }
+
+        .badge-do {
+            background-color: #d1fae5;
+            color: #047857;
+            border: 1px solid #6ee7b7;
+        }
+
+        .doc-link-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.4rem 0.85rem;
+            border-radius: 0.5rem;
+            background: #ffffff;
+            border: 1px solid var(--ks-border-color);
+            color: var(--ks-text-main);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .doc-link-pill:hover {
+            background: #f8fafc;
+            border-color: var(--ks-primary);
+            color: var(--ks-primary);
+            transform: translateY(-1px);
         }
     </style>
 </head>
@@ -232,7 +244,7 @@
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
                 <div class="rounded-3 bg-primary text-white d-flex align-items-center justify-content-center fw-bold"
                     style="width: 32px; height: 32px; font-size: 0.9rem;">KS</div>
-                <span>json-to-dom-renderers</span>
+                <span class="fw-bold tracking-tight">json-to-dom-renderers</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
                 <span class="navbar-toggler-icon"></span>
@@ -241,6 +253,8 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-3">
                     <li class="nav-item"><a class="nav-link" href="#demo">Live Demo</a></li>
                     <li class="nav-item"><a class="nav-link" href="#architecture">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-to">How To</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-not-to">How NOT To</a></li>
                     <li class="nav-item"><a class="nav-link" href="#api">Components API</a></li>
                     <li class="nav-item"><a class="nav-link" href="#quickstart">Quick Start</a></li>
                 </ul>
@@ -263,16 +277,32 @@
             </div>
             <h1 class="hero-title mb-3">Config-Driven UI Renderers</h1>
             <p class="lead text-muted mx-auto mb-4" style="max-width: 720px;">
-                High-performance <strong>Table</strong>, <strong>Form</strong>, and <strong>DataList</strong> components
-                built on top of the zero-dependency <code>json-to-dom</code> engine. Declarative, config-driven styling,
-                and seamless hybrid filtering.
+                Modular, high-performance <strong>Table</strong>, <strong>Form</strong>, and <strong>DataList</strong> components
+                built on top of the zero-dependency <code>json-to-dom</code> engine. Clean Screaming Architecture, multi-tier footer aggregates,
+                and decoupled REST CRUD via <code>createDataProvider</code>.
             </p>
-            <div class="d-flex justify-content-center gap-3 flex-wrap">
-                <a href="#demo" class="btn btn-primary btn-lg px-4 d-flex align-items-center gap-2">
+            <div class="d-flex justify-content-center gap-3 flex-wrap mb-4">
+                <a href="#demo" class="btn btn-primary btn-lg px-4 d-flex align-items-center gap-2 shadow-sm">
                     <i class="bi bi-play-circle-fill"></i> View Live Demo
                 </a>
                 <a href="#quickstart" class="btn btn-outline-dark btn-lg px-4 d-flex align-items-center gap-2">
                     <i class="bi bi-box-arrow-in-down"></i> Get Started (CDN)
+                </a>
+            </div>
+
+            <!-- Quick Document Jump Links -->
+            <div class="d-flex justify-content-center gap-2 flex-wrap pt-2">
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/architecture.md" target="_blank" class="doc-link-pill">
+                    <i class="bi bi-diagram-2 text-primary"></i> Architecture Guide
+                </a>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/how-to.md" target="_blank" class="doc-link-pill">
+                    <i class="bi bi-journal-code text-success"></i> How-To Recipes
+                </a>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/how-not-to.md" target="_blank" class="doc-link-pill">
+                    <i class="bi bi-exclamation-octagon text-danger"></i> How-Not-To Pitfalls
+                </a>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/api-reference.md" target="_blank" class="doc-link-pill">
+                    <i class="bi bi-file-earmark-text text-info"></i> API Reference
                 </a>
             </div>
         </div>
@@ -290,32 +320,31 @@
                         <h5 class="fw-bold mb-2">Pure DOM Generation</h5>
                         <p class="text-muted small mb-0">
                             Zero Virtual DOM overhead. Transforms declarative JSON specifications directly into standard
-                            DOM nodes using <code>json-to-dom</code> with high-speed repainting.
+                            DOM nodes using <code>json-to-dom</code> with high-speed surgical repainting.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-custom h-100 p-4">
                         <div class="feature-icon-box">
-                            <i class="bi bi-sliders"></i>
+                            <i class="bi bi-hdd-network"></i>
                         </div>
-                        <h5 class="fw-bold mb-2">100% Config-Driven</h5>
+                        <h5 class="fw-bold mb-2">DataProvider Adapter (v11)</h5>
                         <p class="text-muted small mb-0">
-                            No hardcoded markup or CSS. Table headers, form inputs, datalists, row stripes, and
-                            Bootstrap classes are completely decoupled into pure JSON configurations.
+                            Decoupled asynchronous REST CRUD repository adapter via <code>createDataProvider</code>. Fetch dynamically
+                            with zero auth or URL coupling inside UI components.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-custom h-100 p-4">
                         <div class="feature-icon-box">
-                            <i class="bi bi-diagram-3"></i>
+                            <i class="bi bi-palette"></i>
                         </div>
-                        <h5 class="fw-bold mb-2">Hybrid Orchestration</h5>
+                        <h5 class="fw-bold mb-2">Multi-Theme System</h5>
                         <p class="text-muted small mb-0">
-                            The <strong>Form</strong> triggers reactive queries, the <strong>Table</strong> performs
-                            stateful in-memory filtering with auto-aggregates, and the <strong>DataList</strong> updates
-                            frequency-profiled autocomplete.
+                            Instant theme switching (<code>default</code>, <code>light</code>, <code>extraLight</code>, <code>dark</code>, <code>extraDark</code>)
+                            across Table, Form, and DataList via declarative <code>classes.json</code> catalogs.
                         </p>
                     </div>
                 </div>
@@ -330,7 +359,7 @@
                 <div>
                     <span class="text-primary fw-semibold text-uppercase small tracking-wide">Interactive Showcase</span>
                     <h2 class="fw-bold mb-1">Hybrid Search, Table &amp; Autocomplete</h2>
-                    <p class="text-muted small mb-0">All 3 renderers orchestrated together from the CDN bundle</p>
+                    <p class="text-muted small mb-0">All 3 renderers orchestrated together with live theme switching</p>
                 </div>
                 <div class="d-flex align-items-center gap-2 mt-3 mt-md-0 flex-wrap">
                     <div class="d-flex align-items-center gap-2">
@@ -394,7 +423,7 @@
                                 <i class="bi bi-table me-1"></i> 2. Table Renderer (Serials, Data &amp; Footers)
                             </span>
                             <span class="badge bg-primary-subtle text-primary border border-primary-subtle small">
-                                Reactive Repaints Enabled
+                                Multi-Tier Aggregates &amp; Formulas
                             </span>
                         </div>
                         <div id="demo-table-container" class="table-responsive"></div>
@@ -472,49 +501,338 @@
     <section id="architecture" class="py-5 bg-white border-top border-bottom border-light-subtle">
         <div class="container">
             <div class="text-center mb-5">
-                <span class="text-primary fw-semibold text-uppercase small tracking-wide">Design Patterns</span>
-                <h2 class="fw-bold">Architectural Principles</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">
-                    Built upon clean software engineering disciplines: Screaming Architecture, Pure DOM builders, and explicit parameter pipelines.
+                <span class="text-primary fw-semibold text-uppercase small tracking-wide">Clean Architecture</span>
+                <h2 class="fw-bold">Screaming Architecture &amp; Data Pipeline</h2>
+                <p class="text-muted mx-auto" style="max-width: 650px;">
+                    Strict separation of concerns between State Stores, Builder Specifications, Native Repainters, and DataProviders.
                 </p>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/architecture.md" target="_blank"
+                    class="btn btn-sm btn-outline-primary mt-2">
+                    <i class="bi bi-book me-1"></i> Read Full Architecture Document
+                </a>
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="card-custom p-4 h-100">
-                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-layers text-primary"></i> Screaming Architecture Pipeline
-                        </h5>
+                        <div class="feature-icon-box">
+                            <i class="bi bi-database text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">1. Stores Layer</h5>
                         <p class="text-muted small">
-                            Every component separates data modeling, specification generation, and DOM rendering:
+                            <code>TableStore</code>, <code>FormStore</code>, and <code>DataListStore</code> manage active state, compute
+                            multi-tier footer sums and dynamic GST formulas, profile frequency distributions, and enforce top-N limits.
                         </p>
-                        <ol class="small text-secondary ps-3 mb-0 lh-lg">
-                            <li><strong>Store Layer</strong> (<code>TableStore</code>, <code>FormStore</code>, <code>DataListStore</code>): Ingests inputs, manages state, computes active columns, evaluations, and aggregations.</li>
-                            <li><strong>Builder Layer</strong> (<code>buildTable</code>, <code>buildForm</code>, <code>buildDataList</code>): Transforms state into pure JSON element specifications conforming to <code>json-to-dom</code> schema.</li>
-                            <li><strong>Engine Layer</strong> (<code>json-to-dom</code>): <code>buildSpecElement({ inSpec })</code> produces high-speed native DOM nodes without virtual DOM diffing.</li>
-                            <li><strong>Repaint Layer</strong>: Optimized repainters (<code>repaintBody</code>, <code>repaintFoot</code>) update specific DOM subtrees without rebuilding the entire container.</li>
-                        </ol>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card-custom p-4 h-100">
+                        <div class="feature-icon-box">
+                            <i class="bi bi-code-slash text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">2. Builders &amp; Engine</h5>
+                        <p class="text-muted small">
+                            Pure spec builders (<code>buildTable</code>, <code>buildForm</code>, <code>buildDataList</code>) output pure JSON element trees.
+                            The <code>json-to-dom</code> engine instantiates native DOM elements with zero Virtual DOM overhead.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card-custom p-4 h-100">
+                        <div class="feature-icon-box">
+                            <i class="bi bi-arrow-repeat text-primary"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">3. Surgical Repainters</h5>
+                        <p class="text-muted small">
+                            Targeted repainters (<code>repaintBody</code>, <code>repaintFoot</code>, <code>refreshTable</code>) update only changed DOM subtrees,
+                            preserving input focus, scroll state, and avoiding screen flicker.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How-To Guide Section -->
+    <section id="how-to" class="py-5">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+                <div>
+                    <span class="text-primary fw-semibold text-uppercase small tracking-wide">Developer Recipes</span>
+                    <h2 class="fw-bold mb-1">How-To Guides</h2>
+                    <p class="text-muted small mb-0">Production-ready, copy-pasteable snippets adhering strictly to the <code>in</code>/<code>local</code> naming convention</p>
+                </div>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/how-to.md" target="_blank" class="btn btn-sm btn-outline-primary mt-2 mt-md-0">
+                    <i class="bi bi-book me-1"></i> View Full How-To Guide
+                </a>
+            </div>
+
+            <ul class="nav nav-pills nav-pills-custom mb-3 gap-2" id="howToTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#recipe-table">Table with Footers</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recipe-form">Filter Form</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recipe-datalist">DataList Autocomplete</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recipe-provider">DataProvider REST CRUD</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recipe-theme">Dynamic Theming</button>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Recipe 1: Table -->
+                <div class="tab-pane fade show active" id="recipe-table">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-recipe-table')">Copy</button>
+                        <pre id="code-recipe-table" class="mb-0"><code class="text-light">import { Table } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+
+const table = new Table({
+    inData: [
+        { item: "Laptop", category: "Electronics", amount: 1200 },
+        { item: "Desk Chair", category: "Furniture", amount: 250 }
+    ],
+    inColumns: [
+        { key: "item", label: "Product Name" },
+        { key: "category", label: "Category" },
+        { key: "amount", label: "Amount", type: "number", align: "right" }
+    ],
+    inConfig: {
+        serial: true, // Enables '#' serial numbers
+        row: { striped: true, hover: true },
+        foot: [
+            { id: "subTotal", title: "Sub Total", type: "aggregate", values: { amount: "sum" } },
+            { id: "tax", title: "Tax (18%)", type: "eval", values: { amount: "subTotal.amount * 0.18" } },
+            { id: "grandTotal", title: "Grand Total", type: "eval", values: { amount: "subTotal.amount + tax.amount" } }
+        ]
+    },
+    inTargetContainerId: "table-container"
+});
+
+table.render();</code></pre>
+                    </div>
+                </div>
+
+                <!-- Recipe 2: Form -->
+                <div class="tab-pane fade" id="recipe-form">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-recipe-form')">Copy</button>
+                        <pre id="code-recipe-form" class="mb-0"><code class="text-light">import { Form } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+
+const form = new Form({
+    inColumns: columns,
+    inConfig: {
+        body: {
+            columns: ["item", "category"] // Fields to generate
+        }
+    },
+    inTargetContainerId: "filter-container"
+});
+
+const { treeWithIds, spec, element } = form.render();
+
+// Access pruned tree with element IDs for wiring listeners
+const controlsTree = form.getControlsTree();</code></pre>
+                    </div>
+                </div>
+
+                <!-- Recipe 3: DataList -->
+                <div class="tab-pane fade" id="recipe-datalist">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-recipe-datalist')">Copy</button>
+                        <pre id="code-recipe-datalist" class="mb-0"><code class="text-light">import { DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+
+const dataList = new DataList({
+    inData: data,
+    inColumns: columns,
+    inConfig: {
+        datalist: { columns: ["category", "item"] },
+        topN: 10 // Top 10 frequency cap
+    },
+    inTargetContainerId: "datalist-container"
+});
+
+dataList.render();
+
+// Reactively update frequency badges when table filters change:
+dataList.update({ inData: table.store.stateData });</code></pre>
+                    </div>
+                </div>
+
+                <!-- Recipe 4: DataProvider -->
+                <div class="tab-pane fade" id="recipe-provider">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-recipe-provider')">Copy</button>
+                        <pre id="code-recipe-provider" class="mb-0"><code class="text-light">import { Table, createDataProvider } 
+    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
+
+// 1. Create REST CRUD adapter
+const dataProvider = createDataProvider({
+    inReadUrl: "https://api.example.com/items",
+    inCreateUrl: "https://api.example.com/items",
+    inUpdateUrl: "https://api.example.com/items/:id",
+    inDeleteUrl: "https://api.example.com/items/:id",
+    inHeaders: { "Authorization": "Bearer SECURE_TOKEN" }
+});
+
+// 2. Supply to Table
+const table = new Table({
+    inColumns: columns,
+    inDataProvider: dataProvider,
+    inTargetContainerId: "table-container"
+});
+
+// 3. Dynamic async operations
+await table.load();
+await table.createRecord({ inItem: { item: "New Item", amount: 150 } });
+await table.updateRecord({ inId: 12, inItem: { amount: 200 } });
+await table.deleteRecord({ inId: 12 });</code></pre>
+                    </div>
+                </div>
+
+                <!-- Recipe 5: Dynamic Theme -->
+                <div class="tab-pane fade" id="recipe-theme">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-recipe-theme')">Copy</button>
+                        <pre id="code-recipe-theme" class="mb-0"><code class="text-light">// Dynamic Theme Switching adhering to in/local convention
+export function switchTheme({ inThemeName, inTable, inForm, inDataList }) {
+    const localTheme = inThemeName;
+    const localTable = inTable;
+    const localForm = inForm;
+    const localDataList = inDataList;
+
+    // Instantly repaints components with the chosen theme catalog
+    localTable.setTheme({ inTheme: localTheme });
+    localForm.setTheme({ inTheme: localTheme });
+    localDataList.setTheme({ inTheme: localTheme });
+}
+
+// Available themes: "default" | "light" | "extraLight" | "dark" | "extraDark"</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How-NOT-To: Anti-Patterns Section -->
+    <section id="how-not-to" class="py-5 bg-white border-top border-bottom border-light-subtle">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+                <div>
+                    <span class="text-danger fw-semibold text-uppercase small tracking-wide">Avoid Critical Mistakes</span>
+                    <h2 class="fw-bold mb-1">How NOT To: Anti-Patterns</h2>
+                    <p class="text-muted small mb-0">Crucial pitfalls, state leaks, and convention violations to steer clear of</p>
+                </div>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/how-not-to.md" target="_blank" class="btn btn-sm btn-outline-danger mt-2 mt-md-0">
+                    <i class="bi bi-exclamation-octagon me-1"></i> Read Full How-Not-To Guide
+                </a>
+            </div>
+
+            <div class="row g-4">
+                <!-- Pitfall 1: Parameter convention -->
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 card-dont">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge badge-dont fw-semibold px-2 py-1 small">❌ DON'T: Positional &amp; Unprefixed Params</span>
+                        </div>
+                        <p class="text-muted small mb-2">Passing positional parameters or directly modifying function arguments:</p>
+                        <div class="code-container p-3 mb-0" style="font-size: 0.8rem;">
+                            <pre class="mb-0"><code class="text-danger">// BAD: Positional arguments &amp; ambiguous origin
+function filterData(data, query) {
+    // Dangerous: Modifies input array
+    return data.filter(d =&gt; d.item === query);
+}
+filterData(items, "ROPE");</code></pre>
+                        </div>
                     </div>
                 </div>
 
                 <div class="col-lg-6">
-                    <div class="card-custom p-4 h-100">
-                        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-shield-check text-primary"></i> <code>in</code> &amp; <code>local</code> Parameter Convention
-                        </h5>
-                        <p class="text-muted small">
-                            Strict naming convention enforced across all constructors and functions to maximize clarity and avoid unintentional mutation:
-                        </p>
+                    <div class="card-custom p-4 h-100 card-do">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge badge-do fw-semibold px-2 py-1 small">✅ DO: Single Object with in / local Mapping</span>
+                        </div>
+                        <p class="text-muted small mb-2">Destructure named <code>in*</code> inputs and map to <code>local*</code> variables immediately:</p>
                         <div class="code-container p-3 mb-0" style="font-size: 0.8rem;">
-                            <pre class="mb-0"><code class="text-light">// Strict in / local convention
-export function processRecords({ inData, inConfig }) {
-    // 1. Assign to local variables
-    const localData = inData || [];
-    const localConfig = inConfig || {};
+                            <pre class="mb-0"><code class="text-success">// GOOD: Explicit, immutable, self-documenting
+function filterData({ inData = [], inQuery = "" } = {}) {
+    const localData = inData;
+    const localQuery = inQuery;
+    return localData.filter(d =&gt; d.item === localQuery);
+}
+filterData({ inData: items, inQuery: "ROPE" });</code></pre>
+                        </div>
+                    </div>
+                </div>
 
-    // 2. Use local variables for all operations
-    return localData.filter(item => localConfig.match(item));
-}</code></pre>
+                <!-- Pitfall 2: Full Repaint vs Surgical -->
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 card-dont">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge badge-dont fw-semibold px-2 py-1 small">❌ DON'T: Call table.render() on State Filter</span>
+                        </div>
+                        <p class="text-muted small mb-2">Calling <code>.render()</code> destroys the existing table DOM and breaks active input focus:</p>
+                        <div class="code-container p-3 mb-0" style="font-size: 0.8rem;">
+                            <pre class="mb-0"><code class="text-danger">// BAD: Destroys table DOM and causes flicker
+button.addEventListener("click", () =&gt; {
+    table.store.stateData = filteredRows;
+    table.render(); // Heavy full re-parse
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 card-do">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge badge-do fw-semibold px-2 py-1 small">✅ DO: Use Surgical table.filterStateData()</span>
+                        </div>
+                        <p class="text-muted small mb-2">Use built-in surgical repainters which update only `tbody` and `tfoot` in place:</p>
+                        <div class="code-container p-3 mb-0" style="font-size: 0.8rem;">
+                            <pre class="mb-0"><code class="text-success">// GOOD: Fast surgical update without DOM loss
+button.addEventListener("click", () =&gt; {
+    table.filterStateData({ inQuery: { category: "ROPE" } });
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pitfall 3: Network in UI -->
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 card-dont">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge badge-dont fw-semibold px-2 py-1 small">❌ DON'T: Scatter Raw fetch() Calls in UI</span>
+                        </div>
+                        <p class="text-muted small mb-2">Hardcoding API endpoints and JWT tokens inside DOM button handlers:</p>
+                        <div class="code-container p-3 mb-0" style="font-size: 0.8rem;">
+                            <pre class="mb-0"><code class="text-danger">// BAD: Tight network &amp; auth coupling in UI
+button.onclick = async () =&gt; {
+    await fetch("https://api.com/items/42", {
+        headers: { "Authorization": "Bearer ..." }
+    });
+};</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card-custom p-4 h-100 card-do">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge badge-do fw-semibold px-2 py-1 small">✅ DO: Abstract Endpoints via createDataProvider</span>
+                        </div>
+                        <p class="text-muted small mb-2">Encapsulate endpoints, authentication, and `:id` substitutions cleanly:</p>
+                        <div class="code-container p-3 mb-0" style="font-size: 0.8rem;">
+                            <pre class="mb-0"><code class="text-success">// GOOD: Decoupled CRUD repository adapter
+const provider = createDataProvider({ inDeleteUrl: "..." });
+const table = new Table({ inDataProvider: provider });
+await table.deleteRecord({ inId: 42 });</code></pre>
                         </div>
                     </div>
                 </div>
@@ -525,88 +843,95 @@ export function processRecords({ inData, inConfig }) {
     <!-- Components API Section -->
     <section id="api" class="py-5">
         <div class="container">
-            <div class="text-center mb-5">
-                <span class="text-primary fw-semibold text-uppercase small tracking-wide">API Reference</span>
-                <h2 class="fw-bold">The Three Core Renderers</h2>
-                <p class="text-muted mx-auto" style="max-width: 600px;">
-                    Each renderer is a standalone class that can be used independently or orchestrated together.
-                </p>
+            <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+                <div>
+                    <span class="text-primary fw-semibold text-uppercase small tracking-wide">API Reference</span>
+                    <h2 class="fw-bold mb-1">Components &amp; Providers</h2>
+                    <p class="text-muted small mb-0">Full API reference for Table, Form, DataList, and createDataProvider</p>
+                </div>
+                <a href="https://github.com/keshavsoft/json-to-dom-renderers/blob/main/docs/api-reference.md" target="_blank" class="btn btn-sm btn-outline-primary mt-2 mt-md-0">
+                    <i class="bi bi-file-earmark-text me-1"></i> Full API Documentation
+                </a>
             </div>
 
             <div class="row g-4">
                 <!-- Table Card -->
-                <div class="col-lg-4">
+                <div class="col-lg-3 col-md-6">
                     <div class="card-custom p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
                             <h5 class="fw-bold mb-0"><code>Table</code></h5>
                             <span class="badge bg-primary">Class</span>
                         </div>
                         <p class="text-muted small">
-                            Renders a data table with dynamic serial numbers, striped/hover rows, sortable columns, and multi-tier summary footers.
+                            Renders tables with dynamic serials, sortable columns, and multi-tier summary footers.
                         </p>
-                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Options:</h6>
-                        <ul class="small text-muted ps-3">
-                            <li><code>data / inData</code>: Array of row objects</li>
-                            <li><code>columns / inColumns</code>: Column definitions</li>
-                            <li><code>config / inConfig</code>: Active columns, row classes, footers</li>
-                            <li><code>targetContainerId</code>: DOM element ID</li>
-                        </ul>
-                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Public Methods:</h6>
+                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Methods:</h6>
                         <ul class="small text-muted ps-3 mb-0">
-                            <li><code>.render()</code>: Builds &amp; mounts DOM</li>
-                            <li><code>.filterStateData({ query })</code>: Filters state</li>
-                            <li><code>.repaintBody()</code>: Re-renders tbody</li>
-                            <li><code>.repaintFoot()</code>: Re-evaluates tfoot</li>
-                            <li><code>.refreshTable()</code>: Full state refresh</li>
+                            <li><code>.render()</code></li>
+                            <li><code>.repaintBody()</code></li>
+                            <li><code>.repaintFoot()</code></li>
+                            <li><code>.refreshTable()</code></li>
+                            <li><code>.filterStateData()</code></li>
+                            <li><code>.setTheme({ inTheme })</code></li>
+                            <li><code>.load({ inQuery })</code></li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Form Card -->
-                <div class="col-lg-4">
+                <div class="col-lg-3 col-md-6">
                     <div class="card-custom p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
                             <h5 class="fw-bold mb-0"><code>Form</code></h5>
                             <span class="badge bg-primary">Class</span>
                         </div>
                         <p class="text-muted small">
-                            Constructs filter/input forms matching active columns with inline action buttons and automatic <code>list</code> bindings for HTML5 datalists.
+                            Constructs filter/input forms matching schema with control-tree tracking.
                         </p>
-                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Options:</h6>
-                        <ul class="small text-muted ps-3">
-                            <li><code>columns / inColumns</code>: Master column list</li>
-                            <li><code>config / inConfig</code>: Active body columns &amp; classes</li>
-                            <li><code>targetContainerId</code>: DOM element ID</li>
-                        </ul>
-                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Public Methods:</h6>
+                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Methods:</h6>
                         <ul class="small text-muted ps-3 mb-0">
-                            <li><code>.render()</code>: Returns <code>{ treeWithIds, spec, element }</code></li>
-                            <li><code>.getControlsTree()</code>: Returns pruned interactive elements tree</li>
+                            <li><code>.render()</code></li>
+                            <li><code>.getControlsTree()</code></li>
+                            <li><code>.setTheme({ inTheme })</code></li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- DataList Card -->
-                <div class="col-lg-4">
+                <div class="col-lg-3 col-md-6">
                     <div class="card-custom p-4 h-100">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
                             <h5 class="fw-bold mb-0"><code>DataList</code></h5>
                             <span class="badge bg-primary">Class</span>
                         </div>
                         <p class="text-muted small">
-                            Analyzes dataset values, computes value frequencies, and generates native HTML5 <code>&lt;datalist&gt;</code> elements with top-N limits.
+                            Profiles column values, computes value frequencies, and generates native HTML5 <code>&lt;datalist&gt;</code>.
                         </p>
-                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Options:</h6>
-                        <ul class="small text-muted ps-3">
-                            <li><code>data / inData</code>: Active dataset</li>
-                            <li><code>columns / inColumns</code>: Column definitions</li>
-                            <li><code>config / inConfig</code>: Active datalist keys, topN</li>
-                            <li><code>targetContainerId</code>: Container ID</li>
-                        </ul>
-                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Public Methods:</h6>
+                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Methods:</h6>
                         <ul class="small text-muted ps-3 mb-0">
-                            <li><code>.render()</code>: Mounts datalist elements</li>
-                            <li><code>.update({ data })</code>: Reactively recalculates frequencies</li>
+                            <li><code>.render()</code></li>
+                            <li><code>.update({ inData })</code></li>
+                            <li><code>.setTheme({ inTheme })</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DataProvider Card -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="card-custom p-4 h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <h5 class="fw-bold mb-0"><code>createDataProvider</code></h5>
+                            <span class="badge bg-success">v11 Factory</span>
+                        </div>
+                        <p class="text-muted small">
+                            Decoupled CRUD repository adapter handling URLs, auth headers, and path params.
+                        </p>
+                        <h6 class="fw-semibold small text-uppercase text-secondary mt-3">Key Methods:</h6>
+                        <ul class="small text-muted ps-3 mb-0">
+                            <li><code>.read({ inQuery })</code></li>
+                            <li><code>.create({ inItem })</code></li>
+                            <li><code>.update({ inId, inItem })</code></li>
+                            <li><code>.delete({ inId })</code></li>
                         </ul>
                     </div>
                 </div>
@@ -618,10 +943,10 @@ export function processRecords({ inData, inConfig }) {
     <section id="quickstart" class="py-5 bg-white border-top border-light-subtle">
         <div class="container">
             <div class="text-center mb-5">
-                <span class="text-primary fw-semibold text-uppercase small tracking-wide">Deployment</span>
+                <span class="text-primary fw-semibold text-uppercase small tracking-wide">Zero Build Step</span>
                 <h2 class="fw-bold">CDN &amp; Quick Start</h2>
                 <p class="text-muted mx-auto" style="max-width: 600px;">
-                    Integrate directly into any web application via jsDelivr CDN without bundlers or build steps.
+                    Integrate directly into any web application via jsDelivr CDN without Node.js, bundlers, or build steps.
                 </p>
             </div>
 
@@ -642,12 +967,13 @@ export function processRecords({ inData, inConfig }) {
                         </div>
 
                         <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
-                            <i class="bi bi-code-square text-primary"></i> 2. Import Renderers via ESM
+                            <i class="bi bi-code-square text-primary"></i> 2. Import Renderers via ESM (v11)
                         </h5>
                         <div class="code-container">
                             <button class="copy-btn" onclick="copySnippet('code-esm-import')">Copy</button>
-                            <pre id="code-esm-import" class="mb-0"><code class="text-light">// Import Table, Form, and DataList directly from jsDelivr CDN
-import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";</code></pre>
+                            <pre id="code-esm-import" class="mb-0"><code class="text-light">// Import Table, Form, DataList, and createDataProvider
+import { Table, Form, DataList, createDataProvider } 
+    from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";</code></pre>
                         </div>
                     </div>
                 </div>
@@ -664,21 +990,28 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
 &lt;div id="datalist-box"&gt;&lt;/div&gt;
 
 &lt;script type="module"&gt;
-  import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
+  import { Table, Form, DataList } 
+      from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v11/min.js";
 
-  const columns = [{ key: "name", label: "Item" }, { key: "qty", label: "Quantity" }];
-  const data = [{ name: "Apples", qty: 10 }, { name: "Oranges", qty: 25 }];
+  const columns = [
+      { key: "name", label: "Item" }, 
+      { key: "qty", label: "Quantity", type: "number", align: "right" }
+  ];
+  const data = [
+      { name: "Apples", qty: 10 }, 
+      { name: "Oranges", qty: 25 }
+  ];
 
   // 1. Table
-  const table = new Table({ data, columns, targetContainerId: "table-box" });
+  const table = new Table({ inData: data, inColumns: columns, inTargetContainerId: "table-box" });
   table.render();
 
   // 2. Form Filter
-  const form = new Form({ columns, targetContainerId: "filter-box" });
+  const form = new Form({ inColumns: columns, inTargetContainerId: "filter-box" });
   form.render();
 
   // 3. Autocomplete DataList
-  const dataList = new DataList({ data, columns, targetContainerId: "datalist-box" });
+  const dataList = new DataList({ inData: data, inColumns: columns, inTargetContainerId: "datalist-box" });
   dataList.render();
 &lt;/script&gt;</code></pre>
                         </div>
@@ -801,7 +1134,7 @@ import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/js
 
             wireFormButtons(formRenderResult?.element);
 
-            // Dynamic Theme Switching (v10 Feature)
+            // Dynamic Theme Switching
             document.getElementById("theme-selector")?.addEventListener("change", (e) => {
                 const newTheme = e.target.value;
                 table.setTheme({ inTheme: newTheme });
