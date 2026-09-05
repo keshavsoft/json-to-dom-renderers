@@ -4,8 +4,8 @@ import tableConfig from "./table/config.json" with { type: "json" };
 import searchConfig from "./search/config.json" with { type: "json" };
 import datalistConfig from "./datalist/config.json" with { type: "json" };
 
-// Import everything cleanly from src/v9
-import { Table, Form, DataList } from "../../../src/v9/index.js";
+// Import everything cleanly from CDN
+import { Table, Form, DataList } from "https://cdn.jsdelivr.net/gh/keshavsoft/json-to-dom-renderers/docs/dist/v9/min.js";
 
 const startFunc = () => {
     // 1. Instantiate Table with clean public API
