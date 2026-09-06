@@ -1,8 +1,9 @@
 {
   "name": "json-to-dom-renderers",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "description": "Modular UI Renderers (Table, Form, DataList) built on top of json-to-dom",
   "type": "module",
+  "main": "src/v13/index.js",
   "bin": {
     "json-to-dom-renderers": "bin/index.js"
   },
@@ -12,9 +13,19 @@
     "docs",
     "README.md"
   ],
+  "exports": {
+    ".": "./src/v13/index.js",
+    "./v13": "./src/v13/index.js",
+    "./v12": "./src/v12/index.js",
+    "./v11": "./src/v11/index.js"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keshavsoft/json-to-dom-renderers.git"
   },
   "keywords": [
     "json-to-dom",
@@ -26,6 +37,10 @@
   ],
   "author": "KeshavSoft",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keshavsoft/json-to-dom-renderers/issues"
+  },
+  "homepage": "https://keshavsoft.github.io/json-to-dom-renderers/",
   "devDependencies": {
     "vite": "^5.4.2"
   }
