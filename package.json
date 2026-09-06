@@ -1,10 +1,10 @@
 {
   "name": "json-to-dom-renderers",
-  "version": "1.0.0",
+  "version": "1.12.1",
   "description": "Modular UI Renderers (Table, Form, DataList) built on top of json-to-dom",
   "type": "module",
   "bin": {
-    "json-to-dom-renderers": "./bin/index.js"
+    "json-to-dom-renderers": "bin/index.js"
   },
   "files": [
     "src",
