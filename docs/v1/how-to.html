@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How-To Guide &amp; Recipes | json-to-dom-renderers</title>
+    <meta name="description"
+        content="Practical recipes and step-by-step guides for building responsive Tables, Forms, DataLists, and REST providers with json-to-dom-renderers.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --ks-primary: #3b82f6;
+            --ks-primary-dark: #1d4ed8;
+            --ks-accent: #06b6d4;
+            --ks-bg-surface: #ffffff;
+            --ks-bg-subtle: #f8fafc;
+            --ks-text-main: #0f172a;
+            --ks-text-muted: #64748b;
+            --ks-border-color: #e2e8f0;
+            --ks-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ks-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--ks-font-sans);
+            color: var(--ks-text-main);
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        pre, code {
+            font-family: var(--ks-font-mono);
+        }
+
+        .card-custom {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid var(--ks-border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        .code-container {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-container pre {
+            margin: 0;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .hero-banner {
+            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+            border-bottom: 1px solid var(--ks-border-color);
+            padding: 3.5rem 0 2.5rem;
+        }
+
+        .badge-convention {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.html">
+                <span class="badge bg-primary text-white rounded-3 px-2 py-1 fs-6">K</span>
+                <span>json-to-dom-renderers</span>
+            </a>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 ms-2 font-monospace">v14.0.0</span>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="demo.html">Live Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="architecture.html">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="how-to.html">How-To</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-not-to.html">Pitfalls</a></li>
+                    <li class="nav-item"><a class="nav-link" href="api-reference.html">API Docs</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+                            href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="hero-banner text-center">
+        <div class="container">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 mb-3 font-monospace">PRACTICAL RECIPES</span>
+            <h1 class="fw-extrabold display-6 mb-2">How-To Guide</h1>
+            <p class="lead text-muted max-w-2xl mx-auto" style="max-width: 700px;">
+                Production-tested recipes for building reactive, fast web interfaces using pure JSON configurations.
+            </p>
+            <span class="badge-convention mt-2 d-inline-block">
+                <i class="bi bi-check-circle me-1"></i> Adheres strictly to <code>in</code> / <code>local</code> parameter naming convention
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row g-4">
+
+            <!-- Recipe 0: Verified Import -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <span class="badge bg-success mb-2">Setup</span>
+                    <h3 class="fw-bold mb-3"><i class="bi bi-link-45deg text-primary me-2"></i>Loading the Library (Verified ESM)</h3>
+                    <p class="text-muted">
+                        Include dependencies directly via CDN or GitHub Pages. No Node.js build step or bundler needed:
+                    </p>
+                    <div class="code-container">
+                        <pre><code class="text-info">&lt;!-- Native DOM Compiler Engine --&gt;
+&lt;script type="module" src="https://keshavsoft.github.io/json-to-dom/docs/dist/v3/min.js"&gt;&lt;/script&gt;
+
+&lt;!-- json-to-dom-renderers (v14.0.0 Verified Live Endpoint) --&gt;
+&lt;script type="module"&gt;
+    import { Table, Form, DataList, createDataProvider } 
+        from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
+
+    console.log("Loaded version:", window.ks["json-to-dom-renderers"].version);
+&lt;/script&gt;</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 1: Table with Footers -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <span class="badge bg-primary mb-2">Recipe 1</span>
+                    <h3 class="fw-bold mb-3"><i class="bi bi-table text-primary me-2"></i>Building a Table with Serials &amp; Multi-Tier Footers</h3>
+                    <p class="text-muted">
+                        Render a rich table with automated row numbering (<code>#</code>), aggregate sums, and evaluated formula rows (GST taxes &amp; Grand Totals):
+                    </p>
+                    <div class="code-container">
+                        <pre><code class="text-light">import { Table } from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
+
+const table = new Table({
+    inData: [
+        { id: 1, item: "Apples", qty: 10, rate: 50, amount: 500 },
+        { id: 2, item: "Oranges", qty: 5, rate: 40, amount: 200 }
+    ],
+    inColumns: [
+        { key: "item", label: "Item Name", type: "string" },
+        { key: "qty", label: "Qty", type: "number", align: "right" },
+        { key: "rate", label: "Rate", type: "number", align: "right" },
+        { key: "amount", label: "Amount", type: "number", align: "right" }
+    ],
+    inConfig: {
+        serial: true,
+        head: { columns: ["item", "qty", "rate", "amount"] },
+        foot: {
+            rows: [
+                {
+                    cells: {
+                        item: { text: "Sub Total", colspan: 3 },
+                        amount: { aggregate: "sum", format: "currency" }
+                    }
+                },
+                {
+                    cells: {
+                        item: { text: "GST (18%)", colspan: 3 },
+                        amount: { eval: "amount * 0.18", format: "currency" }
+                    }
+                },
+                {
+                    cells: {
+                        item: { text: "Grand Total", colspan: 3 },
+                        amount: { eval: "amount + (amount * 0.18)", format: "currency" }
+                    }
+                }
+            ]
+        }
+    },
+    inTargetContainerId: "table-container"
+});
+
+table.render();</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 2: Search Form -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <span class="badge bg-primary mb-2">Recipe 2</span>
+                    <h3 class="fw-bold mb-3"><i class="bi bi-funnel text-primary me-2"></i>Generating a Search &amp; Filter Form</h3>
+                    <p class="text-muted">
+                        Generate declarative form controls with search buttons and automatic linkage to HTML5 <code>&lt;datalist&gt;</code> elements:
+                    </p>
+                    <div class="code-container">
+                        <pre><code class="text-light">import { Form } from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
+
+const form = new Form({
+    inColumns: [
+        { key: "item", label: "Item Name", type: "string" },
+        { key: "category", label: "Category", type: "string" }
+    ],
+    inConfig: {
+        fields: [
+            {
+                name: "item",
+                type: "text",
+                placeholder: "Search item name...",
+                datalist: true,
+                button: { text: "Search", class: "btn-outline-primary" }
+            }
+        ]
+    },
+    inTargetContainerId: "form-container"
+});
+
+form.render();</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 3: DataProvider -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <span class="badge bg-primary mb-2">Recipe 3</span>
+                    <h3 class="fw-bold mb-3"><i class="bi bi-cloud-arrow-down text-primary me-2"></i>Decoupled REST CRUD with <code>createDataProvider</code></h3>
+                    <p class="text-muted">
+                        Decouple your networking logic from UI components with a uniform read/create provider:
+                    </p>
+                    <div class="code-container">
+                        <pre><code class="text-light">import { Table, createDataProvider } 
+    from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
+
+// Initialize uniform REST provider
+const dataProvider = createDataProvider({
+    inReadUrl: "/api/orders/list",
+    inCreateUrl: "/api/orders/new"
+});
+
+// Pass to Table instance
+const table = new Table({
+    columns,
+    config: tableConfig,
+    dataProvider
+});
+
+// Asynchronously load and render
+await table.render({ inContainerId: "table-container" });</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 4: Dynamic Theme Switching -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <span class="badge bg-primary mb-2">Recipe 4</span>
+                    <h3 class="fw-bold mb-3"><i class="bi bi-palette text-primary me-2"></i>Dynamic Theme Switching</h3>
+                    <p class="text-muted">
+                        Switch visual appearances instantaneously across Table, Form, and DataList without re-querying or rebuilding data:
+                    </p>
+                    <div class="code-container">
+                        <pre><code class="text-light">// Instantaneously switch themes across components:
+table.setTheme({ inTheme: "dark" });
+form.setTheme({ inTheme: "dark" });
+dataList.setTheme({ inTheme: "dark" });
+
+// Supported out-of-the-box:
+// "default" | "light" | "extraLight" | "dark" | "extraDark"</code></pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 border-top border-secondary mt-5">
+        <div class="container text-center small text-secondary">
+            <p class="mb-1">&copy; KeshavSoft. Distributed under the ISC License.</p>
+            <p class="mb-0">
+                <a href="index.html" class="text-secondary text-decoration-none">Home</a> &bull;
+                <a href="demo.html" class="text-secondary text-decoration-none">Live Demo</a> &bull;
+                <a href="architecture.html" class="text-secondary text-decoration-none">Architecture</a> &bull;
+                <a href="how-not-to.html" class="text-secondary text-decoration-none">Pitfalls</a> &bull;
+                <a href="api-reference.html" class="text-secondary text-decoration-none">API Docs</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>json-to-dom-renderers | Modular UI Renderers</title>
+    <meta name="description"
+        content="Modular, config-driven UI Renderers (Table, Form, DataList) built on top of json-to-dom with zero dependencies.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --ks-primary: #2563eb;
+            --ks-primary-dark: #1d4ed8;
+            --ks-accent: #06b6d4;
+            --ks-bg-surface: #ffffff;
+            --ks-bg-subtle: #f8fafc;
+            --ks-text-main: #0f172a;
+            --ks-text-muted: #64748b;
+            --ks-border-color: #e2e8f0;
+            --ks-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ks-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--ks-font-sans);
+            color: var(--ks-text-main);
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        pre, code {
+            font-family: var(--ks-font-mono);
+        }
+
+        /* Hero */
+        .hero-section {
+            background: radial-gradient(circle at 15% 20%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border-bottom: 1px solid var(--ks-border-color);
+            padding: 4.5rem 0 3.5rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.9rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--ks-primary);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .hero-title {
+            font-size: 3.25rem;
+            font-weight: 900;
+            letter-spacing: -0.035em;
+            line-height: 1.15;
+            color: #0f172a;
+        }
+
+        /* Verified Endpoint Box */
+        .endpoint-card {
+            background: #0f172a;
+            border-radius: 1.25rem;
+            border: 1px solid #1e293b;
+            box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.25);
+            color: #f8fafc;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .endpoint-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4, #10b981);
+        }
+
+        .code-box {
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+            position: relative;
+        }
+
+        .copy-pill {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-pill:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Hub Cards */
+        .hub-card {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid var(--ks-border-color);
+            padding: 1.75rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .hub-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px -5px rgba(0, 0, 0, 0.08);
+            border-color: #93c5fd;
+            color: inherit;
+        }
+
+        .hub-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            margin-bottom: 1.25rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.html">
+                <span class="badge bg-primary text-white rounded-3 px-2 py-1 fs-6">K</span>
+                <span>json-to-dom-renderers</span>
+            </a>
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 ms-2 font-monospace">v14.0.0</span>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="demo.html">Live Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="architecture.html">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-to.html">How-To</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-not-to.html">Pitfalls</a></li>
+                    <li class="nav-item"><a class="nav-link" href="api-reference.html">API Docs</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+                            href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Minimalist, High-Impact Hero -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <div class="hero-badge mb-3">
+                <i class="bi bi-check2-circle text-success fs-6"></i>
+                <span>v14.0.0 Confirmed &amp; Live on GitHub Pages</span>
+            </div>
+            <h1 class="hero-title mb-3">
+                Building Tables &amp; Forms is Tough.<br>
+                <span class="text-primary">We Made Them Config-Driven.</span>
+            </h1>
+            <p class="lead text-muted max-w-2xl mx-auto mb-4" style="max-width: 720px;">
+                <code>json-to-dom-renderers</code> is the high-performance JSON-to-JSON state transformation engine. 
+                It turns column schemas and raw business data into declarative element specifications compiled at native speed by <code>json-to-dom</code>.
+            </p>
+            <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
+                <a href="demo.html" class="btn btn-primary px-4 py-2.5 rounded-3 fw-semibold shadow-sm d-flex align-items-center gap-2">
+                    <i class="bi bi-play-circle-fill"></i>
+                    <span>Open Interactive Demo</span>
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+                <a href="how-to.html" class="btn btn-outline-secondary px-4 py-2.5 rounded-3 fw-semibold bg-white">
+                    <span>Explore Recipes</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CRITERION: Confirmed Working Production Endpoint -->
+    <section class="py-5">
+        <div class="container">
+            <div class="endpoint-card p-4 p-lg-5">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-success font-monospace px-2.5 py-1">CONFIRMED ENDPOINT</span>
+                        <span class="text-secondary small">Zero build step &bull; Native ES Module &bull; Direct Browser Import</span>
+                    </div>
+                    <span class="badge bg-dark border border-secondary text-info font-monospace">Production Ready</span>
+                </div>
+
+                <h3 class="fw-bold mb-2">The Verified CDN Endpoint</h3>
+                <p class="text-secondary small mb-4">
+                    This is the confirmed, tested URL hosted on GitHub Pages ready to use in your applications right now:
+                </p>
+
+                <!-- Primary ESM Import Snippet -->
+                <div class="code-box mb-3">
+                    <button class="copy-pill" onclick="copyText('esm-import-snippet', this)">Copy Import</button>
+                    <pre class="mb-0" id="esm-import-snippet"><code class="text-info">import { Table, Form, DataList, createDataProvider } 
+    from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";</code></pre>
+                </div>
+
+                <!-- Secondary: Verification in Console -->
+                <div class="row g-3 mt-1">
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-dark border border-secondary h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="small text-muted fw-semibold">
+                                    <i class="bi bi-terminal me-1 text-warning"></i> Instant Console Check
+                                </span>
+                                <span class="badge bg-secondary font-monospace" style="font-size: 0.7rem;">window.ks</span>
+                            </div>
+                            <pre class="mb-0 small"><code class="text-light">&gt; window.ks["json-to-dom-renderers"].version
+&lt; "v14.0.0"</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 rounded-3 bg-dark border border-secondary h-100">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="small text-muted fw-semibold">
+                                    <i class="bi bi-code-slash me-1 text-primary"></i> HTML Script Tag
+                                </span>
+                                <span class="badge bg-secondary font-monospace" style="font-size: 0.7rem;">ESM Script</span>
+                            </div>
+                            <pre class="mb-0 small"><code class="text-light">&lt;script type="module" 
+  src="https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js"&gt;
+&lt;/script&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Instant 30-Second Quickstart -->
+    <section class="py-4">
+        <div class="container">
+            <div class="card bg-white border rounded-4 p-4 p-lg-5 shadow-sm">
+                <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+                    <div>
+                        <span class="text-primary fw-semibold small text-uppercase font-monospace">Quickstart</span>
+                        <h3 class="fw-bold mb-1">Render a Table in 10 Seconds</h3>
+                    </div>
+                    <span class="badge bg-light text-dark border font-monospace">Zero HTML String Templates</span>
+                </div>
+                <div class="code-box bg-dark text-light">
+                    <button class="copy-pill" onclick="copyText('quickstart-code', this)">Copy Code</button>
+                    <pre class="mb-0" id="quickstart-code"><code>import { Table } from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
+
+// Instantiate with plain JSON columns and data
+const table = new Table({
+    inColumns: [
+        { key: "item", label: "Product Name", type: "string" },
+        { key: "qty", label: "Qty", type: "number", align: "right" },
+        { key: "rate", label: "Rate", type: "number", align: "right" }
+    ],
+    inData: [
+        { item: "Apples", qty: 10, rate: 50 },
+        { item: "Oranges", qty: 25, rate: 30 }
+    ],
+    inConfig: { serial: true },
+    inTargetContainerId: "table-container"
+});
+
+// Mount to DOM
+table.render();</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Gateways (5 Clean Hub Cards) -->
+    <section class="py-5">
+        <div class="container">
+            <div class="mb-4 d-flex align-items-center justify-content-between border-bottom pb-3">
+                <div>
+                    <span class="text-muted fw-bold small text-uppercase font-monospace">Documentation Hubs</span>
+                    <h3 class="fw-bold mb-0">Explore Dedicated Guides</h3>
+                </div>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle font-monospace">5 Specialized Sections</span>
+            </div>
+
+            <div class="row g-4">
+                <!-- Gateway 1: Live Demo -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="demo.html" class="hub-card">
+                        <div>
+                            <div class="hub-icon-box bg-primary-subtle text-primary">
+                                <i class="bi bi-play-circle-fill"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2">Interactive Live Demo</h5>
+                            <p class="text-muted small mb-3">
+                                Hands-on sandbox demonstrating Table, Form, and DataList orchestrated together with live theme switching and JSON inspectors.
+                            </p>
+                        </div>
+                        <span class="text-primary fw-semibold small d-inline-flex align-items-center gap-1">
+                            <span>Open Demo</span> <i class="bi bi-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Gateway 2: Architecture -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="architecture.html" class="hub-card">
+                        <div>
+                            <div class="hub-icon-box bg-info-subtle text-info">
+                                <i class="bi bi-diagram-3-fill"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2">Architecture &amp; Mental Model</h5>
+                            <p class="text-muted small mb-3">
+                                Learn the story of Two Worlds: The JSON Specification World vs Native DOM World, and why this separation delivers unmatched speed.
+                            </p>
+                        </div>
+                        <span class="text-primary fw-semibold small d-inline-flex align-items-center gap-1">
+                            <span>Read Architecture</span> <i class="bi bi-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Gateway 3: How-To -->
+                <div class="col-md-6 col-lg-4">
+                    <a href="how-to.html" class="hub-card">
+                        <div>
+                            <div class="hub-icon-box bg-success-subtle text-success">
+                                <i class="bi bi-journal-code"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2">How-To Guide &amp; Recipes</h5>
+                            <p class="text-muted small mb-3">
+                                Step-by-step recipes for serial numbers, multi-tier footer aggregates, formula evaluations, autocompletes, and REST providers.
+                            </p>
+                        </div>
+                        <span class="text-primary fw-semibold small d-inline-flex align-items-center gap-1">
+                            <span>View Recipes</span> <i class="bi bi-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Gateway 4: Pitfalls -->
+                <div class="col-md-6 col-lg-6">
+                    <a href="how-not-to.html" class="hub-card">
+                        <div>
+                            <div class="hub-icon-box bg-danger-subtle text-danger">
+                                <i class="bi bi-shield-slash-fill"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2">Pitfalls &amp; Anti-Patterns</h5>
+                            <p class="text-muted small mb-3">
+                                The 7 critical mistakes to avoid: parameter naming rules, preventing layout thrashing, and keeping state synchronized.
+                            </p>
+                        </div>
+                        <span class="text-primary fw-semibold small d-inline-flex align-items-center gap-1">
+                            <span>Explore Pitfalls</span> <i class="bi bi-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Gateway 5: API Reference -->
+                <div class="col-md-12 col-lg-6">
+                    <a href="api-reference.html" class="hub-card">
+                        <div>
+                            <div class="hub-icon-box bg-warning-subtle text-warning">
+                                <i class="bi bi-code-square"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2">Complete API Reference</h5>
+                            <p class="text-muted small mb-3">
+                                Exhaustive documentation for Table, Form, DataList, TableStore, FormStore, and createDataProvider methods and configs.
+                            </p>
+                        </div>
+                        <span class="text-primary fw-semibold small d-inline-flex align-items-center gap-1">
+                            <span>Inspect API</span> <i class="bi bi-arrow-right"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 border-top border-secondary mt-5">
+        <div class="container text-center small text-secondary">
+            <p class="mb-1">&copy; KeshavSoft. Distributed under the ISC License.</p>
+            <p class="mb-0">
+                <a href="index.html" class="text-secondary text-decoration-none">Home</a> &bull;
+                <a href="demo.html" class="text-secondary text-decoration-none">Live Demo</a> &bull;
+                <a href="architecture.html" class="text-secondary text-decoration-none">Architecture</a> &bull;
+                <a href="how-to.html" class="text-secondary text-decoration-none">How-To</a> &bull;
+                <a href="how-not-to.html" class="text-secondary text-decoration-none">Pitfalls</a> &bull;
+                <a href="api-reference.html" class="text-secondary text-decoration-none">API Docs</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Copy Helper -->
+    <script>
+        function copyText(elementId, btn) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            navigator.clipboard.writeText(el.innerText).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+                btn.style.background = "#10b981";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+
+</html>
