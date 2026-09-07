@@ -1,0 +1,53 @@
+{
+    "rowKeys": {
+        "id": "",
+        "title": "",
+        "type": "aggregate",
+        "values": {}
+    },
+    "types": {
+        "aggregate": {
+            "description": "Calculates column-level aggregations directly across table dataset records",
+            "supportedFunctions": ["sum", "count", "avg", "min", "max"]
+        },
+        "eval": {
+            "description": "Evaluates dynamic mathematical expressions using calculated values from preceding row IDs",
+            "scope": "Any prior row with an 'id' property has its computed column values available in the expression scope",
+            "example": "totals.inwardQty - totals.outwardQty"
+        }
+    },
+    "samples": [
+        {
+            "id": "totals",
+            "title": "Total Quantity",
+            "type": "aggregate",
+            "values": {
+                "inwardQty": "sum",
+                "outwardQty": "sum"
+            }
+        },
+        {
+            "id": "itemCount",
+            "title": "Total Records",
+            "type": "aggregate",
+            "values": {
+                "vouchernumber": "count"
+            }
+        },
+        {
+            "id": "averages",
+            "title": "Average Inward",
+            "type": "aggregate",
+            "values": {
+                "inwardQty": "avg"
+            }
+        },
+        {
+            "title": "Net Balance",
+            "type": "eval",
+            "values": {
+                "inwardQty": "totals.inwardQty - totals.outwardQty"
+            }
+        }
+    ]
+}

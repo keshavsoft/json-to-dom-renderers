@@ -1,0 +1,35 @@
+{
+    "stacked": {
+        "form": "",
+        "body": "d-flex flex-column gap-3",
+        "field": "col-12",
+        "label": "form-label mb-1",
+        "controlWrapper": "",
+        "group": "input-group input-group-sm w-100",
+        "input": "form-control",
+        "button": "btn",
+        "foot": "d-flex align-items-center justify-content-end gap-2 pt-3 mt-3 border-top"
+    },
+    "horizontal": {
+        "form": "",
+        "body": "d-flex flex-column gap-3",
+        "field": "row align-items-center g-2",
+        "label": "col-sm-4 col-form-label text-sm-end mb-0",
+        "controlWrapper": "col-sm-8",
+        "group": "input-group input-group-sm w-100",
+        "input": "form-control",
+        "button": "btn",
+        "foot": "d-flex align-items-center justify-content-end gap-2 pt-3 mt-3 border-top"
+    },
+    "inline": {
+        "form": "mb-3",
+        "body": "row g-3 align-items-center",
+        "field": "col-auto d-flex align-items-center gap-2 mb-2",
+        "label": "col-form-label col-form-label-sm text-nowrap mb-0",
+        "controlWrapper": "",
+        "group": "input-group input-group-sm w-auto",
+        "input": "form-control",
+        "button": "btn",
+        "foot": "col-auto d-flex align-items-center gap-2 mt-2"
+    }
+}

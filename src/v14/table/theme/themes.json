@@ -1,0 +1,47 @@
+{
+    "default": {
+        "table": "table-hover table-striped",
+        "thead": "table-light",
+        "th": "",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": ""
+    },
+    "light": {
+        "table": "table-hover table-striped",
+        "thead": "table-light",
+        "th": "text-secondary",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": ""
+    },
+    "extraLight": {
+        "table": "table-hover",
+        "thead": "",
+        "th": "text-muted",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "text-secondary"
+    },
+    "dark": {
+        "table": "table-dark table-hover table-striped",
+        "thead": "table-dark",
+        "th": "",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "border-secondary"
+    },
+    "extraDark": {
+        "table": "table-dark table-striped-columns border-secondary",
+        "thead": "table-active",
+        "th": "text-light",
+        "tbody": "",
+        "tr": "",
+        "td": "",
+        "tfoot": "border-secondary"
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "serial": true,
+    "head": {
+        "columns": []
+    },
+    "row": {
+        "striped": true,
+        "hover": true
+    },
+    "foot": [
+        {
+            "id": "totals",
+            "title": "Total",
+            "type": "aggregate",
+            "values": {}
+        }
+    ],
+    "classes": {
+        "table": "",
+        "thead": "",
+        "tfoot": "",
+        "th": "",
+        "tbody": "",
+        "tr": "",
+        "td": ""
+    }
+}
