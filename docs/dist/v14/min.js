@@ -1581,9 +1581,10 @@ const fe = ({
       return await v.json();
     }
   };
-};
+}, be = "v14.0.0";
 window.ks ?? (window.ks = {});
 window.ks["json-to-dom-renderers"] = {
+  version: be,
   Table: I,
   Form: ce,
   DataList: $,
@@ -1593,5 +1594,6 @@ export {
   $ as DataList,
   ce as Form,
   I as Table,
-  fe as createDataProvider
+  fe as createDataProvider,
+  be as version
 };

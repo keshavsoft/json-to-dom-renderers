@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture &amp; Design System | json-to-dom-renderers</title>
+    <meta name="description"
+        content="Architecture of json-to-dom-renderers: The JSON-to-JSON state transformation engine powering declarative native UIs with json-to-dom.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        :root {
+            --ks-primary: #3b82f6;
+            --ks-primary-dark: #1d4ed8;
+            --ks-accent: #06b6d4;
+            --ks-bg-surface: #ffffff;
+            --ks-bg-subtle: #f8fafc;
+            --ks-text-main: #0f172a;
+            --ks-text-muted: #64748b;
+            --ks-border-color: #e2e8f0;
+            --ks-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ks-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--ks-font-sans);
+            color: var(--ks-text-main);
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        pre, code {
+            font-family: var(--ks-font-mono);
+        }
+
+        .card-custom {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid var(--ks-border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+        }
+
+        .diagram-box {
+            background: #0f172a;
+            color: #38bdf8;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            font-size: 0.82rem;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+
+        .hero-banner {
+            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+            border-bottom: 1px solid var(--ks-border-color);
+            padding: 3.5rem 0 2.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.html">
+                <span class="badge bg-primary text-white rounded-3 px-2 py-1 fs-6">K</span>
+                <span>json-to-dom-renderers</span>
+            </a>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 ms-2 font-monospace">v14.0.0</span>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="demo.html">Live Demo</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="architecture.html">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-to.html">How-To</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-not-to.html">Pitfalls</a></li>
+                    <li class="nav-item"><a class="nav-link" href="api-reference.html">API Docs</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+                            href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="hero-banner text-center">
+        <div class="container">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 mb-3 font-monospace">CORE ARCHITECTURE</span>
+            <h1 class="fw-extrabold display-6 mb-2">The Story of Two Worlds</h1>
+            <p class="lead text-muted max-w-2xl mx-auto" style="max-width: 700px;">
+                Why KeshavSoft divides UI generation into the <strong>JSON Specification World</strong> and the <strong>Native DOM World</strong>.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container py-5">
+        <div class="row g-4">
+            <!-- Mental Model -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <h3 class="fw-bold mb-3"><i class="bi bi-diagram-3 text-primary me-2"></i>The Mental Model: Two Libraries, Two Roles</h3>
+                    <p class="text-muted leading-relaxed">
+                        Modern frameworks typically build an in-memory Virtual DOM tree, run complex reconciliation heuristics on every tick, and ship tens of kilobytes of runtime overhead.
+                    </p>
+                    <p class="text-muted leading-relaxed">
+                        KeshavSoft splits this into two hyper-focused, zero-dependency tools:
+                    </p>
+
+                    <!-- Diagram -->
+                    <div class="diagram-box my-4 font-monospace">
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                                THE JSON WORLD                                    │
+│                     (Managed by json-to-dom-renderers)                           │
+│                                                                                  │
+│   Application Data ───►  State Stores  ───►  Calculations  ───►  JSON Element    │
+│   (columns, rows,         (TableStore,        (aggregates,        Specification  │
+│    configs, themes)        FormStore)          eval formulas)     Tree (inSpec)  │
+└────────────────────────────────────────┬─────────────────────────────────────────┘
+                                         │
+                       THE ARCHITECTURAL BOUNDARY
+                                         │
+                       window.ks["json-to-dom"].buildSpecElement({ inSpec })
+                                         │
+┌────────────────────────────────────────▼─────────────────────────────────────────┐
+│                                 THE DOM WORLD                                    │
+│                           (Managed by json-to-dom)                               │
+│                                                                                  │
+│   Recursive DOM Builder ───► Native DOM Elements ───► Surgical Repainters        │
+│   (pure DOM APIs:            (&lt;table&gt;, &lt;form&gt;,        (repaintBody, repaintFoot) │
+│    createElement, attrs)      &lt;datalist&gt;)                                        │
+└──────────────────────────────────────────────────────────────────────────────────┘
+                    </div>
+
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 25%;">Library</th>
+                                    <th style="width: 25%;">Core Role</th>
+                                    <th style="width: 25%;">Input &rarr; Output</th>
+                                    <th style="width: 25%;">Domain Focus</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold text-primary font-monospace">json-to-dom-renderers</td>
+                                    <td>High-Level JSON-to-JSON Transformer &amp; State Coordinator</td>
+                                    <td>Data + Schema &rarr; <span class="badge bg-secondary font-monospace">inSpec (JSON)</span></td>
+                                    <td>Table calculations, serials, multi-tier footer aggregates, formula evaluations, autocomplete frequency profiling, REST CRUD.</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold text-success font-monospace">json-to-dom</td>
+                                    <td>Low-Level Native DOM Compiler</td>
+                                    <td><span class="badge bg-secondary font-monospace">inSpec (JSON)</span> &rarr; <span class="badge bg-dark">Native HTMLElement</span></td>
+                                    <td>Pure browser DOM creation, attribute bindings, event delegation, fast recursive node generation. Zero knowledge of business tables or forms.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Journey -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <h3 class="fw-bold mb-4"><i class="bi bi-arrow-repeat text-primary me-2"></i>The Complete End-to-End Pipeline</h3>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded-3 bg-light h-100">
+                                <span class="badge bg-primary mb-2">Step 1</span>
+                                <h6 class="fw-bold mb-1">State &amp; Ingestion</h6>
+                                <p class="small text-muted mb-0">Raw rows, column definitions, and layout configurations are passed into TableStore or FormStore.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded-3 bg-light h-100">
+                                <span class="badge bg-primary mb-2">Step 2</span>
+                                <h6 class="fw-bold mb-1">JSON Spec Generation</h6>
+                                <p class="small text-muted mb-0">Pure JSON specification tree is assembled: header cells, body rows, calculated aggregates, and form input controls.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 border rounded-3 bg-light h-100">
+                                <span class="badge bg-primary mb-2">Step 3</span>
+                                <h6 class="fw-bold mb-1">DOM Compilation</h6>
+                                <p class="small text-muted mb-0">json-to-dom compiles the specification into native elements in a single synchronous pass.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Surgical Repainting -->
+            <div class="col-12">
+                <div class="card-custom p-4 p-lg-5">
+                    <h3 class="fw-bold mb-3"><i class="bi bi-lightning-charge text-warning me-2"></i>Surgical Repainting Loop</h3>
+                    <p class="text-muted">
+                        When records change or search filters are applied, the table header does not re-render. Instead:
+                    </p>
+                    <ul class="text-muted">
+                        <li><strong><code>repaintBody</code></strong>: Only the <code>&lt;tbody&gt;</code> contents are recompiled and replaced.</li>
+                        <li><strong><code>repaintFoot</code></strong>: Only footer aggregates (sum, averages, taxes) are recomputed and updated.</li>
+                        <li>Zero layout thrashing, preserving scroll positions, column widths, and input focus.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 border-top border-secondary mt-5">
+        <div class="container text-center small text-secondary">
+            <p class="mb-1">&copy; KeshavSoft. Distributed under the ISC License.</p>
+            <p class="mb-0">
+                <a href="index.html" class="text-secondary text-decoration-none">Home</a> &bull;
+                <a href="demo.html" class="text-secondary text-decoration-none">Live Demo</a> &bull;
+                <a href="how-to.html" class="text-secondary text-decoration-none">How-To</a> &bull;
+                <a href="how-not-to.html" class="text-secondary text-decoration-none">Pitfalls</a> &bull;
+                <a href="api-reference.html" class="text-secondary text-decoration-none">API Docs</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

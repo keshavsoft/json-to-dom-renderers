@@ -1,9 +1,9 @@
 {
   "name": "json-to-dom-renderers",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "Modular UI Renderers (Table, Form, DataList) built on top of json-to-dom",
   "type": "module",
-  "main": "src/v13/index.js",
+  "main": "src/v14/index.js",
   "bin": {
     "json-to-dom-renderers": "bin/index.js"
   },
@@ -14,7 +14,8 @@
     "README.md"
   ],
   "exports": {
-    ".": "./src/v13/index.js",
+    ".": "./src/v14/index.js",
+    "./v14": "./src/v14/index.js",
     "./v13": "./src/v13/index.js",
     "./v12": "./src/v12/index.js",
     "./v11": "./src/v11/index.js"

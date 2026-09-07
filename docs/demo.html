@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Live Demo | json-to-dom-renderers</title>
+    <meta name="description"
+        content="Interactive live demonstration of json-to-dom-renderers: Table, Form, and DataList orchestrated together with dynamic theme switching.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- json-to-dom CDN engine -->
+    <script type="module" src="https://keshavsoft.github.io/json-to-dom/docs/dist/v3/min.js"></script>
+
+    <style>
+        :root {
+            --ks-primary: #3b82f6;
+            --ks-primary-dark: #1d4ed8;
+            --ks-accent: #06b6d4;
+            --ks-bg-surface: #ffffff;
+            --ks-bg-subtle: #f8fafc;
+            --ks-text-main: #0f172a;
+            --ks-text-muted: #64748b;
+            --ks-border-color: #e2e8f0;
+            --ks-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ks-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--ks-font-sans);
+            color: var(--ks-text-main);
+            background-color: #f1f5f9;
+            line-height: 1.6;
+        }
+
+        pre, code {
+            font-family: var(--ks-font-mono);
+        }
+
+        .card-custom {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid var(--ks-border-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+        }
+
+        .demo-window {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid var(--ks-border-color);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .demo-header {
+            background: #f8fafc;
+            border-bottom: 1px solid var(--ks-border-color);
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .window-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .code-container {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            position: relative;
+            overflow-x: auto;
+            max-height: 380px;
+        }
+
+        .code-container pre {
+            margin: 0;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            transition: background 0.2s ease;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-pills-custom .nav-link {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ks-text-muted);
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.85rem;
+            border: 1px solid transparent;
+        }
+
+        .nav-pills-custom .nav-link.active {
+            background-color: var(--ks-primary);
+            color: #ffffff;
+        }
+
+        .preset-btn {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.65rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.html">
+                <span class="badge bg-primary text-white rounded-3 px-2 py-1 fs-6">K</span>
+                <span>json-to-dom-renderers</span>
+            </a>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 ms-2 font-monospace">v14.0.0</span>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMain">
+                <ul class="navbar-nav ms-auto align-items-center gap-1">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="demo.html">Live Demo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="architecture.html">Architecture</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-to.html">How-To</a></li>
+                    <li class="nav-item"><a class="nav-link" href="how-not-to.html">Pitfalls</a></li>
+                    <li class="nav-item"><a class="nav-link" href="api-reference.html">API Docs</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+                            href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Demo Section -->
+    <div class="container py-5">
+        <div class="d-flex align-items-center justify-content-between flex-wrap mb-4">
+            <div>
+                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2.5 py-1 mb-2 font-monospace">INTERACTIVE SHOWCASE</span>
+                <h1 class="fw-bold h2 mb-1">Hybrid Search, Table &amp; Autocomplete</h1>
+                <p class="text-muted small mb-0">All 3 renderers orchestrated together with live theme switching and dynamic data sync</p>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-3 mt-md-0 flex-wrap">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted fw-semibold"><i class="bi bi-palette me-1"></i>Theme:</span>
+                    <select id="theme-selector" class="form-select form-select-sm" style="width: 125px;">
+                        <option value="default" selected>Default</option>
+                        <option value="light">Light</option>
+                        <option value="extraLight">Extra Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="extraDark">Extra Dark</option>
+                    </select>
+                </div>
+                <div class="d-flex align-items-center gap-1 ms-md-2">
+                    <span class="small text-muted">Filter:</span>
+                    <button class="btn btn-outline-primary preset-btn" id="preset-rope">ROPE</button>
+                    <button class="btn btn-outline-primary preset-btn" id="preset-shading">Shading Net</button>
+                    <button class="btn btn-outline-secondary preset-btn" id="preset-reset">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Window -->
+        <div class="demo-window mb-4">
+            <div class="demo-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="window-dots">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                    </div>
+                    <span class="small font-monospace text-secondary">hybrid-renderer-live-demo.html</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="demo-status-badge" class="badge bg-success small">
+                        <i class="bi bi-check-circle me-1"></i> Ready
+                    </span>
+                    <span id="demo-count-badge" class="badge bg-dark border border-secondary small">
+                        Loading...
+                    </span>
+                </div>
+            </div>
+
+            <div class="p-4 bg-light">
+                <!-- Form Filter Container -->
+                <div class="bg-white p-3 rounded-3 border mb-3 shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="fw-semibold small text-uppercase text-secondary">
+                            <i class="bi bi-funnel me-1"></i> 1. Form Renderer (Filter Controls)
+                        </span>
+                        <span class="badge bg-info-subtle text-info border border-info-subtle small">
+                            Auto-linked to HTML5 DataList
+                        </span>
+                    </div>
+                    <div id="demo-filter-container"></div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="bg-white p-3 rounded-3 border shadow-sm">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="fw-semibold small text-uppercase text-secondary">
+                            <i class="bi bi-table me-1"></i> 2. Table Renderer (Serials, Data &amp; Footers)
+                        </span>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle small">
+                            Multi-Tier Aggregates &amp; Formulas
+                        </span>
+                    </div>
+                    <div id="demo-table-container" class="table-responsive"></div>
+                </div>
+
+                <!-- DataList Container -->
+                <div id="demo-datalist-container"></div>
+            </div>
+        </div>
+
+        <!-- Configuration Inspector Tabs -->
+        <div class="card-custom p-4">
+            <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                <i class="bi bi-filetype-json text-primary"></i> Live Config Inspector
+            </h5>
+            <p class="text-muted small mb-3">
+                Examine the pure JSON configuration objects that drive the Table, Form, and DataList instances shown above.
+            </p>
+
+            <ul class="nav nav-pills nav-pills-custom mb-3 gap-2" id="configTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-columns">columns.json</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-table-cfg">table/config.json</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-search-cfg">search/config.json</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-datalist-cfg">datalist/config.json</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-data">data.json</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="configTabsContent">
+                <div class="tab-pane fade show active" id="tab-columns">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-columns')">Copy</button>
+                        <pre id="code-columns" class="mb-0"><code class="text-light">Loading...</code></pre>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-table-cfg">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-table-cfg')">Copy</button>
+                        <pre id="code-table-cfg" class="mb-0"><code class="text-light">Loading...</code></pre>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-search-cfg">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-search-cfg')">Copy</button>
+                        <pre id="code-search-cfg" class="mb-0"><code class="text-light">Loading...</code></pre>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-datalist-cfg">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-datalist-cfg')">Copy</button>
+                        <pre id="code-datalist-cfg" class="mb-0"><code class="text-light">Loading...</code></pre>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-data">
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copySnippet('code-data')">Copy</button>
+                        <pre id="code-data" class="mb-0"><code class="text-light">Loading...</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 border-top border-secondary mt-5">
+        <div class="container text-center small text-secondary">
+            <p class="mb-1">&copy; KeshavSoft. Distributed under the ISC License.</p>
+            <p class="mb-0">
+                <a href="index.html" class="text-secondary text-decoration-none">Home</a> &bull;
+                <a href="architecture.html" class="text-secondary text-decoration-none">Architecture</a> &bull;
+                <a href="how-to.html" class="text-secondary text-decoration-none">How-To</a> &bull;
+                <a href="how-not-to.html" class="text-secondary text-decoration-none">Pitfalls</a> &bull;
+                <a href="api-reference.html" class="text-secondary text-decoration-none">API Docs</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Demo Script -->
+    <script type="module">
+        import {
+            sampleColumns,
+            sampleTableConfig,
+            sampleSearchConfig,
+            sampleDatalistConfig,
+            sampleData
+        } from "./sampleData.js";
+
+        let Table, Form, DataList, createDataProvider;
+
+        try {
+            const module = await import("./dist/v14/min.js");
+            Table = module.Table;
+            Form = module.Form;
+            DataList = module.DataList;
+            createDataProvider = module.createDataProvider;
+        } catch (err) {
+            console.warn("Local v14 load fallback to CDN:", err);
+            const cdnModule = await import("https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js");
+            Table = cdnModule.Table;
+            Form = cdnModule.Form;
+            DataList = cdnModule.DataList;
+            createDataProvider = cdnModule.createDataProvider;
+        }
+
+        const initDemo = () => {
+            // 1. Table
+            const table = new Table({
+                inData: sampleData,
+                inColumns: sampleColumns,
+                inConfig: sampleTableConfig,
+                inTargetContainerId: "demo-table-container"
+            });
+            table.render();
+
+            // 2. Form
+            const form = new Form({
+                inColumns: sampleColumns,
+                inConfig: sampleSearchConfig,
+                inTargetContainerId: "demo-filter-container"
+            });
+            let formRenderResult = form.render();
+
+            // 3. DataList
+            const dataList = new DataList({
+                inData: sampleData,
+                inColumns: sampleColumns,
+                inConfig: sampleDatalistConfig,
+                inTargetContainerId: "demo-datalist-container"
+            });
+            dataList.render();
+
+            const countBadge = document.getElementById("demo-count-badge");
+            const updateCountBadge = () => {
+                const count = table.store.stateData.length;
+                const total = sampleData.length;
+                countBadge.textContent = `${count} of ${total} Records`;
+            };
+            updateCountBadge();
+
+            // Wire form filter buttons
+            const wireFormButtons = (containerElement) => {
+                if (!containerElement) return;
+                const buttons = containerElement.querySelectorAll("button");
+                buttons.forEach(button => {
+                    button.addEventListener("click", event => {
+                        const row = event.currentTarget.closest("div");
+                        const input = row?.querySelector("input");
+                        if (!input) return;
+
+                        const name = input.getAttribute("name");
+                        const value = input.value;
+                        const query = {};
+                        query[name] = value;
+
+                        table.filterStateData({ query });
+                        dataList.update({ data: table.store.stateData });
+                        updateCountBadge();
+                    });
+                });
+            };
+
+            wireFormButtons(formRenderResult?.element);
+
+            // Dynamic Theme Switching
+            document.getElementById("theme-selector")?.addEventListener("change", (e) => {
+                const newTheme = e.target.value;
+                table.setTheme({ inTheme: newTheme });
+                formRenderResult = form.setTheme({ inTheme: newTheme });
+                dataList.setTheme({ inTheme: newTheme });
+                wireFormButtons(formRenderResult?.element);
+            });
+
+            // Presets
+            const applyFilterToFirstInput = (val) => {
+                const input = formRenderResult?.element?.querySelector("input");
+                if (!input) return;
+                input.value = val;
+                const name = input.getAttribute("name");
+                const query = {};
+                query[name] = val;
+                table.filterStateData({ query });
+                dataList.update({ data: table.store.stateData });
+                updateCountBadge();
+            };
+
+            document.getElementById("preset-rope")?.addEventListener("click", () => applyFilterToFirstInput("ROPE"));
+            document.getElementById("preset-shading")?.addEventListener("click", () => applyFilterToFirstInput("Shading Net Kgs"));
+            document.getElementById("preset-reset")?.addEventListener("click", () => {
+                const inputs = formRenderResult?.element?.querySelectorAll("input") || [];
+                inputs.forEach(inp => inp.value = "");
+                table.filterStateData({ query: "" });
+                dataList.update({ data: sampleData });
+                updateCountBadge();
+            });
+
+            // Populate JSON Inspector tabs
+            document.getElementById("code-columns").textContent = JSON.stringify(sampleColumns, null, 2);
+            document.getElementById("code-table-cfg").textContent = JSON.stringify(sampleTableConfig, null, 2);
+            document.getElementById("code-search-cfg").textContent = JSON.stringify(sampleSearchConfig, null, 2);
+            document.getElementById("code-datalist-cfg").textContent = JSON.stringify(sampleDatalistConfig, null, 2);
+            document.getElementById("code-data").textContent = JSON.stringify(sampleData, null, 2);
+        };
+
+        window.copySnippet = (elementId) => {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            navigator.clipboard.writeText(el.innerText).then(() => {
+                const btn = el.parentElement.querySelector(".copy-btn");
+                if (btn) {
+                    const original = btn.textContent;
+                    btn.textContent = "Copied!";
+                    setTimeout(() => btn.textContent = original, 1500);
+                }
+            });
+        };
+
+        initDemo();
+    </script>
+</body>
+
+</html>
