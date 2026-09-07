@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How-To Guide &amp; Recipes | json-to-dom-renderers</title>
+    <title>Step-by-Step Setup Guide | json-to-dom-renderers</title>
     <meta name="description"
-        content="Practical recipes and step-by-step guides for building responsive Tables, Forms, DataLists, and REST providers with json-to-dom-renderers.">
+        content="Step-by-step guide: How to add the CDN and verify it in the browser console.">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
 
     <!-- Bootstrap 5 CSS & Icons -->
@@ -21,11 +21,8 @@
 
     <style>
         :root {
-            --ks-primary: #3b82f6;
+            --ks-primary: #2563eb;
             --ks-primary-dark: #1d4ed8;
-            --ks-accent: #06b6d4;
-            --ks-bg-surface: #ffffff;
-            --ks-bg-subtle: #f8fafc;
             --ks-text-main: #0f172a;
             --ks-text-muted: #64748b;
             --ks-border-color: #e2e8f0;
@@ -44,14 +41,36 @@
             font-family: var(--ks-font-mono);
         }
 
-        .card-custom {
+        /* Top Bar */
+        .top-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--ks-border-color);
+            padding: 0.85rem 0;
+        }
+
+        .step-badge {
+            width: 32px;
+            height: 32px;
+            background: var(--ks-primary);
+            color: #ffffff;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .step-card {
             background: #ffffff;
             border-radius: 1rem;
             border: 1px solid var(--ks-border-color);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+            padding: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .code-container {
+        .code-box {
             background: #0f172a;
             color: #f8fafc;
             border-radius: 0.75rem;
@@ -60,264 +79,256 @@
             overflow-x: auto;
         }
 
-        .code-container pre {
+        .code-box pre {
             margin: 0;
-            font-size: 0.82rem;
-            line-height: 1.5;
+            font-size: 0.85rem;
+            line-height: 1.55;
         }
 
-        .hero-banner {
-            background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
-            border-bottom: 1px solid var(--ks-border-color);
-            padding: 3.5rem 0 2.5rem;
-        }
-
-        .badge-convention {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.6rem;
             font-size: 0.75rem;
             font-weight: 600;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* DevTools Console Mockup */
+        .devtools-window {
+            background: #202124;
+            border-radius: 0.75rem;
+            border: 1px solid #3c4043;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            font-family: var(--ks-font-mono);
+            font-size: 0.85rem;
+        }
+
+        .devtools-header {
+            background: #292a2d;
+            border-bottom: 1px solid #3c4043;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: #bdc1c6;
+            font-size: 0.75rem;
+        }
+
+        .devtools-tab {
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.25rem;
+            color: #9aa0a6;
+        }
+
+        .devtools-tab.active {
+            background: #35363a;
+            color: #8ab4f8;
+            font-weight: 600;
+        }
+
+        .devtools-body {
+            padding: 1rem 1.25rem;
+            color: #e8eaed;
+            line-height: 1.7;
+        }
+
+        .console-input-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #e8eaed;
+        }
+
+        .console-prompt {
+            color: #8ab4f8;
+            font-weight: bold;
+        }
+
+        .console-output-line {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            color: #9aa0a6;
+            padding-left: 0.25rem;
+            margin-top: 0.25rem;
+        }
+
+        .console-arrow-out {
+            color: #9aa0a6;
+        }
+
+        .console-obj {
+            color: #f28b82;
+        }
+
+        .console-val-str {
+            color: #ce9178;
+        }
+
+        .console-fn {
+            color: #8ab4f8;
+            font-style: italic;
+        }
+
+        .verification-callout {
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm py-2">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="index.html">
+    <!-- Minimal Clean Header: Back link only, no distracting menus -->
+    <div class="top-bar">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a href="index.html" class="text-decoration-none text-dark d-flex align-items-center gap-2 fw-bold">
                 <span class="badge bg-primary text-white rounded-3 px-2 py-1 fs-6">K</span>
                 <span>json-to-dom-renderers</span>
             </a>
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 ms-2 font-monospace">v14.0.0</span>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navMain">
-                <ul class="navbar-nav ms-auto align-items-center gap-1">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="demo.html">Live Demo</a></li>
-                    <li class="nav-item"><a class="nav-link" href="architecture.html">Architecture</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="how-to.html">How-To</a></li>
-                    <li class="nav-item"><a class="nav-link" href="how-not-to.html">Pitfalls</a></li>
-                    <li class="nav-item"><a class="nav-link" href="api-reference.html">API Docs</a></li>
-                    <li class="nav-item ms-lg-2">
-                        <a class="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
-                            href="https://github.com/keshavsoft/json-to-dom-renderers" target="_blank">
-                            <i class="bi bi-github"></i> GitHub
-                        </a>
-                    </li>
-                </ul>
+            <a href="index.html" class="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1">
+                <i class="bi bi-arrow-left"></i>
+                <span>Back to Home</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="container py-4" style="max-width: 860px;">
+
+        <!-- Intro -->
+        <div class="mb-4">
+            <h2 class="fw-bold mb-1">Step-by-Step Setup Guide</h2>
+            <p class="text-muted mb-0">Follow these simple steps to load the library and verify that it is active in your browser.</p>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="step-badge">1</div>
+                <div>
+                    <h4 class="fw-bold mb-0">Add the CDN to Your Project</h4>
+                    <span class="text-muted small">Import the confirmed, tested build directly via ES Module</span>
+                </div>
             </div>
-        </div>
-    </nav>
 
-    <!-- Header -->
-    <header class="hero-banner text-center">
-        <div class="container">
-            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 mb-3 font-monospace">PRACTICAL RECIPES</span>
-            <h1 class="fw-extrabold display-6 mb-2">How-To Guide</h1>
-            <p class="lead text-muted max-w-2xl mx-auto" style="max-width: 700px;">
-                Production-tested recipes for building reactive, fast web interfaces using pure JSON configurations.
+            <p class="text-secondary small mb-3">
+                Include the native DOM compiler engine followed by <code>json-to-dom-renderers</code>. No build tools, Webpack, or Vite required:
             </p>
-            <span class="badge-convention mt-2 d-inline-block">
-                <i class="bi bi-check-circle me-1"></i> Adheres strictly to <code>in</code> / <code>local</code> parameter naming convention
-            </span>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="container py-5">
-        <div class="row g-4">
-
-            <!-- Recipe 0: Verified Import -->
-            <div class="col-12">
-                <div class="card-custom p-4 p-lg-5">
-                    <span class="badge bg-success mb-2">Setup</span>
-                    <h3 class="fw-bold mb-3"><i class="bi bi-link-45deg text-primary me-2"></i>Loading the Library (Verified ESM)</h3>
-                    <p class="text-muted">
-                        Include dependencies directly via CDN or GitHub Pages. No Node.js build step or bundler needed:
-                    </p>
-                    <div class="code-container">
-                        <pre><code class="text-info">&lt;!-- Native DOM Compiler Engine --&gt;
+            <div class="code-box mb-3">
+                <button class="copy-btn" onclick="copyCode('step1-code', this)">Copy</button>
+                <pre id="step1-code"><code class="text-light">&lt;!-- 1. Low-level Native DOM Compiler --&gt;
 &lt;script type="module" src="https://keshavsoft.github.io/json-to-dom/docs/dist/v3/min.js"&gt;&lt;/script&gt;
 
-&lt;!-- json-to-dom-renderers (v14.0.0 Verified Live Endpoint) --&gt;
+&lt;!-- 2. High-level UI Renderers (v14 Confirmed Endpoint) --&gt;
 &lt;script type="module"&gt;
     import { Table, Form, DataList, createDataProvider } 
         from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
-
-    console.log("Loaded version:", window.ks["json-to-dom-renderers"].version);
 &lt;/script&gt;</code></pre>
-                    </div>
-                </div>
             </div>
-
-            <!-- Recipe 1: Table with Footers -->
-            <div class="col-12">
-                <div class="card-custom p-4 p-lg-5">
-                    <span class="badge bg-primary mb-2">Recipe 1</span>
-                    <h3 class="fw-bold mb-3"><i class="bi bi-table text-primary me-2"></i>Building a Table with Serials &amp; Multi-Tier Footers</h3>
-                    <p class="text-muted">
-                        Render a rich table with automated row numbering (<code>#</code>), aggregate sums, and evaluated formula rows (GST taxes &amp; Grand Totals):
-                    </p>
-                    <div class="code-container">
-                        <pre><code class="text-light">import { Table } from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
-
-const table = new Table({
-    inData: [
-        { id: 1, item: "Apples", qty: 10, rate: 50, amount: 500 },
-        { id: 2, item: "Oranges", qty: 5, rate: 40, amount: 200 }
-    ],
-    inColumns: [
-        { key: "item", label: "Item Name", type: "string" },
-        { key: "qty", label: "Qty", type: "number", align: "right" },
-        { key: "rate", label: "Rate", type: "number", align: "right" },
-        { key: "amount", label: "Amount", type: "number", align: "right" }
-    ],
-    inConfig: {
-        serial: true,
-        head: { columns: ["item", "qty", "rate", "amount"] },
-        foot: {
-            rows: [
-                {
-                    cells: {
-                        item: { text: "Sub Total", colspan: 3 },
-                        amount: { aggregate: "sum", format: "currency" }
-                    }
-                },
-                {
-                    cells: {
-                        item: { text: "GST (18%)", colspan: 3 },
-                        amount: { eval: "amount * 0.18", format: "currency" }
-                    }
-                },
-                {
-                    cells: {
-                        item: { text: "Grand Total", colspan: 3 },
-                        amount: { eval: "amount + (amount * 0.18)", format: "currency" }
-                    }
-                }
-            ]
-        }
-    },
-    inTargetContainerId: "table-container"
-});
-
-table.render();</code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recipe 2: Search Form -->
-            <div class="col-12">
-                <div class="card-custom p-4 p-lg-5">
-                    <span class="badge bg-primary mb-2">Recipe 2</span>
-                    <h3 class="fw-bold mb-3"><i class="bi bi-funnel text-primary me-2"></i>Generating a Search &amp; Filter Form</h3>
-                    <p class="text-muted">
-                        Generate declarative form controls with search buttons and automatic linkage to HTML5 <code>&lt;datalist&gt;</code> elements:
-                    </p>
-                    <div class="code-container">
-                        <pre><code class="text-light">import { Form } from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
-
-const form = new Form({
-    inColumns: [
-        { key: "item", label: "Item Name", type: "string" },
-        { key: "category", label: "Category", type: "string" }
-    ],
-    inConfig: {
-        fields: [
-            {
-                name: "item",
-                type: "text",
-                placeholder: "Search item name...",
-                datalist: true,
-                button: { text: "Search", class: "btn-outline-primary" }
-            }
-        ]
-    },
-    inTargetContainerId: "form-container"
-});
-
-form.render();</code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recipe 3: DataProvider -->
-            <div class="col-12">
-                <div class="card-custom p-4 p-lg-5">
-                    <span class="badge bg-primary mb-2">Recipe 3</span>
-                    <h3 class="fw-bold mb-3"><i class="bi bi-cloud-arrow-down text-primary me-2"></i>Decoupled REST CRUD with <code>createDataProvider</code></h3>
-                    <p class="text-muted">
-                        Decouple your networking logic from UI components with a uniform read/create provider:
-                    </p>
-                    <div class="code-container">
-                        <pre><code class="text-light">import { Table, createDataProvider } 
-    from "https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js";
-
-// Initialize uniform REST provider
-const dataProvider = createDataProvider({
-    inReadUrl: "/api/orders/list",
-    inCreateUrl: "/api/orders/new"
-});
-
-// Pass to Table instance
-const table = new Table({
-    columns,
-    config: tableConfig,
-    dataProvider
-});
-
-// Asynchronously load and render
-await table.render({ inContainerId: "table-container" });</code></pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recipe 4: Dynamic Theme Switching -->
-            <div class="col-12">
-                <div class="card-custom p-4 p-lg-5">
-                    <span class="badge bg-primary mb-2">Recipe 4</span>
-                    <h3 class="fw-bold mb-3"><i class="bi bi-palette text-primary me-2"></i>Dynamic Theme Switching</h3>
-                    <p class="text-muted">
-                        Switch visual appearances instantaneously across Table, Form, and DataList without re-querying or rebuilding data:
-                    </p>
-                    <div class="code-container">
-                        <pre><code class="text-light">// Instantaneously switch themes across components:
-table.setTheme({ inTheme: "dark" });
-form.setTheme({ inTheme: "dark" });
-dataList.setTheme({ inTheme: "dark" });
-
-// Supported out-of-the-box:
-// "default" | "light" | "extraLight" | "dark" | "extraDark"</code></pre>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <!-- STEP 2 -->
+        <div class="step-card">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <div class="step-badge">2</div>
+                <div>
+                    <h4 class="fw-bold mb-0">How to Confirm the CDN is Loaded</h4>
+                    <span class="text-muted small">Verify instantly using your browser's Developer Console</span>
+                </div>
+            </div>
+
+            <p class="text-secondary small mb-3">
+                Once your page opens in Google Chrome or any modern browser:
+            </p>
+
+            <ol class="text-secondary small ps-3 mb-4">
+                <li class="mb-2">Press <kbd class="bg-dark text-white px-2 py-1 rounded">F12</kbd> (or <kbd class="bg-dark text-white px-2 py-1 rounded">Ctrl</kbd> + <kbd class="bg-dark text-white px-2 py-1 rounded">Shift</kbd> + <kbd class="bg-dark text-white px-2 py-1 rounded">I</kbd>) to open DevTools.</li>
+                <li class="mb-2">Click on the <strong>Console</strong> tab.</li>
+                <li class="mb-2">Type the following command and hit <kbd class="bg-dark text-white px-2 py-1 rounded">Enter</kbd>:</li>
+            </ol>
+
+            <div class="code-box mb-3">
+                <button class="copy-btn" onclick="copyCode('step2-cmd', this)">Copy</button>
+                <pre id="step2-cmd"><code class="text-info">window.ks['json-to-dom-renderers']</code></pre>
+            </div>
+
+            <h6 class="fw-bold text-dark mt-4 mb-2">What You Should See in the Console:</h6>
+
+            <!-- Chrome DevTools Mockup -->
+            <div class="devtools-window mb-3">
+                <div class="devtools-header">
+                    <span class="devtools-tab">Elements</span>
+                    <span class="devtools-tab active">Console</span>
+                    <span class="devtools-tab">Sources</span>
+                    <span class="devtools-tab">Network</span>
+                </div>
+                <div class="devtools-body">
+                    <div class="console-input-line">
+                        <span class="console-prompt">&gt;</span>
+                        <span>window.ks['json-to-dom-renderers']</span>
+                    </div>
+                    <div class="console-output-line">
+                        <span class="console-arrow-out">&lt;</span>
+                        <span>{<span class="text-light">version: </span><span class="console-val-str">'v14.0.0'</span>, <span class="text-light">Table: </span><span class="console-fn">ƒ</span>, <span class="text-light">Form: </span><span class="console-fn">ƒ</span>, <span class="text-light">DataList: </span><span class="console-fn">ƒ</span>, <span class="text-light">createDataProvider: </span><span class="console-fn">ƒ</span>}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification Breakdown -->
+            <div class="verification-callout mt-3">
+                <div class="d-flex align-items-center gap-2 mb-2 text-success fw-bold">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Successful Verification Checklist</span>
+                </div>
+                <ul class="text-secondary small mb-0 ps-3">
+                    <li><code>version: 'v14.0.0'</code> confirms you are running the exact latest build.</li>
+                    <li><code>Table: ƒ</code> confirms the Table renderer class is ready.</li>
+                    <li><code>Form: ƒ</code> confirms the Form generator is ready.</li>
+                    <li><code>DataList: ƒ</code> confirms the Autocomplete generator is ready.</li>
+                    <li><code>createDataProvider: ƒ</code> confirms the decoupled REST provider factory is ready.</li>
+                </ul>
+            </div>
+        </div>
+
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4 border-top border-secondary mt-5">
-        <div class="container text-center small text-secondary">
-            <p class="mb-1">&copy; KeshavSoft. Distributed under the ISC License.</p>
-            <p class="mb-0">
-                <a href="index.html" class="text-secondary text-decoration-none">Home</a> &bull;
-                <a href="demo.html" class="text-secondary text-decoration-none">Live Demo</a> &bull;
-                <a href="architecture.html" class="text-secondary text-decoration-none">Architecture</a> &bull;
-                <a href="how-not-to.html" class="text-secondary text-decoration-none">Pitfalls</a> &bull;
-                <a href="api-reference.html" class="text-secondary text-decoration-none">API Docs</a>
-            </p>
-        </div>
+    <footer class="bg-white border-top py-3 text-center small text-muted">
+        &copy; KeshavSoft &bull; json-to-dom-renderers v14.0.0
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Copy Helper -->
+    <script>
+        function copyCode(elementId, btn) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            navigator.clipboard.writeText(el.innerText).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+                btn.style.background = "#10b981";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                }, 1500);
+            });
+        }
+    </script>
 </body>
 
 </html>

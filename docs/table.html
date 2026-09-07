@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table with DataProvider | json-to-dom-renderers</title>
+    <meta name="description" content="Table renderer connected to createDataProvider for asynchronous data loading and multi-tier totals.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- json-to-dom low-level compiler -->
+    <script type="module" src="https://keshavsoft.github.io/json-to-dom/docs/dist/v3/min.js"></script>
+
+    <style>
+        :root {
+            --ks-primary: #2563eb;
+            --ks-text-main: #0f172a;
+            --ks-text-muted: #64748b;
+            --ks-border-color: #e2e8f0;
+            --ks-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ks-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--ks-font-sans);
+            color: var(--ks-text-main);
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        pre, code {
+            font-family: var(--ks-font-mono);
+        }
+
+        /* Ultra-compact top navigation: No wasted space, no logo */
+        .top-nav {
+            height: 44px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--ks-border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .nav-links a {
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: var(--ks-text-muted);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: all 0.15s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--ks-primary);
+            background: rgba(37, 99, 235, 0.08);
+            font-weight: 600;
+        }
+
+        .compact-toolbar {
+            background: #ffffff;
+            border: 1px solid var(--ks-border-color);
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .table-wrapper {
+            background: #ffffff;
+            border: 1px solid var(--ks-border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+        }
+
+        .code-drawer {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 0.6rem;
+            font-size: 0.78rem;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .code-drawer.open {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Compact Top Bar: Breadcrumb on left, Home link floated on right -->
+    <header class="top-nav">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold text-dark small">Table Renderer</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-0.5 font-monospace" style="font-size: 11px;">DataProvider</span>
+            <span class="text-secondary opacity-50 mx-1">|</span>
+            <div class="nav-links d-inline-flex align-items-center gap-1">
+                <a href="table.html" class="active">Table</a>
+                <a href="form.html">Form</a>
+                <a href="datalist.html">DataList</a>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn btn-sm btn-outline-secondary py-1 px-2.5 d-flex align-items-center gap-1" style="font-size: 12px;">
+            <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+    </header>
+
+    <!-- Main Container: Immediate content, no vertical scroll needed -->
+    <main class="container-fluid px-3 py-2">
+        <!-- Compact Toolbar -->
+        <div class="compact-toolbar">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge bg-success-subtle text-success border border-success-subtle small py-1 px-2">
+                    <i class="bi bi-cloud-check me-1"></i>DataProvider: Loaded
+                </span>
+                <span id="record-count-badge" class="badge bg-light text-secondary border small py-1 px-2">
+                    0 records
+                </span>
+
+                <div class="input-group input-group-sm" style="width: 220px;">
+                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                    <input type="text" id="filter-input" class="form-control" placeholder="Filter by stock item..." aria-label="Filter">
+                </div>
+
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary" id="btn-filter-rope">ROPE</button>
+                    <button class="btn btn-outline-primary" id="btn-filter-shading">Shading</button>
+                    <button class="btn btn-outline-secondary" id="btn-filter-reset">Reset</button>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-1">
+                    <label for="theme-select" class="small text-muted fw-semibold">Theme:</label>
+                    <select id="theme-select" class="form-select form-select-sm" style="width: 110px;">
+                        <option value="default" selected>Default</option>
+                        <option value="light">Light</option>
+                        <option value="extraLight">Extra Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="extraDark">Extra Dark</option>
+                    </select>
+                </div>
+                <button class="btn btn-sm btn-outline-dark" id="btn-toggle-code">
+                    <i class="bi bi-code-slash me-1"></i>Code
+                </button>
+            </div>
+        </div>
+
+        <!-- Rendered Table Container -->
+        <div class="table-wrapper p-2">
+            <div id="table-container"></div>
+        </div>
+
+        <!-- Collapsible Code Drawer -->
+        <div class="code-drawer" id="code-drawer">
+            <div class="d-flex justify-content-between align-items-center mb-1 text-secondary">
+                <span class="fw-semibold">Implementation Script</span>
+                <span class="small font-monospace">DataProvider + Table</span>
+            </div>
+            <pre class="m-0 text-light"><code id="code-display"></code></pre>
+        </div>
+    </main>
+
+    <!-- Logic adhering strictly to in / local naming convention -->
+    <script type="module">
+        import {
+            sampleColumns,
+            sampleTableConfig,
+            sampleData
+        } from "./sampleData.js";
+
+        // Guaranteed self-contained json-to-dom engine
+        if (!window.ks?.["json-to-dom"]?.buildSpecElement) {
+            const isNullOrUndefined = ({ inSpec }) => !inSpec;
+            const isDOMNode = ({ inSpec }) => inSpec instanceof Node;
+            const isArray = ({ inSpec }) => Array.isArray(inSpec);
+            const isObject = ({ inSpec }) => typeof inSpec === "object" && !!inSpec;
+            const handleArray = ({ inSpec }) => inSpec.map(item => buildSpecElement(item)).flat().filter(Boolean);
+            const createElement = ({ inTagName }) => document.createElement(inTagName);
+            const applyTextContent = ({ inElement, inTextContent }) => {
+                if (inTextContent) inElement.textContent = inTextContent;
+                return inElement;
+            };
+            const applyProperties = ({ inElement, inProperties }) => {
+                if (inProperties) Object.assign(inElement, inProperties);
+                return inElement;
+            };
+            const applyAttributes = ({ inElement, inAttributes }) => {
+                if (inAttributes) {
+                    Object.entries(inAttributes).forEach(([key, val]) => {
+                        if (key === "class") inElement.className = val;
+                        else inElement.setAttribute(key, val);
+                    });
+                }
+                return inElement;
+            };
+            const applyClassList = ({ inElement, inClassList }) => {
+                if (inClassList) {
+                    if (Array.isArray(inClassList)) inClassList.forEach(c => c && inElement.classList.add(c));
+                    else if (typeof inClassList === "string") inClassList.split(" ").forEach(c => c && inElement.classList.add(c));
+                }
+                return inElement;
+            };
+            const applyEvents = ({ inElement, inEvents, inTagName }) => {
+                if (inEvents && typeof inEvents === "object") {
+                    Object.entries(inEvents).forEach(([ev, handler]) => {
+                        if (typeof handler === "function") inElement.addEventListener(ev, handler);
+                    });
+                }
+                return inElement;
+            };
+            const appendChildren = ({ inElement, inChildren }) => {
+                if (inChildren && Array.isArray(inChildren)) {
+                    inChildren.forEach(ch => {
+                        const node = buildSpecElement(ch);
+                        if (node) inElement.appendChild(node);
+                    });
+                }
+                return inElement;
+            };
+            const handleElement = ({ inSpec }) => {
+                const el = createElement({ inTagName: inSpec.tagName || "div" });
+                applyAttributes({ inElement: el, inAttributes: inSpec.attributes });
+                applyClassList({ inElement: el, inClassList: inSpec.classList });
+                applyProperties({ inElement: el, inProperties: inSpec.properties });
+                applyTextContent({ inElement: el, inTextContent: inSpec.textContent });
+                applyEvents({ inElement: el, inEvents: inSpec.events, inTagName: inSpec.tagName });
+                appendChildren({ inElement: el, inChildren: inSpec.children });
+                return el;
+            };
+            const buildSpecElement = (specInput) => {
+                const spec = specInput && typeof specInput === "object" && "inSpec" in specInput && !(specInput instanceof Node) && !Array.isArray(specInput) ? specInput.inSpec : specInput;
+                if (isNullOrUndefined({ inSpec: spec })) return null;
+                if (isDOMNode({ inSpec: spec })) return spec;
+                if (isArray({ inSpec: spec })) return handleArray({ inSpec: spec });
+                if (isObject({ inSpec: spec })) return handleElement({ inSpec: spec });
+                return null;
+            };
+            window.ks = window.ks || {};
+            window.ks["json-to-dom"] = { buildSpecElement };
+        }
+
+        let Table, createDataProvider;
+
+        try {
+            const module = await import("./dist/v14/min.js");
+            Table = module.Table;
+            createDataProvider = module.createDataProvider;
+        } catch (err) {
+            console.warn("Fallback to CDN for v14:", err);
+            const cdnModule = await import("https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js");
+            Table = cdnModule.Table;
+            createDataProvider = cdnModule.createDataProvider;
+        }
+
+        const updateBadgeText = ({ inCount, inTotal } = {}) => {
+            const localCount = inCount;
+            const localTotal = inTotal;
+            const badge = document.getElementById("record-count-badge");
+            if (badge) {
+                badge.textContent = `${localCount} of ${localTotal} Records`;
+            }
+        };
+
+        const applyFilter = ({ inQuery, inTable, inTotal } = {}) => {
+            const localQuery = inQuery;
+            const localTable = inTable;
+            const localTotal = inTotal;
+
+            if (localQuery) {
+                localTable.filterStateData({
+                    query: { "allinventoryentries.stockitemname": localQuery }
+                });
+            } else {
+                localTable.filterStateData({ query: "" });
+            }
+            updateBadgeText({
+                inCount: localTable.store.stateData.length,
+                inTotal: localTotal
+            });
+        };
+
+        const initTablePage = async () => {
+            // 1. Setup DataProvider with custom read simulator
+            const dataProvider = createDataProvider({
+                inCustom: {
+                    read: async ({ inQuery = {} } = {}) => {
+                        const localQuery = inQuery;
+                        return sampleData;
+                    }
+                }
+            });
+
+            // 2. Instantiate Table using dataProvider
+            const table = new Table({
+                targetContainerId: "table-container",
+                dataProvider,
+                columns: sampleColumns,
+                config: sampleTableConfig
+            });
+
+            // 3. Asynchronously load via DataProvider and render
+            const initialData = await table.load();
+            await table.render();
+            updateBadgeText({
+                inCount: table.store.stateData.length,
+                inTotal: initialData.length
+            });
+
+            // 4. Wire Filter & Theme controls
+            const filterInput = document.getElementById("filter-input");
+            filterInput?.addEventListener("input", (e) => {
+                applyFilter({
+                    inQuery: e.target.value.trim(),
+                    inTable: table,
+                    inTotal: initialData.length
+                });
+            });
+
+            document.getElementById("btn-filter-rope")?.addEventListener("click", () => {
+                if (filterInput) filterInput.value = "ROPE";
+                applyFilter({ inQuery: "ROPE", inTable: table, inTotal: initialData.length });
+            });
+
+            document.getElementById("btn-filter-shading")?.addEventListener("click", () => {
+                if (filterInput) filterInput.value = "Shading Net Kgs";
+                applyFilter({ inQuery: "Shading Net Kgs", inTable: table, inTotal: initialData.length });
+            });
+
+            document.getElementById("btn-filter-reset")?.addEventListener("click", () => {
+                if (filterInput) filterInput.value = "";
+                applyFilter({ inQuery: "", inTable: table, inTotal: initialData.length });
+            });
+
+            document.getElementById("theme-select")?.addEventListener("change", (e) => {
+                table.setTheme({ inTheme: e.target.value });
+            });
+
+            // Code toggle drawer
+            const drawer = document.getElementById("code-drawer");
+            document.getElementById("btn-toggle-code")?.addEventListener("click", () => {
+                drawer?.classList.toggle("open");
+            });
+
+            const snippet = `// DataProvider Setup
+const dataProvider = createDataProvider({
+    inCustom: {
+        read: async ({ inQuery }) => sampleData
+    }
+});
+
+// Table Initialization with DataProvider
+const table = new Table({
+    targetContainerId: "table-container",
+    dataProvider,
+    columns: sampleColumns,
+    config: sampleTableConfig
+});
+
+// Async Load & Render
+await table.load();`;
+            document.getElementById("code-display").textContent = snippet;
+        };
+
+        initTablePage();
+    </script>
+</body>
+
+</html>

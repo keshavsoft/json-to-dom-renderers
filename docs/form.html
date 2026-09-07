@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with DataProvider | json-to-dom-renderers</title>
+    <meta name="description" content="Form renderer configured via JSON and integrated with createDataProvider for query and CRUD actions.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- json-to-dom low-level compiler -->
+    <script type="module" src="https://keshavsoft.github.io/json-to-dom/docs/dist/v3/min.js"></script>
+
+    <style>
+        :root {
+            --ks-primary: #2563eb;
+            --ks-text-main: #0f172a;
+            --ks-text-muted: #64748b;
+            --ks-border-color: #e2e8f0;
+            --ks-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --ks-font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--ks-font-sans);
+            color: var(--ks-text-main);
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        pre, code {
+            font-family: var(--ks-font-mono);
+        }
+
+        /* Ultra-compact top navigation: No wasted space, no logo */
+        .top-nav {
+            height: 44px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--ks-border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+        }
+
+        .nav-links a {
+            font-size: 0.8rem;
+            text-decoration: none;
+            color: var(--ks-text-muted);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: all 0.15s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--ks-primary);
+            background: rgba(37, 99, 235, 0.08);
+            font-weight: 600;
+        }
+
+        .compact-toolbar {
+            background: #ffffff;
+            border: 1px solid var(--ks-border-color);
+            border-radius: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .panel-box {
+            background: #ffffff;
+            border: 1px solid var(--ks-border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            padding: 1rem;
+        }
+
+        .console-box {
+            background: #0f172a;
+            color: #38bdf8;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.8rem;
+            height: 100%;
+            min-height: 220px;
+            overflow-y: auto;
+        }
+
+        .code-drawer {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 0.6rem;
+            font-size: 0.78rem;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .code-drawer.open {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Compact Top Bar: Breadcrumb on left, Home link floated on right -->
+    <header class="top-nav">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold text-dark small">Form Renderer</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-0.5 font-monospace" style="font-size: 11px;">DataProvider</span>
+            <span class="text-secondary opacity-50 mx-1">|</span>
+            <div class="nav-links d-inline-flex align-items-center gap-1">
+                <a href="table.html">Table</a>
+                <a href="form.html" class="active">Form</a>
+                <a href="datalist.html">DataList</a>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn btn-sm btn-outline-secondary py-1 px-2.5 d-flex align-items-center gap-1" style="font-size: 12px;">
+            <i class="bi bi-arrow-left"></i> Back to Home
+        </a>
+    </header>
+
+    <!-- Main Container: Immediate content, no vertical scroll needed -->
+    <main class="container-fluid px-3 py-2">
+        <!-- Compact Toolbar -->
+        <div class="compact-toolbar">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <span class="badge bg-success-subtle text-success border border-success-subtle small py-1 px-2">
+                    <i class="bi bi-input-cursor-text me-1"></i>Form Ready
+                </span>
+                <span class="small text-muted">Config-driven form fields with connected DataProvider dispatch</span>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-1">
+                    <label for="theme-select" class="small text-muted fw-semibold">Theme:</label>
+                    <select id="theme-select" class="form-select form-select-sm" style="width: 110px;">
+                        <option value="default" selected>Default</option>
+                        <option value="light">Light</option>
+                        <option value="extraLight">Extra Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="extraDark">Extra Dark</option>
+                    </select>
+                </div>
+                <button class="btn btn-sm btn-outline-dark" id="btn-toggle-code">
+                    <i class="bi bi-code-slash me-1"></i>Code
+                </button>
+            </div>
+        </div>
+
+        <!-- Rendered Form and DataProvider Console side-by-side -->
+        <div class="row g-2">
+            <div class="col-lg-6">
+                <div class="panel-box">
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+                        <span class="fw-semibold small text-uppercase text-secondary">
+                            <i class="bi bi-ui-checks me-1"></i> Rendered Dynamic Form
+                        </span>
+                        <span class="badge bg-light text-muted border small">JSON Defined</span>
+                    </div>
+                    <div id="form-container"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="console-box" id="provider-console">
+                    <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom border-secondary">
+                        <span class="text-light fw-semibold small font-monospace"><i class="bi bi-terminal me-1"></i>DataProvider Activity Log</span>
+                        <span class="badge bg-secondary font-monospace" style="font-size: 10px;">read() / query</span>
+                    </div>
+                    <pre class="m-0 text-info" id="log-content">// Click any filter/search button on the form to test DataProvider...</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Collapsible Code Drawer -->
+        <div class="code-drawer" id="code-drawer">
+            <div class="d-flex justify-content-between align-items-center mb-1 text-secondary">
+                <span class="fw-semibold">Implementation Script</span>
+                <span class="small font-monospace">DataProvider + Form</span>
+            </div>
+            <pre class="m-0 text-light"><code id="code-display"></code></pre>
+        </div>
+    </main>
+
+    <!-- Logic adhering strictly to in / local naming convention -->
+    <script type="module">
+        import {
+            sampleColumns,
+            sampleSearchConfig,
+            sampleData
+        } from "./sampleData.js";
+
+        // Guaranteed self-contained json-to-dom engine
+        if (!window.ks?.["json-to-dom"]?.buildSpecElement) {
+            const isNullOrUndefined = ({ inSpec }) => !inSpec;
+            const isDOMNode = ({ inSpec }) => inSpec instanceof Node;
+            const isArray = ({ inSpec }) => Array.isArray(inSpec);
+            const isObject = ({ inSpec }) => typeof inSpec === "object" && !!inSpec;
+            const handleArray = ({ inSpec }) => inSpec.map(item => buildSpecElement(item)).flat().filter(Boolean);
+            const createElement = ({ inTagName }) => document.createElement(inTagName);
+            const applyTextContent = ({ inElement, inTextContent }) => {
+                if (inTextContent) inElement.textContent = inTextContent;
+                return inElement;
+            };
+            const applyProperties = ({ inElement, inProperties }) => {
+                if (inProperties) Object.assign(inElement, inProperties);
+                return inElement;
+            };
+            const applyAttributes = ({ inElement, inAttributes }) => {
+                if (inAttributes) {
+                    Object.entries(inAttributes).forEach(([key, val]) => {
+                        if (key === "class") inElement.className = val;
+                        else inElement.setAttribute(key, val);
+                    });
+                }
+                return inElement;
+            };
+            const applyClassList = ({ inElement, inClassList }) => {
+                if (inClassList) {
+                    if (Array.isArray(inClassList)) inClassList.forEach(c => c && inElement.classList.add(c));
+                    else if (typeof inClassList === "string") inClassList.split(" ").forEach(c => c && inElement.classList.add(c));
+                }
+                return inElement;
+            };
+            const applyEvents = ({ inElement, inEvents, inTagName }) => {
+                if (inEvents && typeof inEvents === "object") {
+                    Object.entries(inEvents).forEach(([ev, handler]) => {
+                        if (typeof handler === "function") inElement.addEventListener(ev, handler);
+                    });
+                }
+                return inElement;
+            };
+            const appendChildren = ({ inElement, inChildren }) => {
+                if (inChildren && Array.isArray(inChildren)) {
+                    inChildren.forEach(ch => {
+                        const node = buildSpecElement(ch);
+                        if (node) inElement.appendChild(node);
+                    });
+                }
+                return inElement;
+            };
+            const handleElement = ({ inSpec }) => {
+                const el = createElement({ inTagName: inSpec.tagName || "div" });
+                applyAttributes({ inElement: el, inAttributes: inSpec.attributes });
+                applyClassList({ inElement: el, inClassList: inSpec.classList });
+                applyProperties({ inElement: el, inProperties: inSpec.properties });
+                applyTextContent({ inElement: el, inTextContent: inSpec.textContent });
+                applyEvents({ inElement: el, inEvents: inSpec.events, inTagName: inSpec.tagName });
+                appendChildren({ inElement: el, inChildren: inSpec.children });
+                return el;
+            };
+            const buildSpecElement = (specInput) => {
+                const spec = specInput && typeof specInput === "object" && "inSpec" in specInput && !(specInput instanceof Node) && !Array.isArray(specInput) ? specInput.inSpec : specInput;
+                if (isNullOrUndefined({ inSpec: spec })) return null;
+                if (isDOMNode({ inSpec: spec })) return spec;
+                if (isArray({ inSpec: spec })) return handleArray({ inSpec: spec });
+                if (isObject({ inSpec: spec })) return handleElement({ inSpec: spec });
+                return null;
+            };
+            window.ks = window.ks || {};
+            window.ks["json-to-dom"] = { buildSpecElement };
+        }
+
+        let Form, createDataProvider;
+
+        try {
+            const module = await import("./dist/v14/min.js");
+            Form = module.Form;
+            createDataProvider = module.createDataProvider;
+        } catch (err) {
+            console.warn("Fallback to CDN for v14:", err);
+            const cdnModule = await import("https://keshavsoft.github.io/json-to-dom-renderers/dist/v14/min.js");
+            Form = cdnModule.Form;
+            createDataProvider = cdnModule.createDataProvider;
+        }
+
+        const logDataProviderAction = ({ inAction, inPayload, inResult } = {}) => {
+            const localAction = inAction;
+            const localPayload = inPayload;
+            const localResult = inResult;
+            const logEl = document.getElementById("log-content");
+            if (!logEl) return;
+
+            const time = new Date().toLocaleTimeString();
+            const entry = `[${time}] DataProvider.${localAction}() called\nPayload: ${JSON.stringify(localPayload, null, 2)}\nMatched: ${localResult.length} records\n-----------------------------------`;
+            logEl.textContent = `${entry}\n\n${logEl.textContent}`;
+        };
+
+        const initFormPage = async () => {
+            // 1. Setup DataProvider
+            const dataProvider = createDataProvider({
+                inCustom: {
+                    read: async ({ inQuery = {} } = {}) => {
+                        const localQuery = inQuery;
+                        const keys = Object.keys(localQuery);
+                        if (!keys.length) return sampleData;
+
+                        return sampleData.filter(item => {
+                            return keys.every(k => {
+                                const val = localQuery[k];
+                                if (!val) return true;
+                                const parts = k.split(".");
+                                let current = item;
+                                for (const p of parts) {
+                                    current = current?.[p];
+                                }
+                                return String(current || "").toLowerCase().includes(String(val).toLowerCase());
+                            });
+                        });
+                    }
+                }
+            });
+
+            // 2. Instantiate Form renderer
+            const form = new Form({
+                inColumns: sampleColumns,
+                inConfig: sampleSearchConfig,
+                inTargetContainerId: "form-container"
+            });
+
+            const renderResult = form.render();
+
+            // 3. Wire form button events to invoke DataProvider
+            const wireButtons = ({ inContainer } = {}) => {
+                const localContainer = inContainer;
+                if (!localContainer) return;
+
+                const buttons = localContainer.querySelectorAll("button");
+                buttons.forEach(button => {
+                    button.addEventListener("click", async (event) => {
+                        const row = event.currentTarget.closest("div");
+                        const input = row?.querySelector("input");
+                        if (!input) return;
+
+                        const name = input.getAttribute("name");
+                        const value = input.value;
+                        const query = {};
+                        query[name] = value;
+
+                        const matched = await dataProvider.read({ inQuery: query });
+                        logDataProviderAction({
+                            inAction: "read",
+                            inPayload: query,
+                            inResult: matched
+                        });
+                    });
+                });
+            };
+
+            wireButtons({ inContainer: renderResult?.element });
+
+            // 4. Theme switching
+            document.getElementById("theme-select")?.addEventListener("change", (e) => {
+                const updated = form.setTheme({ inTheme: e.target.value });
+                wireButtons({ inContainer: updated?.element });
+            });
+
+            // Code toggle drawer
+            const drawer = document.getElementById("code-drawer");
+            document.getElementById("btn-toggle-code")?.addEventListener("click", () => {
+                drawer?.classList.toggle("open");
+            });
+
+            const snippet = `// DataProvider Setup
+const dataProvider = createDataProvider({
+    inCustom: {
+        read: async ({ inQuery }) => {
+            // custom read or backend fetch
+            return matchedRecords;
+        }
+    }
+});
+
+// Form Initialization
+const form = new Form({
+    inColumns: sampleColumns,
+    inConfig: sampleSearchConfig,
+    inTargetContainerId: "form-container"
+});
+const renderResult = form.render();
+
+// Query DataProvider on Form submission
+const matched = await dataProvider.read({ inQuery: { "allinventoryentries.stockitemname": "ROPE" } });`;
+            document.getElementById("code-display").textContent = snippet;
+        };
+
+        initFormPage();
+    </script>
+</body>
+
+</html>
